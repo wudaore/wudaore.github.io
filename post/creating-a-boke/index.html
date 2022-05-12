@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>windows使用hugo搭建博客 - Hugo Theme Fuji</title>
+
+
+<meta name="author" content="wudao" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+
+<meta property="og:title" content="windows使用hugo搭建博客" />
+<meta name="twitter:title" content="windows使用hugo搭建博客" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://github.dsrkafuu.net/hugo-theme-fuji/post/creating-a-boke/" /><meta property="og:description" content="Introduction 本文主要介绍如何在windows下使用hugo搭建自己的博客并通过github挂载，同时绑定自己的域名 bilibili视频教程：https://www.bilibili.com/video/BV13" />
+<meta name="twitter:description" content="Introduction 本文主要介绍如何在windows下使用hugo搭建自己的博客并通过github挂载，同时绑定自己的域名 bilibili视频教程：https://www.bilibili.com/video/BV13" /><meta property="og:image" content="https://github.dsrkafuu.net/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://github.dsrkafuu.net/img/og.png" /><meta property="article:published_time" content="2022-05-12T00:00:00+00:00" /><meta property="article:modified_time" content="2022-05-12T00:00:00+00:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://github.dsrkafuu.net/hugo-theme-fuji/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://github.dsrkafuu.net/hugo-theme-fuji/">Hugo Theme Fuji</a>
+            
+            <span class="title-sub">A minimal Hugo theme.</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://github.dsrkafuu.net/hugo-theme-fuji/post/creating-a-boke/">windows使用hugo搭建博客</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-12</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1669 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="introduction">Introduction</h1>
+<p>本文主要介绍如何在windows下使用hugo搭建自己的博客并通过github挂载，同时绑定自己的域名</p>
+<p>bilibili视频教程：https://www.bilibili.com/video/BV13c411h7k7?spm_id_from=333.999.0.0</p>
+<p>本文主要总结一些踩的坑以及功能拓展</p>
+<h2 id="step1-安装配置hugo"><em>step1 安装配置hugo</em></h2>
+<p>hugo中文文档 ：https://www.gohugo.org/</p>
+<p>hugo编译文件下载地址：https://github.com/gohugoio/hugo/releases</p>
+<p>解压后放入bin文件夹内，将bin添加到系统变量，如下图所示</p>
+<p><img class="img-zoomable" src="/pictures/pic1.png" alt="image" />
+</p>
+<p>打开cmd输入hugo version，若能显示版本，则配置成功</p>
+<h2 id="step2-创建博客"><em>step2 创建博客</em></h2>
+<h3 id="21创建项目文件"><em>2.1创建项目文件</em></h3>
+<p>在cmd中输入以下指令创建项目文件.</p>
+<pre><code>hugo new site yourname.com
+</code></pre>
+<h3 id="22选择博客样式"><em>2.2选择博客样式</em></h3>
+<p>在https://themes.gohugo.io/中选择下载博客的样式.本博客使用gohugo-theme-ananke</p>
+<p>样式下载方法：直接git clone到项目文件夹下的themes中（ssh），或下载压缩包解压到themes中（http），如下图所示</p>
+<p><img class="img-zoomable" src="/pictures/3.png" alt="image" />
+</p>
+<p><img class="img-zoomable" src="/pictures/pic2.png" alt="image" />
+</p>
+<p>下载后需要在项目文件夹下的config.toml中修改样式名.同时可以修改博客名等字段</p>
+<p><img class="img-zoomable" src="/pictures/4.png" alt="image" />
+</p>
+<p>注意项目名为clone地址中的字段，如下图所示，项目名就应该是hermit.</p>
+<p><img class="img-zoomable" src="/pictures/5.png" alt="image" />
+</p>
+<p>进入hermit（以hermit为例）下的ExampleSite文件夹中，复制content和config.toml粘贴到项目文件夹xxx.com下.其中content为博客模板，是markdown文件，config.toml是配置项.</p>
+<p>导入完毕后在项目文件夹xxx.com下的cmd中执行命令.</p>
+<pre><code>hugo
+</code></pre>
+<p>即可编译项目.</p>
+<h2 id="step3-通过github挂载"><em>step3 通过github挂载</em></h2>
+<h3 id="31建立个人仓库"><em>3.1建立个人仓库</em></h3>
+<p>注册github账号后点击头像-Your Repositories即可新建/管理仓库</p>
+<p>个人仓库名必须是github用户名+github.io，否则会报错.readme文档暂时不添加，防止冲突</p>
+<p><img class="img-zoomable" src="/pictures/6.png" alt="image" />
+</p>
+<p>作者使用的是master分支而非main，这需要进入setting-branch中进行配置.还需要使用git push origin -d main 删除main分支</p>
+<p><img class="img-zoomable" src="/pictures/7.png" alt="image" />
+</p>
+<p>建立仓库后通过git-scm.com下载最新版git，同样需要将git的bin文件加入系统变量</p>
+<h3 id="32本地代码同步到git"><em>3.2本地代码同步到git</em></h3>
+<p>首先在项目文件夹.com下的cmd中输入hugo编译项目.编译完成后出现public文件夹，即编译后的文件.</p>
+<p>进入public，右键Git Bash Here进入Git命令行.相继输入</p>
+<pre><code>git init
+git add -A
+git commit -m&quot;init&quot;
+git remote add origin https://github.com/你的用户名/你的用户名.github.io.git
+git push -f origin master
+</code></pre>
+<p>如果是第一次使用git，还需要进行验证（如果是http方式则会跳出窗口，如果是ssh方式则需要设置密钥公钥，详见博客https://www.xuanfengge.com/using-ssh-key-link-github-photo-tour.html）</p>
+<p>push完毕后打开github仓库，就能发现public中的内容已经被存到仓库中了</p>
+<p><img class="img-zoomable" src="/pictures/8.png" alt="image" />
+</p>
+<p>此时浏览器访问用户名.github.io即可进入博客.</p>
+<h2 id="step4-关联到域名"><em>step4 关联到域名</em></h2>
+<h3 id="41域名解析"><em>4.1域名解析</em></h3>
+<p>本文使用的是腾讯云.进入控制台选择域名解析，添加以下配置：</p>
+<p><img class="img-zoomable" src="/pictures/9.png" alt="image" />
+</p>
+<h3 id="42github中的配置"><em>4.2github中的配置</em></h3>
+<p>进入项目仓库-settings-page，在Custom domain中配置自己的域名，等待解析完成即可.此页面也可配置默认分支为master，就不需要每次都修改.</p>
+<p><img class="img-zoomable" src="/pictures/10.png" alt="image" />
+</p>
+<p>设置完毕后就可以通过自己的域名访问博客.</p>
+<h2 id="step5-新增删除或者修改博客"><em>step5 新增，删除或者修改博客</em></h2>
+<p>所有的博客都保存在content/posts中（当然也可改名为blogs等，无伤大雅）.修改完毕后需要回退到项目文件夹.com下，cmd执行胡工命令重新编译，并进入public文件夹输入以下代码上传</p>
+<pre><code>git add -A
+git commit -m&quot;edit&quot;
+git push 
+</code></pre>
+<h2 id="step6-补充"><em>step6 补充</em></h2>
+<p>有些博客模板在本地运行没有问题，但是绑定域名后出错，需要仔细筛选.</p>
+<p>Hugo官网：https://gohugo.io/content-management 要学会查找官方文档，解决开发中遇到的问题.</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/hugo-theme-fuji/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#step1-安装配置hugo"><em>step1 安装配置hugo</em></a></li>
+    <li><a href="#step2-创建博客"><em>step2 创建博客</em></a>
+      <ul>
+        <li><a href="#21创建项目文件"><em>2.1创建项目文件</em></a></li>
+        <li><a href="#22选择博客样式"><em>2.2选择博客样式</em></a></li>
+      </ul>
+    </li>
+    <li><a href="#step3-通过github挂载"><em>step3 通过github挂载</em></a>
+      <ul>
+        <li><a href="#31建立个人仓库"><em>3.1建立个人仓库</em></a></li>
+        <li><a href="#32本地代码同步到git"><em>3.2本地代码同步到git</em></a></li>
+      </ul>
+    </li>
+    <li><a href="#step4-关联到域名"><em>step4 关联到域名</em></a>
+      <ul>
+        <li><a href="#41域名解析"><em>4.1域名解析</em></a></li>
+        <li><a href="#42github中的配置"><em>4.2github中的配置</em></a></li>
+      </ul>
+    </li>
+    <li><a href="#step5-新增删除或者修改博客"><em>step5 新增，删除或者修改博客</em></a></li>
+    <li><a href="#step6-补充"><em>step6 补充</em></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/hugo-theme-fuji/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/hugo-theme-fuji/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#step1-安装配置hugo"><em>step1 安装配置hugo</em></a></li>
+    <li><a href="#step2-创建博客"><em>step2 创建博客</em></a>
+      <ul>
+        <li><a href="#21创建项目文件"><em>2.1创建项目文件</em></a></li>
+        <li><a href="#22选择博客样式"><em>2.2选择博客样式</em></a></li>
+      </ul>
+    </li>
+    <li><a href="#step3-通过github挂载"><em>step3 通过github挂载</em></a>
+      <ul>
+        <li><a href="#31建立个人仓库"><em>3.1建立个人仓库</em></a></li>
+        <li><a href="#32本地代码同步到git"><em>3.2本地代码同步到git</em></a></li>
+      </ul>
+    </li>
+    <li><a href="#step4-关联到域名"><em>step4 关联到域名</em></a>
+      <ul>
+        <li><a href="#41域名解析"><em>4.1域名解析</em></a></li>
+        <li><a href="#42github中的配置"><em>4.2github中的配置</em></a></li>
+      </ul>
+    </li>
+    <li><a href="#step5-新增删除或者修改博客"><em>step5 新增，删除或者修改博客</em></a></li>
+    <li><a href="#step6-补充"><em>step6 补充</em></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://github.dsrkafuu.net/hugo-theme-fuji/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/hugo-theme-fuji/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
