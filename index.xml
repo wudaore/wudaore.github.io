@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Myboke</title>
+    <title>wudao的博客</title>
     <link>https://wudaore.github.io/</link>
-    <description>Recent content on Myboke</description>
+    <description>Recent content on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 12 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 12 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>windows使用hugo搭建博客</title>
+      <title>windows下使用hugo搭建博客</title>
       <link>https://wudaore.github.io/post/creating-a-boke/</link>
-      <pubDate>Thu, 12 May 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 12 May 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/creating-a-boke/</guid>
       <description>Introduction 本文主要介绍如何在windows下使用hugo搭建自己的博客并通过github挂载，同时绑定自己的域名 bilibili视频教程：https://www.bilibili.com/video/BV13</description>
