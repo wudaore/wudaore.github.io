@@ -16,7 +16,7 @@
 
 
 
-<title>windows下使用hugo搭建博客 - wudao的博客</title>
+<title>svm学习(1)--基础概念和公式 - wudao的博客</title>
 
 
 <meta name="author" content="DSRKafuU" />
@@ -25,16 +25,16 @@
 <meta name="description" content="create a boke with Hugo theme Fuji" />
 
 
-<meta name="keywords" content="test, others" />
+<meta name="keywords" content="机器学习, algo" />
 
 
-<meta property="og:title" content="windows下使用hugo搭建博客" />
-<meta name="twitter:title" content="windows下使用hugo搭建博客" />
+<meta property="og:title" content="svm学习(1)--基础概念和公式" />
+<meta name="twitter:title" content="svm学习(1)--基础概念和公式" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/creating-a-boke/" /><meta property="og:description" content="create a boke with Hugo theme Fuji" />
+<meta property="og:url" content="https://wudaore.github.io/post/svm1/" /><meta property="og:description" content="create a boke with Hugo theme Fuji" />
 <meta name="twitter:description" content="create a boke with Hugo theme Fuji" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-05-12T00:00:00+08:00" /><meta property="article:modified_time" content="2022-05-12T00:00:00+08:00" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-05-13T00:00:00+08:00" /><meta property="article:modified_time" content="2022-05-13T00:00:00+08:00" />
 
 
 <style>
@@ -100,95 +100,81 @@
 <article>
     
     <h2 class="post-item post-title">
-        <a href="https://wudaore.github.io/post/creating-a-boke/">windows下使用hugo搭建博客</a>
+        <a href="https://wudaore.github.io/post/svm1/">svm学习(1)--基础概念和公式</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-12</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-13</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1711 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1682 words</span>
 
-<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/test">test</a>&nbsp;<a href="/tags/others">others</a>&nbsp;</span>
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
     </div>
     
     <div class="post-content markdown-body">
         <h1 id="introduction">Introduction</h1>
-<p>本文主要介绍如何在windows下使用hugo搭建自己的博客并通过github挂载，同时绑定自己的域名</p>
-<p>bilibili视频教程：https://www.bilibili.com/video/BV13c411h7k7?spm_id_from=333.999.0.0</p>
-<p>本文主要总结一些踩的坑以及功能拓展</p>
-<h2 id="step1-安装配置hugo"><em>step1 安装配置hugo</em></h2>
-<p>hugo中文文档 ：https://www.gohugo.org/</p>
-<p>hugo编译文件下载地址：https://github.com/gohugoio/hugo/releases</p>
-<p>解压后放入bin文件夹内，将bin添加到系统变量，如下图所示</p>
-<p><img class="img-zoomable" src="/pictures/pic1.png" alt="image" />
+<p>&laquo;实战&raquo;中的svm数学推导实在是有些晦涩难懂.</p>
+<p>bilibili视频教程：https://www.bilibili.com/video/BV1Hs411w7ci?spm_id_from=333.337.search-card.all.click</p>
+<p>本文主要总结一部分svm的数学推导.后续再补全以及学习SVM的使用</p>
+<p>在开始之前，需要了解一些基本的概念</p>
+<h2 id="1-基础概念">1. 基础概念</h2>
+<h3 id="11-wsuptsupxb">1.1 <em>w<sup>T</sup>x=b</em></h3>
+<p>以二维空间为例子，w<sup>T</sup>x 是指向量x在向量W上的投影长度乘以向量W的长度.w<sup>T</sup>x=b几何上来说所有乘积为b的向量x构成的一个平面.且该平面显然垂直于向量x.</p>
+<p>当出现空间中的另一个点a，想要计算该点到上述超平面的距离，可先将该点与x向量与w向量的起始点连接，形成x<sup>,</sup>向量.根据公式</p>
+<p><img class="img-zoomable" src="/pictures/%e5%90%91%e9%87%8f%e8%b7%9d%e7%a6%bb.png" alt="image" />
 </p>
-<p>打开cmd输入hugo version，若能显示版本，则配置成功</p>
-<h2 id="step2-创建博客"><em>step2 创建博客</em></h2>
-<h3 id="21创建项目文件"><em>2.1创建项目文件</em></h3>
-<p>在cmd中输入以下指令创建项目文件.</p>
-<pre><code>hugo new site yourname.com
-</code></pre>
-<h3 id="22选择博客样式"><em>2.2选择博客样式</em></h3>
-<p>在https://themes.gohugo.io/中选择下载博客的样式.本博客使用fuji模板，https://themes.gohugo.io/themes/hugo-theme-fuji/</p>
-<p>样式下载方法：直接git clone到项目文件夹下的themes中（ssh），或下载压缩包解压到themes中（http），如下图所示</p>
-<p><img class="img-zoomable" src="/pictures/3.png" alt="image" />
+<p>进行计算.详细推导见博客https://blog.csdn.net/Zelf0914/article/details/95811715</p>
+<p>理解之后不难发现，参数b的作用是控制超平面前后移动</p>
+<p>svm &mdash;间隔 对偶 核技巧</p>
+<h2 id="2硬间隔svm">2.硬间隔SVM</h2>
+<p>即最大间隔分类器.适用于数据线性可分.</p>
+<p>核心就是要找出一个超平面，使其对于“最近的点”的距离最大.（数据集中有很多点，对当前点的距离大了会导致和其他点的距离变小，这个时候其他点就变成“最近的点”了.)硬间隔SVM就是要求出对于“最近的点”的距离的最大值，即</p>
+<p><img class="img-zoomable" src="/pictures/svm1.png" alt="image" />
 </p>
-<p><img class="img-zoomable" src="/pictures/pic2.png" alt="image" />
+<p>其中y<sub>i</sub>对应书中的label，当w<sup>T</sup>x&gt;0时y<sub>i</sub>=1，反之为-1</p>
+<p>而|w<sup>T</sup>x+b|等价于y<sub>i</sub>（w<sup>T</sup>x+b） （因为y<sub>i</sub>只有可能是正负1且w<sup>T</sup>x+b时y<sub>i</sub>为+1，反之为-1.这样的转换是等价的.）</p>
+<p>替换后提出1/||w||（因为min内计算的是点到直线的距离，和向量w无关.||w||表示n维向量的模，称为范数），令min[y<sub>i</sub>（w<sup>T</sup>x+b）]=1（w<sup>T</sup>x+b 本质是一个向量，对其进行缩放不影响，就比如二维空间中的直线，所以设为1其实是设了个最小值）</p>
+<p>此时等式就变成了求max（1/||w||），等价于求min（1/2 w<sup>T</sup>w）(加1/2是为了方便求最小值？)</p>
+<p>推导过程见下图</p>
+<p><img class="img-zoomable" src="/pictures/svm2.png" alt="image" />
 </p>
-<p>下载后需要在项目文件夹下的config.toml中修改样式名.同时可以修改博客名等字段</p>
-<p><img class="img-zoomable" src="/pictures/4.png" alt="image" />
+<p>式子的目标函数是二次函数，限制条件是N个线性不等式条件，所以这是凸二次优化问题，可以用拉格朗日乘子法和KKT条件进行求解。拉格朗日乘子法可以寻找多元函数在一组约束条件下的极值，将d个变量与k个约束的最优化问题转变成d+k个变量的无约束问题。</p>
+<h3 id="21-拉格朗日乘子法">2.1 <em>拉格朗日乘子法</em></h3>
+<p>经过上述推导，问题就变成了带有不等式约束条件的最优化问题（约束条件为y<sub>i</sub>（w<sup>T</sup>x+b）&gt;=1）.</p>
+<p>借助拉格朗日乘子 将带约束问题转换成无约束问题（考研数学做过类似的题型，也可参考博客https://blog.csdn.net/lijil168/article/details/69395023），</p>
+<p>同时，1/2w<sup>T</sup>w 又等价于max<sub>λ</sub>L(w，b，λ)，故而可以如下进行转换，如下图：</p>
+<p><img class="img-zoomable" src="/pictures/svm3.png" alt="image" />
 </p>
-<p>注意项目名为应该与模板中的文件夹名相同，如下图所示，项目名就应该是hermit.</p>
-<p><img class="img-zoomable" src="/pictures/5.png" alt="image" />
+<p>该问题的目标函数是二次的，约束又是线性的，故而满足强对偶关系.故而进行以下转换：</p>
+<p><img class="img-zoomable" src="/pictures/svm4.png" alt="image" />
 </p>
-<p>进入hermit（以hermit模板为例）下的ExampleSite文件夹中，复制content和config.toml粘贴到项目文件夹xxx.com下.其中content为博客模板，是markdown文件，config.toml是配置项.</p>
-<p>导入完毕后在项目文件夹xxx.com下的cmd中执行命令.</p>
-<pre><code>hugo
-</code></pre>
-<p>即可编译项目.</p>
-<h2 id="step3-通过github挂载"><em>step3 通过github挂载</em></h2>
-<h3 id="31建立个人仓库"><em>3.1建立个人仓库</em></h3>
-<p>注册github账号后点击头像-Your Repositories即可新建/管理仓库</p>
-<p>个人仓库名必须是github用户名+github.io，否则会报错.readme文档暂时不添加，防止冲突</p>
-<p><img class="img-zoomable" src="/pictures/6.png" alt="image" />
+<p>L先对b求偏导，令结果=0，并带回L原式：</p>
+<p><img class="img-zoomable" src="/pictures/svm5.png" alt="image" />
 </p>
-<p>作者使用的是master分支而非main，这需要进入setting-branch中进行配置.还需要使用git push origin -d main 删除main分支</p>
-<p><img class="img-zoomable" src="/pictures/7.png" alt="image" />
+<p>继续对w求偏导.因为w<sup>T</sup>w=ww<sup>T</sup>，有以下转换：</p>
+<p><img class="img-zoomable" src="/pictures/svm6.png" alt="image" />
 </p>
-<p>建立仓库后通过git-scm.com下载最新版git，同样需要将git的bin文件加入系统变量</p>
-<h3 id="32本地代码同步到git"><em>3.2本地代码同步到git</em></h3>
-<p>首先在项目文件夹.com下的cmd中输入hugo编译项目.编译完成后出现public文件夹，即编译后的文件.</p>
-<p>进入public，右键Git Bash Here进入Git命令行.相继输入</p>
-<pre><code>git init
-git add -A
-git commit -m&quot;init&quot;
-git remote add origin https://github.com/你的用户名/你的用户名.github.io.git
-git push -f origin master
-</code></pre>
-<p>如果是第一次使用git，还需要进行验证（如果是http方式则会跳出窗口，如果是ssh方式则需要设置密钥公钥，详见博客https://www.xuanfengge.com/using-ssh-key-link-github-photo-tour.html）</p>
-<p>push完毕后打开github仓库，就能发现public中的内容已经被存到仓库中了</p>
-<p><img class="img-zoomable" src="/pictures/8.png" alt="image" />
+<p>此时的w已经是最优解（？）</p>
+<p>最终得到如下转换</p>
+<p><img class="img-zoomable" src="/pictures/svm7.png" alt="image" />
 </p>
-<p>此时浏览器访问用户名.github.io即可进入博客.</p>
-<h2 id="step4-关联到域名"><em>step4 关联到域名</em></h2>
-<h3 id="41域名解析"><em>4.1域名解析</em></h3>
-<p>本文使用的是腾讯云.进入控制台选择域名解析，添加以下配置：</p>
-<p><img class="img-zoomable" src="/pictures/9.png" alt="image" />
+<h3 id="22-kkt条件">2.2 <em>KKT条件</em></h3>
+<p>满足强对偶关系（如上述，目标函数是二次且约束是线性）的充要条件是满足KKt条件.</p>
+<p>KKT条件：</p>
+<p><img class="img-zoomable" src="/pictures/svm8.png" alt="image" />
 </p>
-<h3 id="42github中的配置"><em>4.2github中的配置</em></h3>
-<p>进入项目仓库-settings-page，在Custom domain中配置自己的域名，等待解析完成即可.此页面也可配置默认分支为master，就不需要每次都修改.</p>
-<p><img class="img-zoomable" src="/pictures/10.png" alt="image" />
+<p>可知w<sup><em></sup>和b<sup></em></sup>都是关于x和y的组合.同时，λ<sub>i</sub>只在支持向量上有意义，其他时候都是0</p>
+<p>支持向量即分类结果中平行于分类平面的过最近点的两个向量（不知道这个理解对不对），只有在支持向量上，ww<sup>T</sup>+b的绝对值才等于1，λ<sub>i</sub>才有意义.</p>
+<p><img class="img-zoomable" src="/pictures/svm9.jpg" alt="image" />
 </p>
-<p>设置完毕后就可以通过自己的域名访问博客.</p>
-<h2 id="step5-新增删除或者修改博客"><em>step5 新增，删除或者修改博客</em></h2>
-<p>所有的博客都保存在content/posts中（当然也可改名为blogs等，无伤大雅）.修改完毕后需要回退到项目文件夹.com下，cmd执行hugo命令重新编译，并进入public文件夹输入以下代码上传</p>
-<pre><code>git add -A
-git commit -m&quot;edit&quot;
-git push 
-</code></pre>
-<h2 id="step6-补充"><em>step6 补充</em></h2>
-<p>有些博客模板在本地运行没有问题，但是绑定域名后出错，需要仔细筛选.</p>
-<p>Hugo官网：https://gohugo.io/content-management 要学会查找官方文档，解决开发中遇到的问题.</p>
+<h2 id="软间隔svm">软间隔SVM</h2>
+<p>soft 指允许一点点误差.只需要在原目标函数后加一个误差函数loss即可：min（1/2 w<sup>T</sup>w）+loss</p>
+<p>loss如果使用y<sub>i</sub>(ww<sup>T</sup>+b)的点的个数的话会导致结果离散，不好求导.所以一般使用距离。即loss = max{0, 1-y<sub>i</sub>(ww<sup>T</sup>+b)},这就是hinge loss</p>
+<p>引入ξ表示1-y<sub>i</sub>(ww<sup>T</sup>+b)，即误差的距离.调整约束条件和目标函数，的软间隔svm模型：</p>
+<p><img class="img-zoomable" src="/pictures/svm10.png" alt="image" />
+</p>
+<h2 id="写在最后">写在最后</h2>
+<p>非数学系，数学功底不好，做这个东西真的困难.还是了解一下，不做深入证明（如强弱对偶性的证明，太头疼），更偏向代码和运用一些.</p>
 
     </div>
 </article>
@@ -313,27 +299,19 @@ git push
     <div class="sidebar-item sidebar-toc">
         <h3>Table of Contents</h3><nav id="TableOfContents">
   <ul>
-    <li><a href="#step1-安装配置hugo"><em>step1 安装配置hugo</em></a></li>
-    <li><a href="#step2-创建博客"><em>step2 创建博客</em></a>
+    <li><a href="#1-基础概念">1. 基础概念</a>
       <ul>
-        <li><a href="#21创建项目文件"><em>2.1创建项目文件</em></a></li>
-        <li><a href="#22选择博客样式"><em>2.2选择博客样式</em></a></li>
+        <li><a href="#11-wsuptsupxb">1.1 <em>w<sup>T</sup>x=b</em></a></li>
       </ul>
     </li>
-    <li><a href="#step3-通过github挂载"><em>step3 通过github挂载</em></a>
+    <li><a href="#2硬间隔svm">2.硬间隔SVM</a>
       <ul>
-        <li><a href="#31建立个人仓库"><em>3.1建立个人仓库</em></a></li>
-        <li><a href="#32本地代码同步到git"><em>3.2本地代码同步到git</em></a></li>
+        <li><a href="#21-拉格朗日乘子法">2.1 <em>拉格朗日乘子法</em></a></li>
+        <li><a href="#22-kkt条件">2.2 <em>KKT条件</em></a></li>
       </ul>
     </li>
-    <li><a href="#step4-关联到域名"><em>step4 关联到域名</em></a>
-      <ul>
-        <li><a href="#41域名解析"><em>4.1域名解析</em></a></li>
-        <li><a href="#42github中的配置"><em>4.2github中的配置</em></a></li>
-      </ul>
-    </li>
-    <li><a href="#step5-新增删除或者修改博客"><em>step5 新增，删除或者修改博客</em></a></li>
-    <li><a href="#step6-补充"><em>step6 补充</em></a></li>
+    <li><a href="#软间隔svm">软间隔SVM</a></li>
+    <li><a href="#写在最后">写在最后</a></li>
   </ul>
 </nav></div>
 </aside>
@@ -464,27 +442,19 @@ git push
         <h3>Table of Contents</h3>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#step1-安装配置hugo"><em>step1 安装配置hugo</em></a></li>
-    <li><a href="#step2-创建博客"><em>step2 创建博客</em></a>
+    <li><a href="#1-基础概念">1. 基础概念</a>
       <ul>
-        <li><a href="#21创建项目文件"><em>2.1创建项目文件</em></a></li>
-        <li><a href="#22选择博客样式"><em>2.2选择博客样式</em></a></li>
+        <li><a href="#11-wsuptsupxb">1.1 <em>w<sup>T</sup>x=b</em></a></li>
       </ul>
     </li>
-    <li><a href="#step3-通过github挂载"><em>step3 通过github挂载</em></a>
+    <li><a href="#2硬间隔svm">2.硬间隔SVM</a>
       <ul>
-        <li><a href="#31建立个人仓库"><em>3.1建立个人仓库</em></a></li>
-        <li><a href="#32本地代码同步到git"><em>3.2本地代码同步到git</em></a></li>
+        <li><a href="#21-拉格朗日乘子法">2.1 <em>拉格朗日乘子法</em></a></li>
+        <li><a href="#22-kkt条件">2.2 <em>KKT条件</em></a></li>
       </ul>
     </li>
-    <li><a href="#step4-关联到域名"><em>step4 关联到域名</em></a>
-      <ul>
-        <li><a href="#41域名解析"><em>4.1域名解析</em></a></li>
-        <li><a href="#42github中的配置"><em>4.2github中的配置</em></a></li>
-      </ul>
-    </li>
-    <li><a href="#step5-新增删除或者修改博客"><em>step5 新增，删除或者修改博客</em></a></li>
-    <li><a href="#step6-补充"><em>step6 补充</em></a></li>
+    <li><a href="#软间隔svm">软间隔SVM</a></li>
+    <li><a href="#写在最后">写在最后</a></li>
   </ul>
 </nav>
     </div>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>机器学习 on wudao的博客</title>
+    <link>https://wudaore.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 机器学习 on wudao的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 13 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>svm学习(1)--基础概念和公式</title>
+      <link>https://wudaore.github.io/post/svm1/</link>
+      <pubDate>Fri, 13 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/svm1/</guid>
+      <description>Introduction &amp;laquo;实战&amp;raquo;中的svm数学推导实在是有些晦涩难懂. bilibili视频教程：https://www.bilibili.com/video/BV1Hs411w7ci?spm_id_</description>
+    </item>
+    
+  </channel>
+</rss>
