@@ -17,6 +17,24 @@
     </item>
     
     <item>
+      <title>svm学习(2)--简易svm算法代码理解</title>
+      <link>https://wudaore.github.io/post/svm2/</link>
+      <pubDate>Fri, 13 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/svm2/</guid>
+      <description>Introduction 对&amp;laquo;实战&amp;raquo;中的smoSimple函数尝试理解 def smoSimple(dataMatIn, classLabels, C, toler, maxIter): &amp;quot;&amp;quot;&amp;quot;smoSimple Args: dataMatIn 特征集合 classLabels 类别标签 C 松弛变量(常量值)，允许有些数据点可以处于分隔面的错误一侧。 控制最大化间隔和保证大部分的函数</description>
+    </item>
+    
+    <item>
+      <title>ubuntu学习(1)--文件系统</title>
+      <link>https://wudaore.github.io/post/ubuntu-filesys/</link>
+      <pubDate>Fri, 13 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/ubuntu-filesys/</guid>
+      <description>Introduction 系统的学习Linux对日常学习和之后的工作都有帮助 本篇博客记录学习ubuntu文件系统时遇到的问题和需要记录的点 1.ubuntu 常见目录</description>
+    </item>
+    
+    <item>
       <title>windows下使用hugo搭建博客</title>
       <link>https://wudaore.github.io/post/creating-a-boke/</link>
       <pubDate>Thu, 12 May 2022 00:00:00 +0800</pubDate>

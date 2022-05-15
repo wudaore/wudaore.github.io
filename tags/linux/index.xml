@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>linux on wudao的博客</title>
+    <link>https://wudaore.github.io/tags/linux/</link>
+    <description>Recent content in linux on wudao的博客</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 13 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ubuntu学习(1)--文件系统</title>
+      <link>https://wudaore.github.io/post/ubuntu-filesys/</link>
+      <pubDate>Fri, 13 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/ubuntu-filesys/</guid>
+      <description>Introduction 系统的学习Linux对日常学习和之后的工作都有帮助 本篇博客记录学习ubuntu文件系统时遇到的问题和需要记录的点 1.ubuntu 常见目录</description>
+    </item>
+    
+  </channel>
+</rss>
