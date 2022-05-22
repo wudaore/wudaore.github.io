@@ -16,7 +16,7 @@
 
 
 
-<title>svm学习(2)--简易svm算法代码理解 - wudao的博客</title>
+<title>svm学习(2)--简易SMO算法代码理解 - wudao的博客</title>
 
 
 <meta name="author" content="DSRKafuU" />
@@ -28,8 +28,8 @@
 <meta name="keywords" content="机器学习, algo" />
 
 
-<meta property="og:title" content="svm学习(2)--简易svm算法代码理解" />
-<meta name="twitter:title" content="svm学习(2)--简易svm算法代码理解" />
+<meta property="og:title" content="svm学习(2)--简易SMO算法代码理解" />
+<meta name="twitter:title" content="svm学习(2)--简易SMO算法代码理解" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://wudaore.github.io/post/svm2/" /><meta property="og:description" content="建议svm算法的实现和理解" />
 <meta name="twitter:description" content="建议svm算法的实现和理解" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
@@ -100,12 +100,12 @@
 <article>
     
     <h2 class="post-item post-title">
-        <a href="https://wudaore.github.io/post/svm2/">svm学习(2)--简易svm算法代码理解</a>
+        <a href="https://wudaore.github.io/post/svm2/">svm学习(2)--简易SMO算法代码理解</a>
     </h2>
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-13</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;989 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1003 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
@@ -113,7 +113,8 @@
     
     <div class="post-content markdown-body">
         <h1 id="introduction">Introduction</h1>
-<p>对&laquo;实战&raquo;中的smoSimple函数尝试理解</p>
+<p>SMO算法 即序列最小优化算法
+对&laquo;实战&raquo;中的smoSimple函数尝试理解</p>
 <h2 id="heading"></h2>
 <pre><code>
 def smoSimple(dataMatIn, classLabels, C, toler, maxIter):

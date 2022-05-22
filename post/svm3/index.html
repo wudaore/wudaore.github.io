@@ -16,23 +16,25 @@
 
 
 
-<title>wudao的博客 - 钝学累功,不妨精熟</title>
+<title>svm学习(3)--SVM实现鸢尾花数据分类 - wudao的博客</title>
 
 
 <meta name="author" content="DSRKafuU" />
 
 
-<meta name="description" content="A minimal Hugo theme with nice theme color." />
+<meta name="description" content="SVM实现鸢尾花数据分类" />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://wudaore.github.io/index.xml" title="wudao的博客" />
+<meta name="keywords" content="机器学习, algo" />
 
-<meta property="og:title" content="wudao的博客" />
-<meta name="twitter:title" content="wudao的博客" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://wudaore.github.io/" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+
+<meta property="og:title" content="svm学习(3)--SVM实现鸢尾花数据分类" />
+<meta name="twitter:title" content="svm学习(3)--SVM实现鸢尾花数据分类" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/svm3/" /><meta property="og:description" content="SVM实现鸢尾花数据分类" />
+<meta name="twitter:description" content="SVM实现鸢尾花数据分类" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="og:updated_time" content="2022-05-13T00:00:00+08:00" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-05-13T00:00:00+08:00" /><meta property="article:modified_time" content="2022-05-13T00:00:00+08:00" />
 
 
 <style>
@@ -95,52 +97,107 @@
             
             <div class="col-12 col-md-9 float-left content">
                 
-
-
-
-<div class="post">
+<article>
+    
     <h2 class="post-item post-title">
-        <a href="https://wudaore.github.io/post/cjk-unicode-test/">CJK Unicode Test</a>
+        <a href="https://wudaore.github.io/post/svm3/">svm学习(3)--SVM实现鸢尾花数据分类</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2018-03-09</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-13</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1549 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;257 words</span>
 
-<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/test">test</a>&nbsp;<a href="/tags/cjk">cjk</a>&nbsp;</span>
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
     </div>
-    <div class="post-item post-summary markdown-body">
-        <p>The following is part of the CJK text, this page is for test use only.</p>
+    
+    <div class="post-content markdown-body">
+        <h1 id="introduction">Introduction</h1>
+<p>sklearn的SVM算法可以调整c值和核函数.本篇并未介绍核函数</p>
+<h2 id="heading"></h2>
+<p>导入数据和数据-标签的处理</p>
+<pre><code>from sklearn.svm import SVC
+from sklearn import datasets
+iris = datasets.load_iris()
+X = iris['data']
+X = iris['data'][:,(2,3)]
+y = iris['target']
+</code></pre>
+<p>SVM训练.c值设置为无穷大代表几乎不容错
+使用线性核函数</p>
+<pre><code>setosa_or_versicolor = (y==0)|(y==1)
+X = X[setosa_or_versicolor]
+y = y[setosa_or_versicolor]
+svm_clf = SVC(kernel='linear', C=float('inf'))
+svm_clf.fit(X,y)
+w = svm_clf.coef_
+b = svm_clf.intercept_
+w
+</code></pre>
+<p>使用matplotlib绘图</p>
+<pre><code>import numpy as np
+import matplotlib
+import os
+import matplotlib.pyplot as plt
+import math
+%matplotlib inline
+plt.rcParams['axes.labelsize']=14
+plt.rcParams['xtick.labelsize']=12
+plt.rcParams['ytick.labelsize']=12
+x0=np.linspace(0, 5.5, 200) 
+pred_1=5*x0-20 
+pred_2=x0-1.8 
+pred_3=0.1*x0+0.5 
+def plot_svc_decision_boundary(svm_clf,xmin,xmax,sv=True):
+    w= svm_clf.coef_[0]
+    b=svm_clf.intercept_[0]
+    print(w)
+    x0=np.linspace(xmin,xmax,200)
+    decision_boundary=-w[0]/w[1] *x0-b/w[1]
+    #这里的margin算的并不是1/||w||,而是1/w[1]，是为了方便绘制支持向量
+    #margin = 1 / np.sqrt(np.sum(svm_clf.coef_**2))
+    margin=1/w[1]
+    print(margin)
+    gutter_up=decision_boundary+margin
+    gutter_down=decision_boundary-margin
+    if sv:
+        svs = svm_clf.support_vectors_
+        plt.scatter(svs[:,0], svs[:,1], s=180, facecolors='#FFAAAA')
+    plt.plot(x0, decision_boundary, 'k-', linewidth=2)
+    plt.plot(x0, gutter_up, 'k-', linewidth=2)
+    plt.plot(x0, gutter_down, 'k-', linewidth=2)
+plt.figure(figsize=(14,4))
+plt.subplot(121)
+plt.plot(X[:,0][y==1],X[:,1][y==1],'bs')
+plt.plot(X[:,0][y==0],X[:,1][y==0],'ys')
+plt.plot(x0,pred_1,'g--',linewidth=2)
+plt.plot(x0,pred_2,'m-',linewidth=2)
+plt.plot(x0,pred_3,'r-',linewidth=2)
+plt.axis([0,5.5,0,2])
+
+plt.subplot(122)
+plot_svc_decision_boundary(svm_clf, 0, 5.5)
+plt.plot(X[:,0][y==1],X[:,1][y==1],'bs')
+plt.plot(X[:,0][y==0],X[:,1][y==0],'ys')
+plt.axis([0,5.5,0,2])
+</code></pre>
+<p>结果如下：
+<img class="img-zoomable" src="/pictures/svm12.png" alt="image" />
+</p>
+
     </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
 </div>
 
-<div class="post">
-    <h2 class="post-item post-title">
-        <a href="https://wudaore.github.io/post/wtf-article/">纯简体中文测试文章</a>
-    </h2>
-    <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2017-04-01</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;11542 words</span>
 
-<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/test">test</a>&nbsp;<a href="/tags/wtf">wtf</a>&nbsp;</span>
-
-    </div>
-    <div class="post-item post-summary markdown-body">
-        <p>本文内容无实际意义，由狗屁不通文章生成器自动生成，不代表作者本人观点。</p>
-<p>可是，即使是这样，一段代码写一天的出现仍然代表了一定的意义。一段代码写一天，到底应该如何实现。马克思在不经意间这样说过，一切节省，归根到底都归结为时间的节省。这不禁令我深思。马克思曾经说过，一切节省，归根到底都归结为时间的节省。</p>
-    </div>
-</div>
-<div class="pagination"><div class="pag-first">
-    <a href="/"><i class="iconfont icon-caret-back-circle-sharp"></i></a>
-  </div><div class="pag-previous">
-    <a href="/"><i class="iconfont icon-chevron-back-circle-sharp"></i></a>
-  </div><div class="pag-item">
-    <a href="/">1</a>
-  </div><div class="pag-item pag-current">
-    <a href="/page/2/">2</a>
-  </div></div>
             </div>
             <aside class="col-12 col-md-3 float-left sidebar">
     
@@ -252,9 +309,12 @@
             
         </div>
     </div>
-    
-    
-    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#heading"></a></li>
+  </ul>
+</nav></div>
 </aside>
 
         </div>
@@ -379,6 +439,17 @@
             </span>
             
         </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#heading"></a></li>
+  </ul>
+</nav>
     </div>
     
     
