@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>KNN学习 - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="机器学习, algo" />
+
+
+<meta property="og:title" content="KNN学习" />
+<meta name="twitter:title" content="KNN学习" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/knn/" /><meta property="og:description" content="Introduction 基本原理 各种距离 距离调参 KNN优化-KD树 数据处理（归一化和标准化） 实战&ndash;鸢尾花数据集 总结 1. 基本原理 非常朴素的原理。根据距离最近的K个点来判断目标点的类别. 2. 各种距离 标准距离 汉明距离 杰卡" />
+<meta name="twitter:description" content="Introduction 基本原理 各种距离 距离调参 KNN优化-KD树 数据处理（归一化和标准化） 实战&ndash;鸢尾花数据集 总结 1. 基本原理 非常朴素的原理。根据距离最近的K个点来判断目标点的类别. 2. 各种距离 标准距离 汉明距离 杰卡" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-05-29T00:00:00+08:00" /><meta property="article:modified_time" content="2022-05-29T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/knn/">KNN学习</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-29</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2529 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="introduction">Introduction</h1>
+<h4 id="基本原理article_top"><a href="#article_top">基本原理</a></h4>
+<h4 id="各种距离2"><a href="#2">各种距离</a></h4>
+<h4 id="距离调参3"><a href="#3">距离调参</a></h4>
+<h4 id="knn优化-kd树4"><a href="#4">KNN优化-KD树</a></h4>
+<h4 id="数据处理归一化和标准化5"><a href="#5">数据处理（归一化和标准化）</a></h4>
+<h4 id="实战--鸢尾花数据集6"><a href="#6">实战&ndash;鸢尾花数据集</a></h4>
+<h4 id="总结7"><a href="#7">总结</a></h4>
+<h2 id="1-a-idarticle_topa基本原理">1. <a id="article_top"></a>基本原理</h2>
+<p>非常朴素的原理。根据距离最近的K个点来判断目标点的类别.</p>
+<h2 id="2-a-id2a各种距离">2. <a id="2"></a>各种距离</h2>
+<p>标准距离</p>
+<p><img class="img-zoomable" src="/KNN/%e6%a0%87%e5%87%86%e8%b7%9d%e7%a6%bb.png" alt="png" />
+</p>
+<p>汉明距离</p>
+<p><img class="img-zoomable" src="/KNN/%e6%b1%89%e6%98%8e%e8%b7%9d%e7%a6%bb.png" alt="png" />
+</p>
+<p>杰卡德距离</p>
+<p><img class="img-zoomable" src="/KNN/%e6%9d%b0%e5%8d%a1%e5%be%b7%e8%b7%9d%e7%a6%bb.png" alt="png" />
+</p>
+<p>马氏距离</p>
+<p><img class="img-zoomable" src="/KNN/%e9%a9%ac%e6%b0%8f.png" alt="png" />
+</p>
+<p>余弦距离</p>
+<p><img class="img-zoomable" src="/KNN/%e4%bd%99%e5%bc%a6%e8%b7%9d%e7%a6%bb.png" alt="png" />
+</p>
+<h2 id="3-a-id3a距离调参">3. <a id="3"></a>距离调参</h2>
+<p>p=1 曼哈顿距离 2 欧式距离 无穷 切比雪夫距离 三者都是闵式距离.</p>
+<h2 id="a-id4a4knn优化-kd树"><a id="4"></a>4.KNN优化-KD树</h2>
+<h3 id="41-kd树基本原理">4.1 KD树基本原理</h3>
+<p>根据KNN的基本原理可知，当需要预测一个点时，需要计算训练集中每个店到它的距离.当数据集很大时，对于N个样本，D个特征的数据集，算法的时间复杂度到达O(D*N^2)</p>
+<p>KD树的基本原理是通过树来分割数据，假设A和B的距离很远，B和C的距离很近，那么A和C的距离一定很远.通过这种方法，可以跳过很多距离远的点，减少计算成本.</p>
+<p>优化后算法的复杂度为O(D<em>N</em>log(N))</p>
+<h3 id="42-kd树的实现">4.2 KD树的实现</h3>
+<p>假设有数据点{(2,3),(5,4),(9,6),(4,7),(8,1),(7,2)}</p>
+<p>要根据X和Y的方差计算第一次分割的平面.X的方差更大所以选择首先分割X轴，选择其中间的(7,2),切割</p>
+<p>第二次根据Y进行分割平面.</p>
+<p>左：(2,3),(4,7),(5,4) &ndash;&gt;3,4,7</p>
+<p>右：(8,1),(9,6) &ndash;&gt;1,6</p>
+<p>对点(5,4)和(9,6)进行切割</p>
+<p>第三次数据集中的点已经很少了，直接进行切割.得到结果如下：</p>
+<p><img class="img-zoomable" src="/KNN/kd1.png" alt="png" />
+</p>
+<h3 id="43-kd树的最近邻查找">4.3 KD树的最近邻查找</h3>
+<p>以上述数据集为例，现在要查找点(2.1,3.1)则根据x-y-x的顺序遍历构造好的KD树，发现经过以下路径：</p>
+<p>&lt;(7,2),(5,4),(2,3)&gt; 反向遍历该路径.</p>
+<p>先假设(2,3)为最近点，计算与其欧式距离为0.141.以(2.1,3.1)为圆心，以0.141这个距离为半径画圆，发现不能与Y=4相交.因为(5,4)点是根据Y分割的，所以没必要到该点的右平面去查找.</p>
+<p>同样，圆不能与x=7相，所以也没必要到(7,2)的右平面查找.可知最近点为(2,3)</p>
+<p>而以点(2,4.5)为例，得到查找路径 &lt;(7,2),(5,4),(4,7)&gt; .先假设(4,7)为最优解，并按照上述步骤画圆.(4,7)和(5,4)出队列后发现，该圆能将(5,4)包括进去.意味着此时的最优点已经发生了变化，半径也变成了3.04.所以需要到(5,4)的左平面查找.此时的查找队列为&lt;(7,2),(2,3)&gt;</p>
+<p>继续回溯队列到(2,3)，此时发现该点更近，更新为最优解.距离更新为1.5</p>
+<p>最后回溯至(7,2)发现圆无法包括，不需要找(7,2)的右平面.查找完毕.</p>
+<p>以上只是举了例子，更详细的原理：https://www.bilibili.com/video/BV19f4y1R7vh?spm_id_from=333.337.search-card.all.click</p>
+<h2 id="a-id5a5数据处理"><a id="5"></a>5.数据处理</h2>
+<h3 id="51-归一化">5.1 归一化</h3>
+<p>将数据映射到[0,1]区间内.公式如下图：</p>
+<p><img class="img-zoomable" src="/KNN/knn1.png" alt="png" />
+</p>
+<p>sklearn提供了对应的API接口.具体实现代码如下：</p>
+<pre><code># # 1.归一化
+# # 1.1 实例化一个转换器
+transfer = MinMaxScaler(feature_range=(0, 1))
+# # 1.2 调用fit_transfrom方法
+minmax_data = transfer.fit_transform(data[['milage', 'Liters', 'Consumtime']])
+print(&quot;经过归一化处理之后的数据为:\n&quot;, minmax_data)
+
+</code></pre>
+<h3 id="51-标准化">5.1 标准化</h3>
+<p>异常点对归一化的影响特别大，只适合传统精确小数，鲁棒性较差.</p>
+<p>标准化：通过转换将数据转换为均值为0，标准差为1的范围内，公式如下：</p>
+<p><img class="img-zoomable" src="/KNN/knn1.png" alt="png" />
+</p>
+<p>sklearn提供了对应的API接口.具体实现代码如下：</p>
+<pre><code># 2.标准化
+# 2.1 实例化一个转换器
+transfer = StandardScaler()
+# 2.2 调用fit_transfrom方法
+minmax_data = transfer.fit_transform(data[['milage', 'Liters', 'Consumtime']])
+print(&quot;经过标准化处理之后的数据为:\n&quot;, minmax_data)
+
+</code></pre>
+<h2 id="a-id6a6实战--鸢尾花数据集交叉验证网格搜索"><a id="6"></a>6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)</h2>
+<p>KNeighborsClassifier 可以使用algorithm参数指定使用的算法，包括ball树，暴力和kd树.具体见sklearn官网https://scikit-learn.org.cn/view/85.html</p>
+<p>交叉验证：将训练集分为训练集和验证集.交叉验证并不能提高准确率 但是能使模型更加可信
+网格搜索：即将超参数(需要手动指定的参数)通过字典的形式传入，进行最优选择</p>
+<p>GridSearchCV的参数如下：https://scikit-learn.org.cn/view/655.html</p>
+<pre><code># coding:utf-8
+&quot;&quot;&quot;
+1.获取数据集
+2.数据基本处理
+3.特征工程
+4.机器学习(模型训练)
+5.模型评估
+&quot;&quot;&quot;
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+
+# 1.获取数据集
+iris = load_iris()
+
+# 2.数据基本处理
+# 2.1 数据分割
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2)
+
+# 3.特征工程
+# 3.1 实例化一个转换器
+transfer = StandardScaler()
+# 3.2 调用fit_transform方法
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.fit_transform(x_test)
+
+
+# 4.机器学习(模型训练)
+# 4.1 实例化一个估计器
+estimator = KNeighborsClassifier()
+
+# 4.2 调用交叉验证网格搜索模型
+param_grid = {&quot;n_neighbors&quot;: [1, 3, 5, 7, 9]}
+estimator = GridSearchCV(estimator, param_grid=param_grid, cv=10, n_jobs=-1)
+
+# 4.3 模型训练
+estimator.fit(x_train, y_train)
+
+# 5.模型评估
+# 5.1 输出预测值
+y_pre = estimator.predict(x_test)
+print(&quot;预测值是:\n&quot;, y_pre)
+print(&quot;预测值和真实值对比:\n&quot;, y_pre == y_test)
+
+# 5.2 输出准确率
+ret = estimator.score(x_test, y_test)
+print(&quot;准确率是:\n&quot;, ret)
+
+# 5.3 其他评价指标
+print(&quot;最好的模型：\n&quot;, estimator.best_estimator_)
+print(&quot;最好的结果:\n&quot;, estimator.best_score_)
+print(&quot;整体模型结果:\n&quot;, estimator.cv_results_)
+
+
+
+</code></pre>
+<h2 id="a-id7a7总结"><a id="7"></a>7.总结</h2>
+<p>k近邻的优点如下：</p>
+<p><strong>1.简单有效</strong></p>
+<p><strong>2.重新训练代价低</strong></p>
+<p><strong>3.适合大样本自动分类</strong></p>
+<p>该算法比较适用于样本容量比较大的类域的自动分类，而那些样本容量较小的类域采用这种算法比较容易产生误分。</p>
+<p><strong>4.适合类域交叉样本</strong></p>
+<p>KNN方法主要靠周围有限的邻近的样本,而不是靠判别类域的方法来确定所属类别的，因此对于类域的交叉或重叠较多的待分样本集来说，KNN方法较其他方法更为适合</p>
+<p>缺点如下：</p>
+<p><strong>1.惰性学习</strong></p>
+<p>KNN算法是懒散学习方法（lazy learning,基本上不学习），一些积极学习的算法要快很多</p>
+<p><strong>2.类别评分非规格化</strong></p>
+<p>不像一些通过概率评分的分类</p>
+<p><strong>3.输出的可解释性不强</strong></p>
+<p>例如决策树的输出可解释性就较强</p>
+<p><strong>4.不擅长不均衡样本</strong></p>
+<p>当样本不平衡时，如一个类的样本容量很大，而其他类样本容量很小时，有可能导致当输入一个新样本时，该样本的K个邻居中大容量类的样本占多数。该算法只计算“最近的”邻居样本，某一类的样本数量很大，那么或者这类样本并不接近目标样本，或者这类样本很靠近目标样本。无论怎样，数量并不能影响运行结果。可以采用权值的方法（和该样本距离小的邻居权值大）来改进。</p>
+<p><strong>5.计算量太大</strong></p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-a-idarticle_topa基本原理">1. <a id="article_top"></a>基本原理</a></li>
+    <li><a href="#2-a-id2a各种距离">2. <a id="2"></a>各种距离</a></li>
+    <li><a href="#3-a-id3a距离调参">3. <a id="3"></a>距离调参</a></li>
+    <li><a href="#a-id4a4knn优化-kd树"><a id="4"></a>4.KNN优化-KD树</a>
+      <ul>
+        <li><a href="#41-kd树基本原理">4.1 KD树基本原理</a></li>
+        <li><a href="#42-kd树的实现">4.2 KD树的实现</a></li>
+        <li><a href="#43-kd树的最近邻查找">4.3 KD树的最近邻查找</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-id5a5数据处理"><a id="5"></a>5.数据处理</a>
+      <ul>
+        <li><a href="#51-归一化">5.1 归一化</a></li>
+        <li><a href="#51-标准化">5.1 标准化</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-id6a6实战--鸢尾花数据集交叉验证网格搜索"><a id="6"></a>6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)</a></li>
+    <li><a href="#a-id7a7总结"><a id="7"></a>7.总结</a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-a-idarticle_topa基本原理">1. <a id="article_top"></a>基本原理</a></li>
+    <li><a href="#2-a-id2a各种距离">2. <a id="2"></a>各种距离</a></li>
+    <li><a href="#3-a-id3a距离调参">3. <a id="3"></a>距离调参</a></li>
+    <li><a href="#a-id4a4knn优化-kd树"><a id="4"></a>4.KNN优化-KD树</a>
+      <ul>
+        <li><a href="#41-kd树基本原理">4.1 KD树基本原理</a></li>
+        <li><a href="#42-kd树的实现">4.2 KD树的实现</a></li>
+        <li><a href="#43-kd树的最近邻查找">4.3 KD树的最近邻查找</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-id5a5数据处理"><a id="5"></a>5.数据处理</a>
+      <ul>
+        <li><a href="#51-归一化">5.1 归一化</a></li>
+        <li><a href="#51-标准化">5.1 标准化</a></li>
+      </ul>
+    </li>
+    <li><a href="#a-id6a6实战--鸢尾花数据集交叉验证网格搜索"><a id="6"></a>6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)</a></li>
+    <li><a href="#a-id7a7总结"><a id="7"></a>7.总结</a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>

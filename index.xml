@@ -6,7 +6,25 @@
     <description>Recent content on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 13 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>KNN学习</title>
+      <link>https://wudaore.github.io/post/knn/</link>
+      <pubDate>Sun, 29 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/knn/</guid>
+      <description>Introduction 基本原理 各种距离 距离调参 KNN优化-KD树 数据处理（归一化和标准化） 实战&amp;ndash;鸢尾花数据集 总结 1. 基本原理 非常朴素的原理。根据距离最近的K个点来判断目标点的类别. 2. 各种距离 标准距离 汉明距离 杰卡</description>
+    </item>
+    
+    <item>
+      <title>matplotlib基础</title>
+      <link>https://wudaore.github.io/post/hello_matplotlib/</link>
+      <pubDate>Tue, 24 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/hello_matplotlib/</guid>
+      <description>Introduction 对matplotlib的简易学习 import matplotlib.pyplot as plt import random matplotlib图像的绘制 # 1. 创建画布 # figsize 画布大小 dpi 像素 plt.figure(figsize=(20, 8), dpi=100) # 2.图像绘制 x = [1,2,3,4,5,6] y = [3,6,3,5,3,10] plt.plot(x, y) # 3.图像展示 plt.show() # help(plt.figure) 图像保存 # 1. 创建画布 plt.figure(figsize=(20, 8), dpi=100) # 2.图像绘</description>
+    </item>
+    
     <item>
       <title>svm学习(1)--基础概念和公式</title>
       <link>https://wudaore.github.io/post/svm1/</link>

@@ -6,7 +6,16 @@
     <description>Recent content in algo on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 13 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/algo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/algo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>KNN学习</title>
+      <link>https://wudaore.github.io/post/knn/</link>
+      <pubDate>Sun, 29 May 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/knn/</guid>
+      <description>Introduction 基本原理 各种距离 距离调参 KNN优化-KD树 数据处理（归一化和标准化） 实战&amp;ndash;鸢尾花数据集 总结 1. 基本原理 非常朴素的原理。根据距离最近的K个点来判断目标点的类别. 2. 各种距离 标准距离 汉明距离 杰卡</description>
+    </item>
+    
     <item>
       <title>svm学习(1)--基础概念和公式</title>
       <link>https://wudaore.github.io/post/svm1/</link>
