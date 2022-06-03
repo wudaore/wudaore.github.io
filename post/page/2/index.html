@@ -32,7 +32,7 @@
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://wudaore.github.io/post/" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="og:updated_time" content="2022-05-29T00:00:00+08:00" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="og:updated_time" content="2022-06-02T00:00:00+08:00" />
 
 
 <style>
@@ -97,6 +97,37 @@
                 
 
 
+
+<div class="post">
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/math-typesetting/">Math Typesetting</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-03-08</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;122 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;No tag</span>
+
+    </div>
+    <div class="post-item post-summary markdown-body">
+        <p>Mathematical notation in a Hugo project can be enabled by using third party JavaScript libraries.</p>
+<p>In this example we will be using <a href="https://katex.org/" target="_blank">KaTeX</a></p>
+<ul>
+<li>Create a partial under <code>/layouts/partials/math.html</code></li>
+<li>Within this partial reference the <a href="https://katex.org/docs/autorender.html" target="_blank">Auto-render Extension</a> or host these scripts locally.</li>
+<li>Include the partial in your templates like so:</li>
+</ul>
+<pre><code>{{ if or .Params.math .Site.Params.math }}
+{{ partial &quot;math.html&quot; . }}
+{{ end }}
+</code></pre>
+<ul>
+<li>To enable KaTex globally set the parameter <code>math</code> to <code>true</code> in a project&rsquo;s configuration</li>
+<li>To enable KaTex on a per page basis include the parameter <code>math: true</code> in content files.</li>
+</ul>
+    </div>
+</div>
 
 <div class="post">
     <h2 class="post-item post-title">

@@ -6,7 +6,16 @@
     <description>Recent content on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 29 May 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 02 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性回归学习</title>
+      <link>https://wudaore.github.io/post/linear-regression/</link>
+      <pubDate>Thu, 02 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/linear-regression/</guid>
+      <description>目录 基本原理 最小二乘法 局部加权线性回归 岭回归和lasso 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如+1，-1）.而回归问题是定量的，输出连续值（</description>
+    </item>
+    
     <item>
       <title>KNN学习</title>
       <link>https://wudaore.github.io/post/knn/</link>

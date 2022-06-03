@@ -120,9 +120,9 @@
 <h4 id="数据处理归一化和标准化5"><a href="#5">数据处理（归一化和标准化）</a></h4>
 <h4 id="实战--鸢尾花数据集6"><a href="#6">实战&ndash;鸢尾花数据集</a></h4>
 <h4 id="总结7"><a href="#7">总结</a></h4>
-<h2 id="1-a-idarticle_topa基本原理">1. <a id="article_top"></a>基本原理</h2>
+<h2 id="1-基本原理a-idarticle_topa">1. 基本原理<a id="article_top"></a></h2>
 <p>非常朴素的原理。根据距离最近的K个点来判断目标点的类别.</p>
-<h2 id="2-a-id2a各种距离">2. <a id="2"></a>各种距离</h2>
+<h2 id="2-各种距离a-id2a">2. 各种距离<a id="2"></a></h2>
 <p>标准距离</p>
 <p><img class="img-zoomable" src="/KNN/%e6%a0%87%e5%87%86%e8%b7%9d%e7%a6%bb.png" alt="png" />
 </p>
@@ -138,9 +138,9 @@
 <p>余弦距离</p>
 <p><img class="img-zoomable" src="/KNN/%e4%bd%99%e5%bc%a6%e8%b7%9d%e7%a6%bb.png" alt="png" />
 </p>
-<h2 id="3-a-id3a距离调参">3. <a id="3"></a>距离调参</h2>
+<h2 id="3-距离调参a-id3a">3. 距离调参<a id="3"></a></h2>
 <p>p=1 曼哈顿距离 2 欧式距离 无穷 切比雪夫距离 三者都是闵式距离.</p>
-<h2 id="a-id4a4knn优化-kd树"><a id="4"></a>4.KNN优化-KD树</h2>
+<h2 id="4knn优化-kd树a-id4a">4.KNN优化-KD树<a id="4"></a></h2>
 <h3 id="41-kd树基本原理">4.1 KD树基本原理</h3>
 <p>根据KNN的基本原理可知，当需要预测一个点时，需要计算训练集中每个店到它的距离.当数据集很大时，对于N个样本，D个特征的数据集，算法的时间复杂度到达O(D*N^2)</p>
 <p>KD树的基本原理是通过树来分割数据，假设A和B的距离很远，B和C的距离很近，那么A和C的距离一定很远.通过这种方法，可以跳过很多距离远的点，减少计算成本.</p>
@@ -164,7 +164,7 @@
 <p>继续回溯队列到(2,3)，此时发现该点更近，更新为最优解.距离更新为1.5</p>
 <p>最后回溯至(7,2)发现圆无法包括，不需要找(7,2)的右平面.查找完毕.</p>
 <p>以上只是举了例子，更详细的原理：https://www.bilibili.com/video/BV19f4y1R7vh?spm_id_from=333.337.search-card.all.click</p>
-<h2 id="a-id5a5数据处理"><a id="5"></a>5.数据处理</h2>
+<h2 id="5数据处理a-id5a">5.数据处理<a id="5"></a></h2>
 <h3 id="51-归一化">5.1 归一化</h3>
 <p>将数据映射到[0,1]区间内.公式如下图：</p>
 <p><img class="img-zoomable" src="/KNN/knn1.png" alt="png" />
@@ -192,7 +192,7 @@ minmax_data = transfer.fit_transform(data[['milage', 'Liters', 'Consumtime']])
 print(&quot;经过标准化处理之后的数据为:\n&quot;, minmax_data)
 
 </code></pre>
-<h2 id="a-id6a6实战--鸢尾花数据集交叉验证网格搜索"><a id="6"></a>6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)</h2>
+<h2 id="6实战--鸢尾花数据集交叉验证网格搜索a-id6a">6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)<a id="6"></a></h2>
 <p>KNeighborsClassifier 可以使用algorithm参数指定使用的算法，包括ball树，暴力和kd树.具体见sklearn官网https://scikit-learn.org.cn/view/85.html</p>
 <p>交叉验证：将训练集分为训练集和验证集.交叉验证并不能提高准确率 但是能使模型更加可信
 网格搜索：即将超参数(需要手动指定的参数)通过字典的形式传入，进行最优选择</p>
@@ -255,7 +255,7 @@ print(&quot;整体模型结果:\n&quot;, estimator.cv_results_)
 
 
 </code></pre>
-<h2 id="a-id7a7总结"><a id="7"></a>7.总结</h2>
+<h2 id="7总结-a-id7a">7.总结 <a id="7"></a></h2>
 <p>k近邻的优点如下：</p>
 <p><strong>1.简单有效</strong></p>
 <p><strong>2.重新训练代价低</strong></p>
@@ -406,24 +406,24 @@ print(&quot;整体模型结果:\n&quot;, estimator.cv_results_)
         <li></li>
       </ul>
     </li>
-    <li><a href="#1-a-idarticle_topa基本原理">1. <a id="article_top"></a>基本原理</a></li>
-    <li><a href="#2-a-id2a各种距离">2. <a id="2"></a>各种距离</a></li>
-    <li><a href="#3-a-id3a距离调参">3. <a id="3"></a>距离调参</a></li>
-    <li><a href="#a-id4a4knn优化-kd树"><a id="4"></a>4.KNN优化-KD树</a>
+    <li><a href="#1-基本原理a-idarticle_topa">1. 基本原理<a id="article_top"></a></a></li>
+    <li><a href="#2-各种距离a-id2a">2. 各种距离<a id="2"></a></a></li>
+    <li><a href="#3-距离调参a-id3a">3. 距离调参<a id="3"></a></a></li>
+    <li><a href="#4knn优化-kd树a-id4a">4.KNN优化-KD树<a id="4"></a></a>
       <ul>
         <li><a href="#41-kd树基本原理">4.1 KD树基本原理</a></li>
         <li><a href="#42-kd树的实现">4.2 KD树的实现</a></li>
         <li><a href="#43-kd树的最近邻查找">4.3 KD树的最近邻查找</a></li>
       </ul>
     </li>
-    <li><a href="#a-id5a5数据处理"><a id="5"></a>5.数据处理</a>
+    <li><a href="#5数据处理a-id5a">5.数据处理<a id="5"></a></a>
       <ul>
         <li><a href="#51-归一化">5.1 归一化</a></li>
         <li><a href="#51-标准化">5.1 标准化</a></li>
       </ul>
     </li>
-    <li><a href="#a-id6a6实战--鸢尾花数据集交叉验证网格搜索"><a id="6"></a>6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)</a></li>
-    <li><a href="#a-id7a7总结"><a id="7"></a>7.总结</a></li>
+    <li><a href="#6实战--鸢尾花数据集交叉验证网格搜索a-id6a">6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)<a id="6"></a></a></li>
+    <li><a href="#7总结-a-id7a">7.总结 <a id="7"></a></a></li>
   </ul>
 </nav></div>
 </aside>
@@ -563,24 +563,24 @@ print(&quot;整体模型结果:\n&quot;, estimator.cv_results_)
         <li></li>
       </ul>
     </li>
-    <li><a href="#1-a-idarticle_topa基本原理">1. <a id="article_top"></a>基本原理</a></li>
-    <li><a href="#2-a-id2a各种距离">2. <a id="2"></a>各种距离</a></li>
-    <li><a href="#3-a-id3a距离调参">3. <a id="3"></a>距离调参</a></li>
-    <li><a href="#a-id4a4knn优化-kd树"><a id="4"></a>4.KNN优化-KD树</a>
+    <li><a href="#1-基本原理a-idarticle_topa">1. 基本原理<a id="article_top"></a></a></li>
+    <li><a href="#2-各种距离a-id2a">2. 各种距离<a id="2"></a></a></li>
+    <li><a href="#3-距离调参a-id3a">3. 距离调参<a id="3"></a></a></li>
+    <li><a href="#4knn优化-kd树a-id4a">4.KNN优化-KD树<a id="4"></a></a>
       <ul>
         <li><a href="#41-kd树基本原理">4.1 KD树基本原理</a></li>
         <li><a href="#42-kd树的实现">4.2 KD树的实现</a></li>
         <li><a href="#43-kd树的最近邻查找">4.3 KD树的最近邻查找</a></li>
       </ul>
     </li>
-    <li><a href="#a-id5a5数据处理"><a id="5"></a>5.数据处理</a>
+    <li><a href="#5数据处理a-id5a">5.数据处理<a id="5"></a></a>
       <ul>
         <li><a href="#51-归一化">5.1 归一化</a></li>
         <li><a href="#51-标准化">5.1 标准化</a></li>
       </ul>
     </li>
-    <li><a href="#a-id6a6实战--鸢尾花数据集交叉验证网格搜索"><a id="6"></a>6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)</a></li>
-    <li><a href="#a-id7a7总结"><a id="7"></a>7.总结</a></li>
+    <li><a href="#6实战--鸢尾花数据集交叉验证网格搜索a-id6a">6.实战&ndash;鸢尾花数据集(交叉验证，网格搜索)<a id="6"></a></a></li>
+    <li><a href="#7总结-a-id7a">7.总结 <a id="7"></a></a></li>
   </ul>
 </nav>
     </div>

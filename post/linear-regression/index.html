@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>线性回归学习 - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="机器学习, algo" />
+
+
+<meta property="og:title" content="线性回归学习" />
+<meta name="twitter:title" content="线性回归学习" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/linear-regression/" /><meta property="og:description" content="目录 基本原理 最小二乘法 局部加权线性回归 岭回归和lasso 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如&#43;1，-1）.而回归问题是定量的，输出连续值（" />
+<meta name="twitter:description" content="目录 基本原理 最小二乘法 局部加权线性回归 岭回归和lasso 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如&#43;1，-1）.而回归问题是定量的，输出连续值（" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-02T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-02T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/linear-regression/">线性回归学习</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-02</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1895 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="基本原理1"><a href="#1">基本原理</a></h4>
+<h4 id="最小二乘法2"><a href="#2">最小二乘法</a></h4>
+<h4 id="局部加权线性回归3"><a href="#3">局部加权线性回归</a></h4>
+<h4 id="岭回归和lasso4"><a href="#4">岭回归和lasso</a></h4>
+<h4 id="逐步向前回归5"><a href="#5">逐步向前回归</a></h4>
+<h4 id="sklearn用法6"><a href="#6">sklearn用法</a></h4>
+<h4 id="总结7"><a href="#7">总结</a></h4>
+<h4 id="ps8"><a href="#8">ps.</a></h4>
+<h2 id="1-基本原理a-id1a">1. 基本原理<a id="1"></a></h2>
+<h3 id="11-分类和回归">1.1 分类和回归</h3>
+<p>区别在于分类问题是定性的，输出离散值（如+1，-1）.而回归问题是定量的，输出连续值（如预测明天的气温为36.5度）</p>
+<h3 id="12-基本原理">1.2 基本原理</h3>
+<p>只有在线性可分的情况下才能使用.大概就是求一组参数w使得y能拟合wx</p>
+<h2 id="2-普通最小二乘法a-id2a">2. 普通最小二乘法<a id="2"></a></h2>
+<p>最小，即最小化.二乘，即真实值-预测值的平法.普通最小二乘法就是要最小化这个平方值.</p>
+<p>由此，可以得到模型的损失函数</p>
+<p><img class="img-zoomable" src="/linear/1.png" alt="png" />
+</p>
+<p>将上式写作矩阵形式.因为要求差值（j(θ)）的极值，所以两边对θ求导=0，解得θ的值</p>
+<p><img class="img-zoomable" src="/linear/2.png" alt="png" />
+</p>
+<p>最后解得w(即θ)的最优解</p>
+<p><img class="img-zoomable" src="/linear/3.png" alt="png" />
+</p>
+<h2 id="3-局部加权线性回归lwlra-id3a">3. 局部加权线性回归LWLR<a id="3"></a></h2>
+<p>线性回归容易出现欠拟合.所以可以引入一些误差来降低均方误差.</p>
+<p>对待求点附近每个点加权（即赋予核），对于更近的点，将赋予更高的权重.</p>
+<p><img class="img-zoomable" src="/linear/4.png" alt="png" />
+</p>
+<p>对于权重W，《实战》中使用的是高斯核.显然，越近的点权重越大.</p>
+<p><img class="img-zoomable" src="/linear/5.png" alt="png" />
+</p>
+<p>公式中还有一个人为规定的参数k.k越大，越多的数据被用于训练.</p>
+<pre><code>
+def lwlr(testPoint,xArr,yArr,k=1.0):
+    xMat = mat(xArr); yMat = mat(yArr).T
+    m = shape(xMat)[0]
+    weights = mat(eye((m)))
+    for j in range(m):
+        diffMat = testPoint - xMat[j,:]
+        weights[j,j] = exp(diffMat*diffMat.T/(-2.0*k**2))
+    xTx = xMat.T * (weights * xMat)
+    if linalg.det(xTx) == 0.0:  #需要检测矩阵是否可逆.
+        print(&quot;This matrix is singular, cannot do inverse&quot;)
+        return
+    ws = xTx.I * (xMat.T * (weights * yMat))
+    return testPoint * ws
+
+
+
+
+def lwlrTest(testArr,xArr,yArr,k=1.0):  #对于每个点，都要遍历xarr计算权重
+    m = shape(testArr)[0]
+    yHat = zeros(m)
+    for i in range(m):
+        yHat[i] = lwlr(testArr[i],xArr,yArr,k)
+    return yHat
+
+</code></pre>
+<h2 id="岭回归和lasso-a-id4a">岭回归和lasso <a id="4"></a></h2>
+<h3 id="41-岭回归">4.1 岭回归</h3>
+<p>线性回归和局部加权的线性回归都存在求逆的问题.而当矩阵不可逆时（或者输入线性相关，约等于不可逆），可以引入岭回归.岭回归不仅解决矩阵不可逆的情况，还引入惩罚项，防止过拟合.</p>
+<p>相较于线性回归，岭回归引入了惩罚项如下：</p>
+<p><img class="img-zoomable" src="/linear/6.png" alt="png" />
+</p>
+<p>经过与线性回归相似的推导（求导，使极值为0）,得到岭回归的w最优解：</p>
+<p><img class="img-zoomable" src="/linear/7.png" alt="png" />
+</p>
+<p><a href="https://blog.csdn.net/qq_36523839/article/details/82931559" target="_blank">岭回归的具体推导过程</a></p>
+<pre><code>
+def rssError(yArr,yHatArr): #yArr and yHatArr both need to be arrays
+    return ((yArr-yHatArr)**2).sum()
+
+def ridgeRegres(xMat,yMat,lam=0.2):
+    xTx = xMat.T*xMat
+    denom = xTx + eye(shape(xMat)[1])*lam
+    if linalg.det(denom) == 0.0:
+        print(&quot;This matrix is singular, cannot do inverse&quot;)
+        return
+    ws = denom.I * (xMat.T*yMat)
+    return ws
+    
+def ridgeTest(xArr,yArr):
+    xMat = mat(xArr); yMat=mat(yArr).T
+    yMean = mean(yMat,0)
+    yMat = yMat - yMean     #to eliminate X0 take mean off of Y
+    #regularize X's
+    xMeans = mean(xMat,0)   #calc mean then subtract it off
+    xVar = var(xMat,0)      #calc variance of Xi then divide by it
+    xMat = (xMat - xMeans)/xVar
+    numTestPts = 30
+    wMat = zeros((numTestPts,shape(xMat)[1]))
+    for i in range(numTestPts):
+        ws = ridgeRegres(xMat,yMat,exp(i-10))
+        wMat[i,:]=ws.T
+    return wMat
+
+
+</code></pre>
+<h3 id="42-lasso">4.2 lasso</h3>
+<p>相较于岭回归，lasso只是更改了惩罚项.</p>
+<p><img class="img-zoomable" src="/linear/8.png" alt="png" />
+</p>
+<p>在添加约束条件&ndash;w<sub>k</sub>  的绝对值求和小于λ&ndash;后，当λ足够小，会使一些系数被迫降到0.</p>
+<p>这么做可以更好的帮助分析数据（庞大特征数量下的特征选择），但是却大大增加了计算量.所以提出既能分析数据又能减少计算量的方法&ndash;逐步向前回归</p>
+<h2 id="5逐步向前回归-a-id5a">5.逐步向前回归 <a id="5"></a></h2>
+<p>逐步向前回归的原理大概是:标准化数据后，经过若干次迭代，每次迭代改变一个系数得到新的w（分为增大和减小）.如新的w误差更小，则取新的w.</p>
+<p>算法共有两个可以调节的参数，即迭代次数和迭代步长.</p>
+<pre><code>def stageWise(xArr,yArr,eps=0.01,numIt=100):
+    xMat = mat(xArr); yMat=mat(yArr).T
+    yMean = mean(yMat,0)
+    yMat = yMat - yMean     #can also regularize ys but will get smaller coef
+    xMat = regularize(xMat)
+    m,n=shape(xMat)
+    returnMat = zeros((numIt,n)) #testing code remove
+    ws = zeros((n,1)); wsTest = ws.copy(); wsMax = ws.copy()
+    for i in range(numIt):
+        print(ws.T)
+        lowestError = inf; 
+        for j in range(n):
+            for sign in [-1,1]:
+                wsTest = ws.copy()
+                wsTest[j] += eps*sign
+                yTest = xMat*wsTest
+                rssE = rssError(yMat.A,yTest.A)
+                if rssE &lt; lowestError:
+                    lowestError = rssE
+                    wsMax = wsTest
+        ws = wsMax.copy()
+        returnMat[i,:]=ws.T
+    return returnMat
+
+</code></pre>
+<h2 id="6sklearn用法-a-id6a">6.sklearn用法 <a id="6"></a></h2>
+<h3 id="61-线性回归">6.1 线性回归</h3>
+<p>可以在sklearn官网中查看模型的参数和一些返回值.<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html#sklearn.linear_model.LinearRegression" target="_blank">点击查看</a></p>
+<p>具体使用如下：</p>
+<pre><code># coding:utf-8
+
+&quot;&quot;&quot;
+1.获取数据
+2.数据基本处理
+2.1 数据集划分
+3.特征工程 --标准化
+4.机器学习(线性回归)
+5.模型评估
+&quot;&quot;&quot;
+
+from sklearn.datasets import load_boston
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+
+def linear_model1():
+    &quot;&quot;&quot;
+    正规方程
+    :return: None
+    &quot;&quot;&quot;
+    # 1.获取数据
+    boston = load_boston()
+
+    # 2.数据基本处理
+    # 2.1 数据集划分
+    x_train, x_test, y_train, y_test = train_test_split(boston.data, boston.target, test_size=0.2)
+
+    # 3.特征工程 --标准化
+    transfer = StandardScaler()
+    x_train = transfer.fit_transform(x_train)
+    x_test = transfer.fit_transform(x_test)
+
+    # 4.机器学习(线性回归)
+    estimator = LinearRegression()
+    estimator.fit(x_train, y_train)
+    print(&quot;这个模型的偏置是:\n&quot;, estimator.intercept_)
+
+    # 5.模型评估
+    # 5.1 预测值和准确率
+    y_pre = estimator.predict(x_test)
+    print(&quot;预测值是:\n&quot;, y_pre)
+
+    score = estimator.score(x_test, y_test)
+    print(&quot;准确率是:\n&quot;, score)
+
+    # 5.2 均方误差
+    ret = mean_squared_error(y_test, y_pre)
+    print(&quot;均方误差是:\n&quot;, ret)
+
+
+if __name__ == '__main__':
+    linear_model1()
+
+
+</code></pre>
+<h3 id="62-岭回归">6.2 岭回归</h3>
+<p>可以在sklearn官网中查看模型的参数和一些返回值.<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV" target="_blank">点击查看</a></p>
+<p>另外，该博客对参数和返回值做了一些中文解释，方便阅读和理解.<a href="https://blog.csdn.net/voidfaceless/article/details/61197999" target="_blank">点击跳转</a></p>
+<h3 id="63-lasso">6.3 lasso</h3>
+<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html#sklearn.linear_model.Lasso" target="_blank">官网</a></p>
+<p><a href="https://blog.csdn.net/qq_36523839/article/details/82931559" target="_blank">注释参数博客</a></p>
+<h2 id="7-总结-a-id7a">7. 总结 <a id="7"></a></h2>
+<p>从本文总结的算法来看，主要经过以下流程：线性回归(容易欠拟合)&ndash;&gt;加权线性回归(容易过拟合且无法处理不可逆矩阵)&ndash;&gt;岭回归&ndash;(不好分析数据)&ndash;&gt;lasso(计算量大)&ndash;&gt;逐步向前回归.</p>
+<p>通过加权线性回归我们知道，越小的核越能拟合训练数据.当然，也越容易过拟合.而lasso和逐步向前回归允许我们参考输入向量中每一维数据的作用大小，从而可以对数据进行缩减.</p>
+<p>然而，上述算法终究只适合线性的数据.对于非线性的数据，需要使用其他算法.</p>
+<h2 id="8ps-a-id8a">8.ps. <a id="8"></a></h2>
+<h3 id="1numpymatrix">1.numpy.matrix</h3>
+<p>numpy.matrix表示矩阵，使用numpy.matrix.A方法可以像数组一样根据下标取出值，不能直接用下标.</p>
+<p><a href="https://numpy.org/devdocs/reference/generated/numpy.matrix.A.html" target="_blank">官方文档</a></p>
+<h3 id="2numpyeye">2.numpy.eye()</h3>
+<p>生成对角阵.</p>
+<p><a href="https://blog.csdn.net/chixujohnny/article/details/51011931" target="_blank">具体链接</a></p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-基本原理a-id1a">1. 基本原理<a id="1"></a></a>
+      <ul>
+        <li><a href="#11-分类和回归">1.1 分类和回归</a></li>
+        <li><a href="#12-基本原理">1.2 基本原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-普通最小二乘法a-id2a">2. 普通最小二乘法<a id="2"></a></a></li>
+    <li><a href="#3-局部加权线性回归lwlra-id3a">3. 局部加权线性回归LWLR<a id="3"></a></a></li>
+    <li><a href="#岭回归和lasso-a-id4a">岭回归和lasso <a id="4"></a></a>
+      <ul>
+        <li><a href="#41-岭回归">4.1 岭回归</a></li>
+        <li><a href="#42-lasso">4.2 lasso</a></li>
+      </ul>
+    </li>
+    <li><a href="#5逐步向前回归-a-id5a">5.逐步向前回归 <a id="5"></a></a></li>
+    <li><a href="#6sklearn用法-a-id6a">6.sklearn用法 <a id="6"></a></a>
+      <ul>
+        <li><a href="#61-线性回归">6.1 线性回归</a></li>
+        <li><a href="#62-岭回归">6.2 岭回归</a></li>
+        <li><a href="#63-lasso">6.3 lasso</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-总结-a-id7a">7. 总结 <a id="7"></a></a></li>
+    <li><a href="#8ps-a-id8a">8.ps. <a id="8"></a></a>
+      <ul>
+        <li><a href="#1numpymatrix">1.numpy.matrix</a></li>
+        <li><a href="#2numpyeye">2.numpy.eye()</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-基本原理a-id1a">1. 基本原理<a id="1"></a></a>
+      <ul>
+        <li><a href="#11-分类和回归">1.1 分类和回归</a></li>
+        <li><a href="#12-基本原理">1.2 基本原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-普通最小二乘法a-id2a">2. 普通最小二乘法<a id="2"></a></a></li>
+    <li><a href="#3-局部加权线性回归lwlra-id3a">3. 局部加权线性回归LWLR<a id="3"></a></a></li>
+    <li><a href="#岭回归和lasso-a-id4a">岭回归和lasso <a id="4"></a></a>
+      <ul>
+        <li><a href="#41-岭回归">4.1 岭回归</a></li>
+        <li><a href="#42-lasso">4.2 lasso</a></li>
+      </ul>
+    </li>
+    <li><a href="#5逐步向前回归-a-id5a">5.逐步向前回归 <a id="5"></a></a></li>
+    <li><a href="#6sklearn用法-a-id6a">6.sklearn用法 <a id="6"></a></a>
+      <ul>
+        <li><a href="#61-线性回归">6.1 线性回归</a></li>
+        <li><a href="#62-岭回归">6.2 岭回归</a></li>
+        <li><a href="#63-lasso">6.3 lasso</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-总结-a-id7a">7. 总结 <a id="7"></a></a></li>
+    <li><a href="#8ps-a-id8a">8.ps. <a id="8"></a></a>
+      <ul>
+        <li><a href="#1numpymatrix">1.numpy.matrix</a></li>
+        <li><a href="#2numpyeye">2.numpy.eye()</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
