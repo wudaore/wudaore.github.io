@@ -31,8 +31,8 @@
 <meta property="og:title" content="线性回归学习" />
 <meta name="twitter:title" content="线性回归学习" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/linear-regression/" /><meta property="og:description" content="目录 基本原理 最小二乘法 局部加权线性回归 岭回归和lasso 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如&#43;1，-1）.而回归问题是定量的，输出连续值（" />
-<meta name="twitter:description" content="目录 基本原理 最小二乘法 局部加权线性回归 岭回归和lasso 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如&#43;1，-1）.而回归问题是定量的，输出连续值（" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/linear-regression/" /><meta property="og:description" content="目录 基本原理 线性回归的损失优化 局部加权线性回归 正则化线性模型 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如&#43;1，-1）.而回归问题是定量的，输出连续" />
+<meta name="twitter:description" content="目录 基本原理 线性回归的损失优化 局部加权线性回归 正则化线性模型 逐步向前回归 sklearn用法 总结 ps. 1. 基本原理 1.1 分类和回归 区别在于分类问题是定性的，输出离散值（如&#43;1，-1）.而回归问题是定量的，输出连续" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-02T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-02T00:00:00+08:00" />
 
@@ -105,7 +105,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-02</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1895 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;3441 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
@@ -114,9 +114,9 @@
     <div class="post-content markdown-body">
         <h1 id="目录">目录</h1>
 <h4 id="基本原理1"><a href="#1">基本原理</a></h4>
-<h4 id="最小二乘法2"><a href="#2">最小二乘法</a></h4>
+<h4 id="线性回归的损失优化2"><a href="#2">线性回归的损失优化</a></h4>
 <h4 id="局部加权线性回归3"><a href="#3">局部加权线性回归</a></h4>
-<h4 id="岭回归和lasso4"><a href="#4">岭回归和lasso</a></h4>
+<h4 id="正则化线性模型4"><a href="#4">正则化线性模型</a></h4>
 <h4 id="逐步向前回归5"><a href="#5">逐步向前回归</a></h4>
 <h4 id="sklearn用法6"><a href="#6">sklearn用法</a></h4>
 <h4 id="总结7"><a href="#7">总结</a></h4>
@@ -126,18 +126,35 @@
 <p>区别在于分类问题是定性的，输出离散值（如+1，-1）.而回归问题是定量的，输出连续值（如预测明天的气温为36.5度）</p>
 <h3 id="12-基本原理">1.2 基本原理</h3>
 <p>只有在线性可分的情况下才能使用.大概就是求一组参数w使得y能拟合wx</p>
-<h2 id="2-普通最小二乘法a-id2a">2. 普通最小二乘法<a id="2"></a></h2>
+<h2 id="2-线性回归的损失优化a-id2a">2. 线性回归的损失优化<a id="2"></a></h2>
+<h3 id="21-损失---最小二乘法">2.1 损失&mdash;最小二乘法</h3>
 <p>最小，即最小化.二乘，即真实值-预测值的平法.普通最小二乘法就是要最小化这个平方值.</p>
 <p>由此，可以得到模型的损失函数</p>
 <p><img class="img-zoomable" src="/linear/1.png" alt="png" />
 </p>
+<h3 id="22-优化---正规方程">2.2 优化&mdash;正规方程</h3>
 <p>将上式写作矩阵形式.因为要求差值（j(θ)）的极值，所以两边对θ求导=0，解得θ的值</p>
 <p><img class="img-zoomable" src="/linear/2.png" alt="png" />
 </p>
 <p>最后解得w(即θ)的最优解</p>
 <p><img class="img-zoomable" src="/linear/3.png" alt="png" />
 </p>
-<h2 id="3-局部加权线性回归lwlra-id3a">3. 局部加权线性回归LWLR<a id="3"></a></h2>
+<p>特点：一蹴而就，一下子就能算出来，但是只适合样本和特征比较少的情况.</p>
+<h3 id="23-优化---梯度下降更多用到">2.3 优化&mdash;梯度下降（更多用到）</h3>
+<p>梯度下降的公式如下：</p>
+<p><img class="img-zoomable" src="/linear/10.png" alt="png" />
+</p>
+<p>原理就是逐步降低梯度，更新数据，如此循环，知道梯度无限趋近于0，找到一定区间内的极小值.梯度下降无法保证找到最小值.</p>
+<p>其中参数α为步长，步长太大容易导致跳过极值点，太小导致计算缓慢.</p>
+<h3 id="24-各种梯度下降算法">2.4 各种梯度下降算法</h3>
+<p><strong>fg，全梯度下降</strong> 计算所有样本的误差平均值作为目标函数.  时间长，内存消耗大（一般不用）</p>
+<p><strong>sag，随机平均梯度下降</strong>给每个样本都维持一个平均值.后期计算的时候参考这个平均值. 初期不佳，优化慢，因为该算法将初始梯度设为1，每轮梯度更新都结合上一轮.（首选）</p>
+<p><strong>sg，随机梯度下降</strong>每次只选择一个样本 . 能快速将平均损失函数降到很低，但是必须注意步长，且无法代表整体样本（一般不用）</p>
+<p><strong>mini-batch，小批量梯度下降</strong>选择一部分样本. 介于SG和FG之间（次选）</p>
+<h3 id="25-正规方程和梯度下降两者对比">2.5 正规方程和梯度下降两者对比</h3>
+<p><img class="img-zoomable" src="/linear/9.png" alt="png" />
+</p>
+<h2 id="3-局部加权线性回归lwlr-a-id3a">3. 局部加权线性回归LWLR <a id="3"></a></h2>
 <p>线性回归容易出现欠拟合.所以可以引入一些误差来降低均方误差.</p>
 <p>对待求点附近每个点加权（即赋予核），对于更近的点，将赋予更高的权重.</p>
 <p><img class="img-zoomable" src="/linear/4.png" alt="png" />
@@ -172,8 +189,19 @@ def lwlrTest(testArr,xArr,yArr,k=1.0):  #对于每个点，都要遍历xarr计�
     return yHat
 
 </code></pre>
-<h2 id="岭回归和lasso-a-id4a">岭回归和lasso <a id="4"></a></h2>
-<h3 id="41-岭回归">4.1 岭回归</h3>
+<h2 id="4正则化线性模型岭回归和lasso回归-a-id4a">4.正则化线性模型（岭回归和lasso回归） <a id="4"></a></h2>
+<h3 id="40-欠拟合和过拟合">4.0 欠拟合和过拟合.</h3>
+<p>欠：在训练集和测试集上表现都不包</p>
+<p>解决方法：</p>
+<p><strong>1.添加其他特征</strong></p>
+<p><strong>2.添加多项式特征.</strong></p>
+<p>过：在训练集上好 测试集上不好.</p>
+<p>解决方法：</p>
+<p><strong>1.重新清洗数据</strong></p>
+<p><strong>2.增大训练量</strong></p>
+<p><strong>3.正则化</strong> 即尽量减少高次项的影响.分为L1正则化（直接使w的一些值为0，如<a href="#lasso">LASSO回归</a>）和L2正则化(使得一些高次项的w值接近0，削弱某个特征的影响，如<a href="#lhg">ridge岭回归</a>)</p>
+<p><strong>4.减少特征维度，防止维度灾难</strong></p>
+<h3 id="41-岭回归推荐a-idlhga">4.1 岭回归（推荐）<a id="lhg"></a></h3>
 <p>线性回归和局部加权的线性回归都存在求逆的问题.而当矩阵不可逆时（或者输入线性相关，约等于不可逆），可以引入岭回归.岭回归不仅解决矩阵不可逆的情况，还引入惩罚项，防止过拟合.</p>
 <p>相较于线性回归，岭回归引入了惩罚项如下：</p>
 <p><img class="img-zoomable" src="/linear/6.png" alt="png" />
@@ -212,12 +240,20 @@ def ridgeTest(xArr,yArr):
 
 
 </code></pre>
-<h3 id="42-lasso">4.2 lasso</h3>
+<h3 id="42-lassoa-idlassoa">4.2 lasso<a id="lasso"></a></h3>
 <p>相较于岭回归，lasso只是更改了惩罚项.</p>
 <p><img class="img-zoomable" src="/linear/8.png" alt="png" />
 </p>
-<p>在添加约束条件&ndash;w<sub>k</sub>  的绝对值求和小于λ&ndash;后，当λ足够小，会使一些系数被迫降到0.</p>
-<p>这么做可以更好的帮助分析数据（庞大特征数量下的特征选择），但是却大大增加了计算量.所以提出既能分析数据又能减少计算量的方法&ndash;逐步向前回归</p>
+<p>岭回归通过增加平方项，并结合约束条件来约束高次项w的值（L2正则），顾其图线会是圆润的.而lasso回归通过增加绝对值项，并结合约束条件使得一些w项为0，表现在图线上就是不可导点，是尖锐的（在添加约束条件&ndash;w<sub>k</sub>  的绝对值求和小于λ&ndash;后，当λ足够小，会使一些系数被迫降到0.）.</p>
+<p>通过这种方法，能够自动进行特征选择.</p>
+<p>lasso可以更好的帮助分析数据（庞大特征数量下的特征选择），但是却大大增加了计算量且不太稳定.所以提出既能分析数据又能减少计算量的方法&ndash;逐步向前回归</p>
+<h3 id="43-elastic-net-弹性网络">4.3 Elastic Net 弹性网络</h3>
+<p>弹性网络通过混合比参数r控制岭回归和lasso回归.</p>
+<p><img class="img-zoomable" src="/linear/13.png" alt="png" />
+</p>
+<p>一般情况下优先使用岭回归，岭回归不适合的话才考虑弹性网络，最后才是lasso</p>
+<h3 id="44-early-stopping">4.4 Early Stopping</h3>
+<p>当错误率达到阈值时，停止迭代.</p>
 <h2 id="5逐步向前回归-a-id5a">5.逐步向前回归 <a id="5"></a></h2>
 <p>逐步向前回归的原理大概是:标准化数据后，经过若干次迭代，每次迭代改变一个系数得到新的w（分为增大和减小）.如新的w误差更小，则取新的w.</p>
 <p>算法共有两个可以调节的参数，即迭代次数和迭代步长.</p>
@@ -249,7 +285,14 @@ def ridgeTest(xArr,yArr):
 <h2 id="6sklearn用法-a-id6a">6.sklearn用法 <a id="6"></a></h2>
 <h3 id="61-线性回归">6.1 线性回归</h3>
 <p>可以在sklearn官网中查看模型的参数和一些返回值.<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html#sklearn.linear_model.LinearRegression" target="_blank">点击查看</a></p>
-<p>具体使用如下：</p>
+<p>正规方程：</p>
+<p><img class="img-zoomable" src="/linear/12.png" alt="png" />
+</p>
+<p>梯度下降：</p>
+<p><img class="img-zoomable" src="/linear/11.png" alt="png" />
+</p>
+<p>具体案例使用如下（使用正规方程和梯度下降）：</p>
+<p>预测波士顿房价</p>
 <pre><code># coding:utf-8
 
 &quot;&quot;&quot;
@@ -264,7 +307,7 @@ def ridgeTest(xArr,yArr):
 from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, SGDRegressor, Ridge, RidgeCV
 from sklearn.metrics import mean_squared_error
 
 
@@ -303,14 +346,98 @@ def linear_model1():
     print(&quot;均方误差是:\n&quot;, ret)
 
 
+def linear_model2():
+    &quot;&quot;&quot;
+    梯度下降法
+    :return: None
+    &quot;&quot;&quot;
+    # 1.获取数据
+    boston = load_boston()
+
+    # 2.数据基本处理
+    # 2.1 数据集划分
+    x_train, x_test, y_train, y_test = train_test_split(boston.data, boston.target, test_size=0.2)
+
+    # 3.特征工程 --标准化
+    transfer = StandardScaler()
+    x_train = transfer.fit_transform(x_train)
+    x_test = transfer.fit_transform(x_test)
+
+    # 4.机器学习
+    estimator = SGDRegressor(max_iter=1000, learning_rate=&quot;constant&quot;, eta0=0.001)
+
+    estimator.fit(x_train, y_train)
+    print(&quot;这个模型的偏置是:\n&quot;, estimator.intercept_)
+
+    # 5.模型评估
+    # 5.1 预测值和准确率
+    y_pre = estimator.predict(x_test)
+    print(&quot;预测值是:\n&quot;, y_pre)
+
+    score = estimator.score(x_test, y_test)
+    print(&quot;准确率是:\n&quot;, score)
+
+    # 5.2 均方误差
+    ret = mean_squared_error(y_test, y_pre)
+    print(&quot;均方误差是:\n&quot;, ret)
+
+
+
+
+
 if __name__ == '__main__':
     linear_model1()
+    linear_model2()
+    linear_model3()
 
 
 </code></pre>
 <h3 id="62-岭回归">6.2 岭回归</h3>
+<p>岭回归是线性回归的正则化版本.在sklearn中，使用SGDRegressor，设置参数penalty=l2，也可以实现岭回归，但是只能实现普通的梯度下降.而使用 Ridge可以实现随机平均梯度下降SAG</p>
+<p><img class="img-zoomable" src="/linear/14.png" alt="png" />
+</p>
+<p>对于参数alpha，根据上面岭回归的公式，alpha越大，正则化力度越大，权重系数就越小.</p>
+<p>对于参数normalize，如果为true，就可以不必进行上面的标准化.</p>
 <p>可以在sklearn官网中查看模型的参数和一些返回值.<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html#sklearn.linear_model.RidgeCV" target="_blank">点击查看</a></p>
 <p>另外，该博客对参数和返回值做了一些中文解释，方便阅读和理解.<a href="https://blog.csdn.net/voidfaceless/article/details/61197999" target="_blank">点击跳转</a></p>
+<pre><code>
+def linear_model3():
+    &quot;&quot;&quot;
+    岭回归
+    :return: None
+    &quot;&quot;&quot;
+    # 1.获取数据
+    boston = load_boston()
+
+    # 2.数据基本处理
+    # 2.1 数据集划分
+    x_train, x_test, y_train, y_test = train_test_split(boston.data, boston.target, test_size=0.2)
+
+    # 3.特征工程 --标准化
+    transfer = StandardScaler()
+    x_train = transfer.fit_transform(x_train)
+    x_test = transfer.fit_transform(x_test)
+
+    # 4.机器学习
+    # estimator = Ridge()
+    estimator = RidgeCV(alphas=(0.001, 0.1, 1, 10, 100))
+
+    estimator.fit(x_train, y_train)
+    print(&quot;这个模型的偏置是:\n&quot;, estimator.intercept_)
+
+    # 5.模型评估
+    # 5.1 预测值和准确率
+    y_pre = estimator.predict(x_test)
+    print(&quot;预测值是:\n&quot;, y_pre)
+
+    score = estimator.score(x_test, y_test)
+    print(&quot;准确率是:\n&quot;, score)
+
+    # 5.2 均方误差
+    ret = mean_squared_error(y_test, y_pre)
+    print(&quot;均方误差是:\n&quot;, ret)
+
+</code></pre>
 <h3 id="63-lasso">6.3 lasso</h3>
 <p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html#sklearn.linear_model.Lasso" target="_blank">官网</a></p>
 <p><a href="https://blog.csdn.net/qq_36523839/article/details/82931559" target="_blank">注释参数博客</a></p>
@@ -325,6 +452,8 @@ if __name__ == '__main__':
 <h3 id="2numpyeye">2.numpy.eye()</h3>
 <p>生成对角阵.</p>
 <p><a href="https://blog.csdn.net/chixujohnny/article/details/51011931" target="_blank">具体链接</a></p>
+<h3 id="3矩阵求导">3.矩阵求导</h3>
+<p>在推导正规方程时使用了矩阵的求导公式，<a href="https://blog.csdn.net/daaikuaichuan/article/details/80620518" target="_blank">点击跳转</a></p>
 
     </div>
 </article>
@@ -464,12 +593,23 @@ if __name__ == '__main__':
         <li><a href="#12-基本原理">1.2 基本原理</a></li>
       </ul>
     </li>
-    <li><a href="#2-普通最小二乘法a-id2a">2. 普通最小二乘法<a id="2"></a></a></li>
-    <li><a href="#3-局部加权线性回归lwlra-id3a">3. 局部加权线性回归LWLR<a id="3"></a></a></li>
-    <li><a href="#岭回归和lasso-a-id4a">岭回归和lasso <a id="4"></a></a>
+    <li><a href="#2-线性回归的损失优化a-id2a">2. 线性回归的损失优化<a id="2"></a></a>
       <ul>
-        <li><a href="#41-岭回归">4.1 岭回归</a></li>
-        <li><a href="#42-lasso">4.2 lasso</a></li>
+        <li><a href="#21-损失---最小二乘法">2.1 损失&mdash;最小二乘法</a></li>
+        <li><a href="#22-优化---正规方程">2.2 优化&mdash;正规方程</a></li>
+        <li><a href="#23-优化---梯度下降更多用到">2.3 优化&mdash;梯度下降（更多用到）</a></li>
+        <li><a href="#24-各种梯度下降算法">2.4 各种梯度下降算法</a></li>
+        <li><a href="#25-正规方程和梯度下降两者对比">2.5 正规方程和梯度下降两者对比</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-局部加权线性回归lwlr-a-id3a">3. 局部加权线性回归LWLR <a id="3"></a></a></li>
+    <li><a href="#4正则化线性模型岭回归和lasso回归-a-id4a">4.正则化线性模型（岭回归和lasso回归） <a id="4"></a></a>
+      <ul>
+        <li><a href="#40-欠拟合和过拟合">4.0 欠拟合和过拟合.</a></li>
+        <li><a href="#41-岭回归推荐a-idlhga">4.1 岭回归（推荐）<a id="lhg"></a></a></li>
+        <li><a href="#42-lassoa-idlassoa">4.2 lasso<a id="lasso"></a></a></li>
+        <li><a href="#43-elastic-net-弹性网络">4.3 Elastic Net 弹性网络</a></li>
+        <li><a href="#44-early-stopping">4.4 Early Stopping</a></li>
       </ul>
     </li>
     <li><a href="#5逐步向前回归-a-id5a">5.逐步向前回归 <a id="5"></a></a></li>
@@ -485,6 +625,7 @@ if __name__ == '__main__':
       <ul>
         <li><a href="#1numpymatrix">1.numpy.matrix</a></li>
         <li><a href="#2numpyeye">2.numpy.eye()</a></li>
+        <li><a href="#3矩阵求导">3.矩阵求导</a></li>
       </ul>
     </li>
   </ul>
@@ -632,12 +773,23 @@ if __name__ == '__main__':
         <li><a href="#12-基本原理">1.2 基本原理</a></li>
       </ul>
     </li>
-    <li><a href="#2-普通最小二乘法a-id2a">2. 普通最小二乘法<a id="2"></a></a></li>
-    <li><a href="#3-局部加权线性回归lwlra-id3a">3. 局部加权线性回归LWLR<a id="3"></a></a></li>
-    <li><a href="#岭回归和lasso-a-id4a">岭回归和lasso <a id="4"></a></a>
+    <li><a href="#2-线性回归的损失优化a-id2a">2. 线性回归的损失优化<a id="2"></a></a>
       <ul>
-        <li><a href="#41-岭回归">4.1 岭回归</a></li>
-        <li><a href="#42-lasso">4.2 lasso</a></li>
+        <li><a href="#21-损失---最小二乘法">2.1 损失&mdash;最小二乘法</a></li>
+        <li><a href="#22-优化---正规方程">2.2 优化&mdash;正规方程</a></li>
+        <li><a href="#23-优化---梯度下降更多用到">2.3 优化&mdash;梯度下降（更多用到）</a></li>
+        <li><a href="#24-各种梯度下降算法">2.4 各种梯度下降算法</a></li>
+        <li><a href="#25-正规方程和梯度下降两者对比">2.5 正规方程和梯度下降两者对比</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-局部加权线性回归lwlr-a-id3a">3. 局部加权线性回归LWLR <a id="3"></a></a></li>
+    <li><a href="#4正则化线性模型岭回归和lasso回归-a-id4a">4.正则化线性模型（岭回归和lasso回归） <a id="4"></a></a>
+      <ul>
+        <li><a href="#40-欠拟合和过拟合">4.0 欠拟合和过拟合.</a></li>
+        <li><a href="#41-岭回归推荐a-idlhga">4.1 岭回归（推荐）<a id="lhg"></a></a></li>
+        <li><a href="#42-lassoa-idlassoa">4.2 lasso<a id="lasso"></a></a></li>
+        <li><a href="#43-elastic-net-弹性网络">4.3 Elastic Net 弹性网络</a></li>
+        <li><a href="#44-early-stopping">4.4 Early Stopping</a></li>
       </ul>
     </li>
     <li><a href="#5逐步向前回归-a-id5a">5.逐步向前回归 <a id="5"></a></a></li>
@@ -653,6 +805,7 @@ if __name__ == '__main__':
       <ul>
         <li><a href="#1numpymatrix">1.numpy.matrix</a></li>
         <li><a href="#2numpyeye">2.numpy.eye()</a></li>
+        <li><a href="#3矩阵求导">3.矩阵求导</a></li>
       </ul>
     </li>
   </ul>
