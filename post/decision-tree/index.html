@@ -105,7 +105,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-05</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;825 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1302 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
@@ -310,8 +310,115 @@
 <p><img class="img-zoomable" src="/dtree/4.png" alt="png" />
 </p>
 <p>而信息增益比 = 信息增益 / 属性分裂信息度量.</p>
-<h3 id="24-基尼不纯度">2.4 基尼不纯度</h3>
-<p>与信息熵同样是度量的指标.基本原理为随机选取子项，计算其被错分到其他类的概率</p>
+<h3 id="24-基尼增益">2.4 基尼增益.</h3>
+<p>与信息增益同样是度量的指标.基尼增益最大的属性作为决策树的根节点</p>
+<h4 id="241-基尼值">2.4.1 基尼值</h4>
+<p>GiNi(D)代表从数据集D中随机抽取两个样本，计算其不一致的概率.基尼值越小，数据集纯度越高</p>
+<p><img class="img-zoomable" src="/dtree/5.png" alt="png" />
+</p>
+<h4 id="242-基尼指数">2.4.2 基尼指数</h4>
+<p>一般选择划分后基尼系数最小的属性为最优划分属性.</p>
+<p><img class="img-zoomable" src="/dtree/6.png" alt="png" />
+</p>
+<p>举例：是否拖欠贷款和是否有房，年收入和婚姻状况的关系.数据表格如下(s代表singal单身，m代表married，已结婚,d表示divorced，已离婚)：</p>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>是否有房</th>
+<th>婚姻状况</th>
+<th>年收入</th>
+<th>是否拖欠贷款</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>s</td>
+<td>125</td>
+<td>0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0</td>
+<td>m</td>
+<td>100</td>
+<td>0</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0</td>
+<td>s</td>
+<td>70</td>
+<td>0</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1</td>
+<td>m</td>
+<td>120</td>
+<td>0</td>
+</tr>
+<tr>
+<td>5</td>
+<td>0</td>
+<td>d</td>
+<td>95</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>0</td>
+<td>m</td>
+<td>60</td>
+<td>0</td>
+</tr>
+<tr>
+<td>7</td>
+<td>1</td>
+<td>d</td>
+<td>220</td>
+<td>0</td>
+</tr>
+<tr>
+<td>8</td>
+<td>0</td>
+<td>s</td>
+<td>85</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9</td>
+<td>0</td>
+<td>m</td>
+<td>75</td>
+<td>0</td>
+</tr>
+<tr>
+<td>10</td>
+<td>0</td>
+<td>s</td>
+<td>90</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>与计算信息增益类似，基尼增益需要先算出分类以前的基尼值.然后根据各个属性的不同类别（比如婚姻状况属性就有三个类别），依次计算出他们的基尼值.最后用分类以前的基尼值依次进去[ 概率（这里指的是总概率，比如这个案例中的是否拖欠贷款）* 各个类别的基尼值 ]</p>
+<p>以本案例来说，根节点基尼系数为0.42.</p>
+<p><img class="img-zoomable" src="/dtree/7.png" alt="png" />
+</p>
+<p><strong>根据是否有房</strong>，计算基尼系数增益为0.077：</p>
+<p><img class="img-zoomable" src="/dtree/8.png" alt="png" />
+</p>
+<p><strong>婚姻状况</strong>不同于是否有房，其并不是一个是或否的问题.需要根据婚姻状况这个属性的三种类别分别划分数据，计算基尼增益.注意划分后只有某类别与其他类别.计算过程如下：</p>
+<p><img class="img-zoomable" src="/dtree/9.png" alt="png" />
+</p>
+<p><img class="img-zoomable" src="/dtree/10.png" alt="png" />
+</p>
+<p><img class="img-zoomable" src="/dtree/11.png" alt="png" />
+</p>
+<p>其中最大的增益为0.12</p>
 
     </div>
 </article>
@@ -451,7 +558,7 @@
         <li><a href="#21-香农熵">2.1 香农熵</a></li>
         <li><a href="#22-信息增益">2.2 信息增益</a></li>
         <li><a href="#23-信息增益比">2.3 信息增益比</a></li>
-        <li><a href="#24-基尼不纯度">2.4 基尼不纯度</a></li>
+        <li><a href="#24-基尼增益">2.4 基尼增益.</a></li>
       </ul>
     </li>
   </ul>
@@ -599,7 +706,7 @@
         <li><a href="#21-香农熵">2.1 香农熵</a></li>
         <li><a href="#22-信息增益">2.2 信息增益</a></li>
         <li><a href="#23-信息增益比">2.3 信息增益比</a></li>
-        <li><a href="#24-基尼不纯度">2.4 基尼不纯度</a></li>
+        <li><a href="#24-基尼增益">2.4 基尼增益.</a></li>
       </ul>
     </li>
   </ul>
