@@ -31,8 +31,8 @@
 <meta property="og:title" content="逻辑回归学习" />
 <meta name="twitter:title" content="逻辑回归学习" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/logistic-regression/" /><meta property="og:description" content="目录 基本原理 逻辑回归的损失函数 逻辑回归的优化 随机梯度上升 分类评估方法 sklearn实现 ps. 1. 基本原理 虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即 之所以能解决二分类问题，是" />
-<meta name="twitter:description" content="目录 基本原理 逻辑回归的损失函数 逻辑回归的优化 随机梯度上升 分类评估方法 sklearn实现 ps. 1. 基本原理 虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即 之所以能解决二分类问题，是" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/logistic-regression/" /><meta property="og:description" content="目录 基本原理 逻辑回归的损失函数 逻辑回归的优化 随机梯度上升 分类评估方法 sklearn实现 总结 ps. 1. 基本原理 虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即 之所以能解决二分类问题" />
+<meta name="twitter:description" content="目录 基本原理 逻辑回归的损失函数 逻辑回归的优化 随机梯度上升 分类评估方法 sklearn实现 总结 ps. 1. 基本原理 虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即 之所以能解决二分类问题" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-03T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-03T00:00:00+08:00" />
 
@@ -105,7 +105,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-03</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2447 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2978 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
@@ -119,6 +119,7 @@
 <h4 id="随机梯度上升4"><a href="#4">随机梯度上升</a></h4>
 <h4 id="分类评估方法45"><a href="#4.5">分类评估方法</a></h4>
 <h4 id="sklearn实现5"><a href="#5">sklearn实现</a></h4>
+<h4 id="总结8"><a href="#8">总结</a></h4>
 <h4 id="psfinal"><a href="#final">ps.</a></h4>
 <h2 id="1-基本原理a-id1a">1. 基本原理<a id="1"></a></h2>
 <p>虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即</p>
@@ -317,7 +318,24 @@ y_test = np.where(y_test&gt;3, 1, 0)
 
 roc_auc_score(y_true=y_test, y_score=y_pre)
 </code></pre>
-<h2 id="7ps-a-idfinala">7.ps. <a id="final"></a></h2>
+<h2 id="7-总结a-id8a">7. 总结<a id="8"></a></h2>
+<p>本文主要介绍了逻辑回归的原理和源码，并使用梯度上升&ndash;随机梯度上升来更新参数，求最优解.另外，本文介绍了一些分类评估的方法.最后，对于上述内容，本文介绍了sklearn API的详细实现过程.</p>
+<p>逻辑回归的优点：</p>
+<p><strong>(1)对率函数任意阶可导，具有很好的数学性质，许多现有的数值优化算法都可以用来求最优解，训练速度快;</strong></p>
+<p><strong>(2)简单易理解，模型的可解释性非常好，从特征的权重可以看到不同的特征对最后结果的影响;</strong></p>
+<p><strong>(3)适合二分类问题，不需要缩放输入特征;</strong></p>
+<p><strong>(4)内存资源占用小，因为只需要存储各个维度的特征值;</strong></p>
+<p><strong>(5)直接对分类可能性进行建模，无需事先假设数据分布，避免了假设分布不准确所带来的问题</strong></p>
+<p><strong>(6)以概率的形式输出，而非知识0.1判定，对许多利用概率辅助决策的任务很有用</strong></p>
+<p>逻辑回归的缺点：</p>
+<p><strong>(1)不能用逻辑回归去解决非线性问题，因为Logistic的决策面试线性的;</strong></p>
+<p><strong>(2)对多重共线性数据较为敏感;</strong></p>
+<p><strong>(3)很难处理数据不平衡的问题;</strong></p>
+<p><strong>(4)准确率并不是很高，因为形式非常的简单(非常类似线性模型)，很难去拟合数据的真实分布;</strong></p>
+<p><strong>(5)逻辑回归本身无法筛选特征，有时会用gbdt来筛选特征，然后再上逻辑回归。</strong></p>
+<p>逻辑回归的适用场景：</p>
+<p>如是否患病，金融诈骗，虚假账号等二分类问题</p>
+<h2 id="8-ps-a-idfinala">8. ps. <a id="final"></a></h2>
 <p><strong>numpy中mat.getA 将矩阵转换为ndarray</strong></p>
 <p><strong>ones((n, 1))，n代表几行，1代表每行有一个数.</strong></p>
 <p><strong>关于loc和iloc</strong></p>
@@ -472,7 +490,8 @@ df.iloc([0:9,0:2]) #定位第0到8行，第0到1列的dataframe
     <li><a href="#4-随机的梯度上升-a-id4a">4. 随机的梯度上升 <a id="4"></a></a></li>
     <li><a href="#5分类评估方法-a-id45a">5.分类评估方法 <a id="4.5"></a></a></li>
     <li><a href="#6-sklearn实现-a-id5a">6. sklearn实现 <a id="5"></a></a></li>
-    <li><a href="#7ps-a-idfinala">7.ps. <a id="final"></a></a></li>
+    <li><a href="#7-总结a-id8a">7. 总结<a id="8"></a></a></li>
+    <li><a href="#8-ps-a-idfinala">8. ps. <a id="final"></a></a></li>
   </ul>
 </nav></div>
 </aside>
@@ -618,7 +637,8 @@ df.iloc([0:9,0:2]) #定位第0到8行，第0到1列的dataframe
     <li><a href="#4-随机的梯度上升-a-id4a">4. 随机的梯度上升 <a id="4"></a></a></li>
     <li><a href="#5分类评估方法-a-id45a">5.分类评估方法 <a id="4.5"></a></a></li>
     <li><a href="#6-sklearn实现-a-id5a">6. sklearn实现 <a id="5"></a></a></li>
-    <li><a href="#7ps-a-idfinala">7.ps. <a id="final"></a></a></li>
+    <li><a href="#7-总结a-id8a">7. 总结<a id="8"></a></a></li>
+    <li><a href="#8-ps-a-idfinala">8. ps. <a id="final"></a></a></li>
   </ul>
 </nav>
     </div>

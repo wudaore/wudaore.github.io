@@ -13,7 +13,7 @@
       <pubDate>Fri, 03 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/logistic-regression/</guid>
-      <description>目录 基本原理 逻辑回归的损失函数 逻辑回归的优化 随机梯度上升 分类评估方法 sklearn实现 ps. 1. 基本原理 虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即 之所以能解决二分类问题，是</description>
+      <description>目录 基本原理 逻辑回归的损失函数 逻辑回归的优化 随机梯度上升 分类评估方法 sklearn实现 总结 ps. 1. 基本原理 虽然叫回归但是其实解决的是二分类问题.逻辑回归的输入值为线性回归的输出值，即 之所以能解决二分类问题</description>
     </item>
     
     <item>
