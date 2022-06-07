@@ -13,7 +13,7 @@
       <pubDate>Sun, 05 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/decision-tree/</guid>
-      <description>目录 基本原理 信息熵和信息增益 总结 ps. 1. 基本原理 决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过问一系列的问题(if-else)去预测结果。 2.</description>
+      <description>目录 基本原理 度量方法 常用的剪枝方法 特征工程-特征提取 决策树的实现 决策树绘制 总结 ps. 1. 基本原理 决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过</description>
     </item>
     
     <item>

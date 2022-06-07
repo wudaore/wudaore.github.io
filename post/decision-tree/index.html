@@ -31,8 +31,8 @@
 <meta property="og:title" content="决策树学习" />
 <meta name="twitter:title" content="决策树学习" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/decision-tree/" /><meta property="og:description" content="目录 基本原理 信息熵和信息增益 总结 ps. 1. 基本原理 决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过问一系列的问题(if-else)去预测结果。 2." />
-<meta name="twitter:description" content="目录 基本原理 信息熵和信息增益 总结 ps. 1. 基本原理 决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过问一系列的问题(if-else)去预测结果。 2." /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/decision-tree/" /><meta property="og:description" content="目录 基本原理 度量方法 常用的剪枝方法 特征工程-特征提取 决策树的实现 决策树绘制 总结 ps. 1. 基本原理 决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过" />
+<meta name="twitter:description" content="目录 基本原理 度量方法 常用的剪枝方法 特征工程-特征提取 决策树的实现 决策树绘制 总结 ps. 1. 基本原理 决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-05T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-05T00:00:00+08:00" />
 
@@ -105,7 +105,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-05</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1302 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;4955 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
@@ -114,14 +114,18 @@
     <div class="post-content markdown-body">
         <h1 id="目录">目录</h1>
 <h4 id="基本原理1"><a href="#1">基本原理</a></h4>
-<h4 id="信息熵和信息增益2"><a href="#2">信息熵和信息增益</a></h4>
+<h4 id="度量方法2"><a href="#2">度量方法</a></h4>
+<h4 id="常用的剪枝方法3"><a href="#3">常用的剪枝方法</a></h4>
+<h4 id="特征工程-特征提取4"><a href="#4">特征工程-特征提取</a></h4>
+<h4 id="决策树的实现5"><a href="#5">决策树的实现</a></h4>
+<h4 id="决策树绘制6"><a href="#6">决策树绘制</a></h4>
 <h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
 <h4 id="psfinal"><a href="#final">ps.</a></h4>
 <h2 id="1-基本原理a-id1a">1. 基本原理<a id="1"></a></h2>
 <p>决策树是一种树形结构，每个内部节点代表一个属性上的判断.每个叶节点代表一种分类结果.它的本质就是基于数据，通过问一系列的问题(if-else)去预测结果。</p>
 <p><img class="img-zoomable" src="/dtree/1.png" alt="png" />
 </p>
-<h2 id="2-信息熵和信息增益a-id2a">2. 信息熵和信息增益<a id="2"></a></h2>
+<h2 id="2-度量方法a-id2a">2. 度量方法<a id="2"></a></h2>
 <p>所谓熵即混乱程度.越有序熵越低.</p>
 <h3 id="21-香农熵">2.1 香农熵</h3>
 <p><img class="img-zoomable" src="/dtree/2.png" alt="png" />
@@ -145,6 +149,25 @@
 <p>信息增益，即以某特征值划分前后信息熵的差值.特征值A对数据集D的增益<strong>g(D,A) = H(D) - H(D|A)</strong></p>
 <p><img class="img-zoomable" src="/dtree/3.png" alt="png" />
 </p>
+<p>计算代码如下：</p>
+<pre><code>def chooseBestFeatureToSplit(dataSet):
+    numFeatures = len(dataSet[0]) - 1      #the last column is used for the labels
+    baseEntropy = calcShannonEnt(dataSet)
+    bestInfoGain = 0.0; bestFeature = -1
+    for i in range(numFeatures):        # 对于每一个特征
+        featList = [example[i] for example in dataSet] # 提取出这个特征所有的值
+        uniqueVals = set(featList)       # unique这个值
+        newEntropy = 0.0
+        for value in uniqueVals:  # 对于某个特征的所有值（类别）
+            subDataSet = splitDataSet(dataSet, i, value)
+            prob = len(subDataSet)/float(len(dataSet))
+            newEntropy += prob * calcShannonEnt(subDataSet)     
+        infoGain = baseEntropy - newEntropy     # 计算信息增益
+        if (infoGain &gt; bestInfoGain):       #compare this to the best gain so far
+            bestInfoGain = infoGain         #if better than current best, set to best
+            bestFeature = i
+    return bestFeature                      #returns an integer
+</code></pre>
 <p><strong>举例 探究某论坛用户流失和性别，活跃度的相关性：</strong></p>
 <table>
 <thead>
@@ -311,7 +334,7 @@
 </p>
 <p>而信息增益比 = 信息增益 / 属性分裂信息度量.</p>
 <h3 id="24-基尼增益">2.4 基尼增益.</h3>
-<p>与信息增益同样是度量的指标.基尼增益最大的属性作为决策树的根节点</p>
+<p>与信息增益同样是度量的指标.基尼增益最大的属性作为决策树的根节点.基尼增益=总体基尼值-基尼指数</p>
 <h4 id="241-基尼值">2.4.1 基尼值</h4>
 <p>GiNi(D)代表从数据集D中随机抽取两个样本，计算其不一致的概率.基尼值越小，数据集纯度越高</p>
 <p><img class="img-zoomable" src="/dtree/5.png" alt="png" />
@@ -419,6 +442,367 @@
 <p><img class="img-zoomable" src="/dtree/11.png" alt="png" />
 </p>
 <p>其中最大的增益为0.12</p>
+<p><strong>年收入</strong>是数值型数据，处理方法不同于前面两种.其基尼增益的求法为从小到大排序，两两之间求出相邻值中点，以此求基尼增益.</p>
+<p>以60和70中间点65为例，以该点为分割时，Gini(年收入) = 0.42 - [1/10 * (1-0-1)] - { 9/10 * [ 1-(3/9)<sup>2</sup> - (6/9)<sup>2</sup> ] } = 0.02</p>
+<p>其中 1/10是小于65的点的概率；3/9是大于65的点中分类为positive的点的占比.依次通过每个中间点分割数据，得到最大的基尼增益同样是0.12</p>
+<p><img class="img-zoomable" src="/dtree/12.png" alt="png" />
+</p>
+<p>婚姻状况&ndash;married的基尼增益也是0.12，因为先被计算出来所以先用它来分割根节点，**注意：**每次分割后剩余的数据需要重新计算基尼增益，来决定下一次由谁来分割.比如分割掉married后，是否有房的基尼增益变为最大，需要根据它来分.具体流程如下图：</p>
+<p><img class="img-zoomable" src="/dtree/13.png" alt="png" />
+</p>
+<h3 id="25-小结">2.5 小结.</h3>
+<p>决策树的变量可以有数字型和名称型.</p>
+<p>数字型，如上文提到的工资，需要使用“&gt;=,&lt;”等比值符号进行分割.而名称型，如上文提到的婚姻状况，使用“=”分割.</p>
+<p>决策树构建的基本步骤如下：</p>
+<p><strong>1.开始将所有记录看做一个节点</strong></p>
+<p><strong>2.遍历每个变量的每一种分割方式，找到最适合的分割方式，分割数据</strong></p>
+<p><strong>3.对分割后的数据重复分割，知道最后的节点足够纯为止</strong></p>
+<p>根据使用信息增益，信息增益率和基尼指数，决策树分为ID3决策树，C4.5决策树和CART决策树</p>
+<table>
+<thead>
+<tr>
+<th>决策树类别</th>
+<th>分支方式</th>
+<th>优点</th>
+<th>缺点</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ID3</td>
+<td>信息增益</td>
+<td></td>
+<td>只能对离散属性的数据集构造决策树，偏向取值多的属性</td>
+<td></td>
+</tr>
+<tr>
+<td>C4.5</td>
+<td>信息增益率</td>
+<td>分类结果易于理解准确率高.可以处理连续数据.对于缺失值的处理.采用了后剪枝，避免树高无限增长，避免过拟合</td>
+<td>对数据多次扫描排序，效率低.另外，只能处理训练集全部读入内存的情况.数据集过大就不好处理</td>
+<td>优化后解决了ID3偏向取值多的属性.</td>
+</tr>
+<tr>
+<td>CART</td>
+<td>基尼指数</td>
+<td>可以进行分类和回归.可以处理离散也可以处理连续</td>
+<td></td>
+<td>根据上面的例子可知，CART每次分类都只是二分</td>
+</tr>
+</tbody>
+</table>
+<h2 id="3-常用的剪枝方法a-id3a">3. 常用的剪枝方法<a id="3"></a></h2>
+<p>由于噪声，样本冲突，或特征即属性不能完全作为分类标准，或因为数据量不够大造成的巧合的规律性，不剪枝的决策树容易过拟合.</p>
+<h3 id="31-预剪枝">3.1 预剪枝</h3>
+<p>即一边构造树时一边剪枝.主要通过(1)限制节点包含的最小样本数(2)指定树的高度或深度(3)指定节点的熵小于某个值</p>
+<h3 id="32-后剪枝">3.2 后剪枝</h3>
+<p>构造完树后进行从下往上的剪枝.C4.5就是后剪枝.因为要构造完树才能剪枝，当数据量太大导致无法全部读入内存时，C4.5无法运行</p>
+<h2 id="4-特征工程-特征提取a-id4a">4. 特征工程-特征提取<a id="4"></a></h2>
+<p>特征提取，即将数据转换为能使机器学习的数字特征.分为三类，字典特征提取（特征离散化），文本特征提取和图像特征提取（深度学习）.本博客介绍前两类.</p>
+<p>sklearn中特征提取的API为feature_extraction.<a href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.feature_extraction" target="_blank">点击跳转</a></p>
+<h3 id="41-字典特征提取">4.1 字典特征提取</h3>
+<p>对于特征中存在的类别信息，我们一般都会one-hot编码</p>
+<p><img class="img-zoomable" src="/dtree/14.png" alt="png" />
+</p>
+<p>具体用法和标准化的接口非常类似</p>
+<pre><code>def dict_demo():
+    &quot;&quot;&quot;
+    字典特征提取
+    :return:
+    &quot;&quot;&quot;
+    data = [{'city': '北京', 'temperature': 100},
+            {'city': '上海', 'temperature': 60},
+            {'city': '深圳', 'temperature': 30}]
+    # 字典特征提取
+    # 1.实例化
+    transfer = DictVectorizer(sparse=False)
+
+    # 2.调用fit_transform
+    trans_data = transfer.fit_transform(data)
+
+    print(&quot;特征名字是：\n&quot;, transfer.get_feature_names())
+
+    print(trans_data)
+</code></pre>
+<p>运行结果如下：</p>
+<p><img class="img-zoomable" src="/dtree/16.png" alt="png" />
+</p>
+<p>而在数据量特别大时，sparse设置为True会更直观，提高读取效率并节省内存</p>
+<p><img class="img-zoomable" src="/dtree/15.png" alt="png" />
+</p>
+<h3 id="42-文本特征提取">4.2 文本特征提取</h3>
+<h4 id="421-英文文本特征提取">4.2.1 英文文本特征提取</h4>
+<p><img class="img-zoomable" src="/dtree/17.png" alt="png" />
+</p>
+<pre><code>def english_count_text_demo():
+    &quot;&quot;&quot;
+    文本特征提取 -- 英文
+    :return: NOne
+    &quot;&quot;&quot;
+    data = [&quot;life is is short,i like python&quot;,
+            &quot;life is too long,i dislike python&quot;]
+
+    # 1.实例化
+    # transfer = CountVectorizer(sparse=False)  # 注意，没有sparse这个参数
+    transfer = CountVectorizer(stop_words=[&quot;dislike&quot;])
+
+    # 2.调用fit_transform
+    transfer_data = transfer.fit_transform(data)
+    print(transfer_data)
+    print(transfer.get_feature_names())
+    print(transfer_data.toarray())
+
+</code></pre>
+<h4 id="422-中文文本特征提取">4.2.2 中文文本特征提取</h4>
+<p>需要先进行分词处理.本篇使用jieba分词，后续可用分词效果更好的模型如hanlp</p>
+<p>需要先分词后，使用&quot; &ldquo;.join转换成用空格分开的句子.转换后再代入.</p>
+<pre><code>def cut_word(sen):
+    &quot;&quot;&quot;
+    中文分词
+    :return: sen
+    &quot;&quot;&quot;
+    # print(&quot; &quot;.join(list(jieba.cut(sen))))
+    return &quot; &quot;.join(list(jieba.cut(sen)))
+</code></pre>
+<pre><code>def chinese_count_text_demo2():
+    &quot;&quot;&quot;
+    文本特征提取 -- 中文
+    :return: NOne
+    &quot;&quot;&quot;
+    data = [&quot;一种还是一种今天很残酷，明天更残酷，后天很美好，但绝对大部分是死在明天晚上，所以每个人不要放弃今天。&quot;,
+            &quot;我们看到的从很远星系来的光是在几百万年之前发出的，这样当我们看到宇宙时，我们是在看它的过去。&quot;,
+            &quot;如果只用一种方式了解某样事物，你就不会真正了解它。了解事物真正含义的秘密取决于如何将其与我们所了解的事物相联系。&quot;]
+
+    list = []
+    for temp in data:
+        # print(temp)
+        list.append(cut_word(temp))
+    print(list)
+
+    # 1.实例化
+    transfer = CountVectorizer(stop_words=[&quot;一种&quot;, &quot;还是&quot;])
+
+    # 2.调用fit_transform
+    transfer_data = transfer.fit_transform(list)
+
+    print(transfer.get_feature_names())
+    print(transfer_data.toarray())
+</code></pre>
+<h3 id="43-tf-idf">4.3 tf-idf</h3>
+<p>作用：评估一个词在一个文件中的重要作用.某次在本文章中出现的概率高（tf，词频率），在其他文件中出现的概率低（idf，逆向文档频率），那么就适合分类.</p>
+<p>tfidf = tf * idf.</p>
+<p>tf即词频，idf = log<sub>10</sub>(总文件数/出现该词的文件数)</p>
+<h2 id="5-决策树的实现a-id5a">5. 决策树的实现<a id="5"></a></h2>
+<h3 id="51-实战源码实现">5.1 《实战》源码实现</h3>
+<p>《实战》决策树分类中只讲了ID3决策树的实现.实现选择信息增益最大的特征的函数已经在上面列出（chooseBestFeatureToSplit）.</p>
+<p>下面是分割数据集的函数：</p>
+<pre><code>def splitDataSet(dataSet, axis, value): # 分割特征下标为axis，值为value的数据
+    retDataSet = []
+    for featVec in dataSet:
+        if featVec[axis] == value:
+            reducedFeatVec = featVec[:axis]     #chop out axis used for splitting
+            reducedFeatVec.extend(featVec[axis+1:])
+            retDataSet.append(reducedFeatVec)
+    return retDataSet
+
+</code></pre>
+<p>票选函数：</p>
+<pre><code>def majorityCnt(classList):
+    classCount={}
+    for vote in classList:
+        if vote not in classCount.keys(): classCount[vote] = 0
+        classCount[vote] += 1
+    sortedClassCount = sorted(classCount.iteritems(), key=operator.itemgetter(1), reverse=True)
+    return sortedClassCount[0][0]
+</code></pre>
+<p>最后是递归构造决策树的函数.递归停止条件一为只剩一个类别了.二位没有特征可以继续分割了</p>
+<pre><code>def createTree(dataSet,labels):
+    classList = [example[-1] for example in dataSet] # yes or no 的一个list
+    if classList.count(classList[0]) == len(classList): 
+        return classList[0] # 当只剩一种类别时，停止递归
+    if len(dataSet[0]) == 1: # 没有特征可以分割了，停止递归
+        return majorityCnt(classList) # 选取类别最多的作为结果
+    bestFeat = chooseBestFeatureToSplit(dataSet)
+    bestFeatLabel = labels[bestFeat]
+    myTree = {bestFeatLabel:{}}
+    del(labels[bestFeat])
+    featValues = [example[bestFeat] for example in dataSet]
+    uniqueVals = set(featValues)
+    for value in uniqueVals:
+        subLabels = labels[:]       #copy all of labels, so trees don't mess up existing labels
+        myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value),subLabels)
+    return myTree    
+
+</code></pre>
+<h3 id="52-sklearn实现">5.2 sklearn实现</h3>
+<p><a href="https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html#sklearn.tree.DecisionTreeClassifier" target="_blank">具体接口信息点击跳转</a></p>
+<p><img class="img-zoomable" src="/dtree/18.png" alt="png" />
+</p>
+<p><strong>案例：泰坦尼克号乘客生存预测</strong></p>
+<details>
+<summary>点击查看</summary>
+<pre><code>
+<h4 id="1获取数据">1.获取数据</h4>
+<h4 id="2数据基本处理">2.数据基本处理</h4>
+<h4 id="21-确定特征值目标值">2.1 确定特征值,目标值</h4>
+<h4 id="22-缺失值处理">2.2 缺失值处理</h4>
+<h4 id="23-数据集划分">2.3 数据集划分</h4>
+<h4 id="3特征工程字典特征抽取">3.特征工程(字典特征抽取)</h4>
+<h4 id="4机器学习决策树">4.机器学习(决策树)</h4>
+<h4 id="5模型评估">5.模型评估</h4>
+<p>import pandas as pd
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.feature_extraction import DictVectorizer</p>
+<h4 id="1获取数据-1">1.获取数据</h4>
+<p>data = pd.read_csv(&rdquo;./titanic.csv&quot;)</p>
+<h4 id="2数据基本处理--缺失值替换">2.数据基本处理 -缺失值替换</h4>
+<h4 id="21-确定特征值目标值-1">2.1 确定特征值,目标值</h4>
+<p>train = data[[&ldquo;pclass&rdquo;,&ldquo;age&rdquo;,&ldquo;sex&rdquo;]]
+label = data[&ldquo;survived&rdquo;]
+print(train.isnull().sum())</p>
+<h4 id="22-缺失值处理-1">2.2 缺失值处理</h4>
+<p>train[&lsquo;age&rsquo;].fillna(value=train[&lsquo;age&rsquo;].mean(), inplace=True)
+train</p>
+<h4 id="23-数据集划分-1">2.3 数据集划分</h4>
+<p>x_train, x_test, y_train, y_test = train_test_split(train, label, random_state=22, test_size=0.2)</p>
+<h4 id="3特征工程字典特征抽取-1">3.特征工程(字典特征抽取)</h4>
+<h4 id="字典特征抽取需要先将输入转换为字典样式">字典特征抽取需要先将输入转换为字典样式</h4>
+<h4 id="orient参数可以有很多值用到的时候再查">orient参数可以有很多值，用到的时候再查</h4>
+<p>x_train = x_train.to_dict(orient=&ldquo;records&rdquo;)
+x_test = x_test.to_dict(orient=&ldquo;records&rdquo;)
+transfer = DictVectorizer()
+x_train = transfer.fit_transform(x_train)
+x_test = transfer.fit_transform(x_test)</p>
+<h4 id="4机器学习决策树-1">4.机器学习(决策树)</h4>
+<p>estimator = DecisionTreeClassifier(max_depth=5)
+estimator.fit(x_train, y_train)
+estimator.predict(x_test)</p>
+<h4 id="5模型评估-1">5.模型评估</h4>
+<p>print(estimator.score(x_test, y_test))</p>
+<p></code></pre></p>
+</details>
+<h2 id="6-决策树的绘制a-id6a">6. 决策树的绘制<a id="6"></a></h2>
+<h3 id="61-实战源码">6.1 《实战》源码</h3>
+<details>
+<summary>获取叶子节点个数</summary>
+<pre><code>
+def getNumLeafs(myTree):
+    numLeafs = 0
+    firstStr = myTree.keys()[0]
+    secondDict = myTree[firstStr]
+    for key in secondDict.keys():
+        if type(secondDict[key]).__name__=='dict':#test to see if the nodes are dictonaires, if not they are leaf nodes
+            numLeafs += getNumLeafs(secondDict[key])
+        else:   numLeafs +=1
+    return numLeafs
+</code></pre>
+</details>
+<details>
+<summary>计算树的高度</summary>
+<pre><code>
+def getTreeDepth(myTree):
+    maxDepth = 0
+    firstStr = myTree.keys()[0]
+    secondDict = myTree[firstStr]
+    for key in secondDict.keys():
+        if type(secondDict[key]).__name__=='dict':#test to see if the nodes are dictonaires, if not they are leaf nodes
+            thisDepth = 1 + getTreeDepth(secondDict[key])
+        else:   thisDepth = 1
+        if thisDepth > maxDepth: maxDepth = thisDepth
+    return maxDepth
+</code></pre>
+</details>
+<details>
+<summary>使用文本注解绘制树节点</summary>
+<pre><code>
+def plotNode(nodeTxt, centerPt, parentPt, nodeType):
+    createPlot.ax1.annotate(nodeTxt, xy=parentPt,  xycoords='axes fraction',
+             xytext=centerPt, textcoords='axes fraction',
+             va="center", ha="center", bbox=nodeType, arrowprops=arrow_args )
+</code></pre>
+</details>
+<details>
+<summary>绘制分支上的值，计算父节点和子节点的中间位置，添加简单的文本信息</summary>
+<pre><code>
+def plotMidText(cntrPt, parentPt, txtString):
+    xMid = (parentPt[0]-cntrPt[0])/2.0 + cntrPt[0]
+    yMid = (parentPt[1]-cntrPt[1])/2.0 + cntrPt[1]
+    createPlot.ax1.text(xMid, yMid, txtString, va="center", ha="center", rotation=30)
+</code></pre>
+</details>
+<details>
+<summary>绘制树</summary>
+<pre><code>
+def plotTree(myTree, parentPt, nodeTxt):#if the first key tells you what feat was split on
+    numLeafs = getNumLeafs(myTree)  #this determines the x width of this tree
+    depth = getTreeDepth(myTree)
+    firstStr = list(myTree.keys())[0]   #the text label for this node should be this
+    cntrPt = (plotTree.xOff + (1.0 + float(numLeafs))/2.0/plotTree.totalW, plotTree.yOff)
+    plotMidText(cntrPt, parentPt, nodeTxt)
+    plotNode(firstStr, cntrPt, parentPt, decisionNode)
+    secondDict = myTree[firstStr]
+    # 更新下一个节点的位置的Y值
+    plotTree.yOff = plotTree.yOff - 1.0/plotTree.totalD
+    for key in secondDict.keys():
+        if type(secondDict[key]).__name__=='dict':#test to see if the nodes are dictonaires, if not they are leaf nodes
+            plotTree(secondDict[key],cntrPt,str(key))        #recursion
+        else:   #it's a leaf node print the leaf node
+            plotTree.xOff = plotTree.xOff + 1.0/plotTree.totalW
+            plotNode(secondDict[key], (plotTree.xOff, plotTree.yOff), cntrPt, leafNode)
+            plotMidText((plotTree.xOff, plotTree.yOff), cntrPt, str(key))
+    plotTree.yOff = plotTree.yOff + 1.0/plotTree.totalD
+</code></pre>
+</details>
+<p><strong>注：该段代码比较阴间，需要注解</strong></p>
+<p>设该树所有叶节点水平位置上之间的距离 d=（ 1/叶节点的个数）。</p>
+<p>y的坐标很好计算，只需要使用上个y的坐标-1/树高 就可以了.以下只考虑x坐标的计算。分两种情况讨论，一是非叶节点，二是叶节点。</p>
+<p>对于非叶节点，每个非叶节点的x位置都可以分别用它左边最近的叶节点进行求解。设某非叶结点 A 有n个叶节点，它左边最近叶节点 a 位置为（xOff，yOff），那么A应位于属于它的所有叶节点的中间位置，即水平位置上离 a 的间隔是（n+1）/2。那么它的 x坐标=xOff+d*（n+1）/2。</p>
+<p>对于叶节点，每个叶节点的x位置也可以用它左边最近的叶节点进行求解。左边最近的叶节点坐标位置（xOff，yOff），即 某叶节点x坐标是 xOff+d。</p>
+<details>
+<summary>主函数，调用 绘制树 函数</summary>
+<pre><code>
+def createPlot(inTree):
+    fig = plt.figure(1, facecolor='white')
+    fig.clf()
+    axprops = dict(xticks=[], yticks=[])
+    createPlot.ax1 = plt.subplot(111, frameon=False, **axprops)    #no ticks
+    #createPlot.ax1 = plt.subplot(111, frameon=False) #ticks for demo puropses 
+    plotTree.totalW = float(getNumLeafs(inTree))
+    plotTree.totalD = float(getTreeDepth(inTree))
+    # 使用两个全局变量plotTree.xOff和plotTree.yOff追踪已经绘制的节点位置，以及放置下一
+    # 个节点的恰当位置
+    plotTree.xOff = -0.5/plotTree.totalW
+    plotTree.yOff = 1.0;
+    print(plotTree.xOff)
+    print(plotTree.yOff)
+    plotTree(inTree, (0.5, 1.0), '')
+    plt.show()
+</code></pre>
+</details>
+<h3 id="62-sklearn实现">6.2 sklearn实现</h3>
+<p>运用上面的泰坦尼克号的案例.sklearn提供了可视化决策树的接口</p>
+<details>
+<summary>决策树可视化</summary>
+<pre><code>
+from sklearn.tree import export_graphviz
+export_graphviz(estimator, out_file="./data/tree.dot", feature_names=['age', 'pclass=1st', 'pclass=2nd', 'pclass=3rd', '女性', '男性'])
+</code></pre>
+</details>
+<p>运行后导出一个dot文件.可以直接查看但是比较糊.可以将文件内容输入到<a href="www.webgraphviz.com">这个网站</a>进行查看</p>
+<p><img class="img-zoomable" src="/dtree/19.png" alt="png" />
+</p>
+<h2 id="6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></h2>
+<p>前面总结的比较到位，这里就不总结了</p>
+<h2 id="7-psa-idfinala">7. p.s.<a id="final"></a></h2>
+<p>决策树可视化时特征名字和训练集不一致，最好用代码看一下训练的特征顺序，才好判定</p>
+<pre><code>
+for i in x_train:
+    print(i.toarray())
+
+</code></pre>
 
     </div>
 </article>
@@ -553,14 +937,42 @@
       </ul>
     </li>
     <li><a href="#1-基本原理a-id1a">1. 基本原理<a id="1"></a></a></li>
-    <li><a href="#2-信息熵和信息增益a-id2a">2. 信息熵和信息增益<a id="2"></a></a>
+    <li><a href="#2-度量方法a-id2a">2. 度量方法<a id="2"></a></a>
       <ul>
         <li><a href="#21-香农熵">2.1 香农熵</a></li>
         <li><a href="#22-信息增益">2.2 信息增益</a></li>
         <li><a href="#23-信息增益比">2.3 信息增益比</a></li>
         <li><a href="#24-基尼增益">2.4 基尼增益.</a></li>
+        <li><a href="#25-小结">2.5 小结.</a></li>
       </ul>
     </li>
+    <li><a href="#3-常用的剪枝方法a-id3a">3. 常用的剪枝方法<a id="3"></a></a>
+      <ul>
+        <li><a href="#31-预剪枝">3.1 预剪枝</a></li>
+        <li><a href="#32-后剪枝">3.2 后剪枝</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-特征工程-特征提取a-id4a">4. 特征工程-特征提取<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-字典特征提取">4.1 字典特征提取</a></li>
+        <li><a href="#42-文本特征提取">4.2 文本特征提取</a></li>
+        <li><a href="#43-tf-idf">4.3 tf-idf</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-决策树的实现a-id5a">5. 决策树的实现<a id="5"></a></a>
+      <ul>
+        <li><a href="#51-实战源码实现">5.1 《实战》源码实现</a></li>
+        <li><a href="#52-sklearn实现">5.2 sklearn实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-决策树的绘制a-id6a">6. 决策树的绘制<a id="6"></a></a>
+      <ul>
+        <li><a href="#61-实战源码">6.1 《实战》源码</a></li>
+        <li><a href="#62-sklearn实现">6.2 sklearn实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#7-psa-idfinala">7. p.s.<a id="final"></a></a></li>
   </ul>
 </nav></div>
 </aside>
@@ -701,14 +1113,42 @@
       </ul>
     </li>
     <li><a href="#1-基本原理a-id1a">1. 基本原理<a id="1"></a></a></li>
-    <li><a href="#2-信息熵和信息增益a-id2a">2. 信息熵和信息增益<a id="2"></a></a>
+    <li><a href="#2-度量方法a-id2a">2. 度量方法<a id="2"></a></a>
       <ul>
         <li><a href="#21-香农熵">2.1 香农熵</a></li>
         <li><a href="#22-信息增益">2.2 信息增益</a></li>
         <li><a href="#23-信息增益比">2.3 信息增益比</a></li>
         <li><a href="#24-基尼增益">2.4 基尼增益.</a></li>
+        <li><a href="#25-小结">2.5 小结.</a></li>
       </ul>
     </li>
+    <li><a href="#3-常用的剪枝方法a-id3a">3. 常用的剪枝方法<a id="3"></a></a>
+      <ul>
+        <li><a href="#31-预剪枝">3.1 预剪枝</a></li>
+        <li><a href="#32-后剪枝">3.2 后剪枝</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-特征工程-特征提取a-id4a">4. 特征工程-特征提取<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-字典特征提取">4.1 字典特征提取</a></li>
+        <li><a href="#42-文本特征提取">4.2 文本特征提取</a></li>
+        <li><a href="#43-tf-idf">4.3 tf-idf</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-决策树的实现a-id5a">5. 决策树的实现<a id="5"></a></a>
+      <ul>
+        <li><a href="#51-实战源码实现">5.1 《实战》源码实现</a></li>
+        <li><a href="#52-sklearn实现">5.2 sklearn实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-决策树的绘制a-id6a">6. 决策树的绘制<a id="6"></a></a>
+      <ul>
+        <li><a href="#61-实战源码">6.1 《实战》源码</a></li>
+        <li><a href="#62-sklearn实现">6.2 sklearn实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#7-psa-idfinala">7. p.s.<a id="final"></a></a></li>
   </ul>
 </nav>
     </div>
