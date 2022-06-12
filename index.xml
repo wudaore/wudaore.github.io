@@ -6,7 +6,16 @@
     <description>Recent content on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 05 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>集成学习</title>
+      <link>https://wudaore.github.io/post/ensemble-learning/</link>
+      <pubDate>Wed, 08 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/ensemble-learning/</guid>
+      <description>目录 基本原理 bagging boosting 总结 ps. 1. 基本原理 即通过简历多个模型来解决单一预测问题.原理是生成多个分类器，各自独立学习得出预测结果，这些预测最后组成预测序列.因此优于任何一个单分类做出的预测. 对于欠拟合问题，使用b</description>
+    </item>
+    
     <item>
       <title>决策树学习</title>
       <link>https://wudaore.github.io/post/decision-tree/</link>
