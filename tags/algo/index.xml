@@ -6,11 +6,20 @@
     <description>Recent content in algo on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 16 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/algo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 22 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/algo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Apriori算法实现关联分析</title>
+      <link>https://wudaore.github.io/post/apriori/</link>
+      <pubDate>Wed, 22 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/apriori/</guid>
+      <description>目录 Apriori关联分析基本原理 关联分析《实战》源码 关联规则基本原理 关联规则《实战》源码 总结 ps. 1. Apriori关联分析基本原理 频繁项集是指那些经常出现在一起的物品集合.使用频繁项集和关联规则，商家可</description>
+    </item>
+    
     <item>
       <title>k均值聚类算法</title>
       <link>https://wudaore.github.io/post/k-means/</link>
-      <pubDate>Thu, 16 Jun 2022 00:00:00 +0800</pubDate>
+      <pubDate>Mon, 20 Jun 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/k-means/</guid>
       <description>目录 基本原理 《实战》源码 模型评估 算法优化 特征降维 API接口实现 案例-消费预测 总结 ps. 1. 基本原理 原理比较简单.首先随机设置k个簇的中心点，遍历每个点计算距离，将较近的点归于一个簇中.完毕后，更新簇的中心点</description>

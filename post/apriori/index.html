@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>Apriori算法实现关联分析 - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="机器学习, algo" />
+
+
+<meta property="og:title" content="Apriori算法实现关联分析" />
+<meta name="twitter:title" content="Apriori算法实现关联分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/apriori/" /><meta property="og:description" content="目录 Apriori关联分析基本原理 关联分析《实战》源码 关联规则基本原理 关联规则《实战》源码 总结 ps. 1. Apriori关联分析基本原理 频繁项集是指那些经常出现在一起的物品集合.使用频繁项集和关联规则，商家可" />
+<meta name="twitter:description" content="目录 Apriori关联分析基本原理 关联分析《实战》源码 关联规则基本原理 关联规则《实战》源码 总结 ps. 1. Apriori关联分析基本原理 频繁项集是指那些经常出现在一起的物品集合.使用频繁项集和关联规则，商家可" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-22T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-22T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/apriori/">Apriori算法实现关联分析</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-22</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2947 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="apriori关联分析基本原理1"><a href="#1">Apriori关联分析基本原理</a></h4>
+<h4 id="关联分析实战源码2"><a href="#2">关联分析《实战》源码</a></h4>
+<h4 id="关联规则基本原理3"><a href="#3">关联规则基本原理</a></h4>
+<h4 id="关联规则实战源码4"><a href="#4">关联规则《实战》源码</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h4 id="psfinal"><a href="#final">ps.</a></h4>
+<h2 id="1-apriori关联分析基本原理a-id1a">1. Apriori关联分析基本原理<a id="1"></a></h2>
+<p>频繁项集是指那些经常出现在一起的物品集合.使用频繁项集和关联规则，商家可以更好地理解他们的顾客.</p>
+<p>**支持度（support）**被定义为数据集中包含该项集的记录所占的比例</p>
+<p>**可信度或置信度（confidence）**针对一条关联规则来定义.</p>
+<p><strong>支持度</strong>和<strong>可信度</strong>是用来量化关联分析是否成功的方法.</p>
+<p>当物品数量多时，针对每一种组合，统计其出现的频繁程度速度很慢.比如对于N种物品，有2<sup>n</sup>-1种项集组合.当N很大时遍历穷举显然不合适.此时引出<strong>Apriori关联分析</strong>减少计算量</p>
+<p>在学习Apriori算法之前，需要知道<strong>Apriori原理</strong>.也即，某个项集是频繁的，那么它的所有子集也是频繁的.逆否定理即子集不频繁，项集频繁.这就可以通过子集来对超集进行剪枝.</p>
+<p>算法流程如下：</p>
+<p>当集合中项的个数大于0时</p>
+<pre><code>构建一个k个项组成的候选项集的列表
+
+检查数据以确认每个项集都是频繁的
+
+保留频繁项集并构建k+1项组成的候选项集的列表
+</code></pre>
+<h2 id="2-关联分析实战源码a-id2a">2. 关联分析《实战》源码<a id="2"></a></h2>
+<p>首先需要创建一个辅助函数扫描数据集</p>
+<pre><code># 构建集合C1
+def createC1(dataSet):
+    C1 = []
+    for transaction in dataSet:
+        for item in transaction:
+            if not [item] in C1:
+                C1.append([item])
+                
+    C1.sort()
+    return list(map(frozenset, C1)) # 需要使用不可修改的frozen set   
+
+# 扫描
+def scanD(D, Ck, minSupport):
+    # ssCnt实际上就是统计D中的每个值在ck中出现的次数
+    # retList是筛选以后的支持度达到最小支持度的Ck列表
+    # supportData是ck中每一个值出现的频率，也即支持度
+    ssCnt = {}
+    for tid in D:
+        for can in Ck:
+            if can.issubset(tid): # 如果ck中的元素都包括在D中
+                if not can in ssCnt:
+                    ssCnt[can]=1
+                else:
+                    ssCnt[can] += 1
+    numItems = float(len(D))
+    retList = []
+    supportData = {}
+    for key in ssCnt:
+        support = ssCnt[key]/numItems
+        if support &gt;= minSupport:
+            retList.insert(0,key)
+        supportData[key] = support
+    return retList, supportData
+
+</code></pre>
+<p>createC1构建了C1，也即大小为1的所有候选项集的集合，格式为{[1],[2]&hellip;}</p>
+<p>而scanD有三个输入参数，分别是数据集、候选项集列表Ck以及感兴趣项集的最小支持度minSupport.该函数的核心作用就是筛选达到最小支持度的Ck列表，并返回ck中每一个值出现的频率，也即支持度.</p>
+<p>然后是Apriori算法的具体实现.Apriori算法的优化之处就在于对于支持度低的子集，舍弃其超集</p>
+<pre><code>def aprioriGen(Lk, k): #creates Ck
+    retList = []
+    lenLk = len(Lk)
+    for i in range(lenLk):
+        for j in range(i+1, lenLk):
+            # print('+++')
+            L1 = list(Lk[i])[:k-2]
+            L2 = list(Lk[j])[:k-2]
+            L1.sort(); L2.sort()
+            # print(Lk)
+            # print(k)
+            # print(L1)
+            # print(L2)
+            # print('+++')
+            if L1==L2: # 输入参数为频繁项集列表Lk与项集元素个数k，输出为Ck
+                retList.append(Lk[i] | Lk[j]) # 合并两个集合
+    # print('ret is', retList)
+    return retList
+
+# 获得频繁集项和其支持度
+def apriori(dataSet, minSupport = 0.5):
+    C1 = createC1(dataSet)
+    D = list(map(set, dataSet))
+    L1, supportData = scanD(D, C1, minSupport)
+    L = [L1]
+    # print('L is', L)
+    k = 2
+    while (len(L[k-2]) &gt; 0):
+        Ck = aprioriGen(L[k-2], k)
+        # print('-----')
+        # print(L[k-2])
+        # print(Ck)
+        # print('-----')
+        Lk, supK = scanD(D, Ck, minSupport)# Ck是候选集列表.需要通过scanD来筛选掉频率低于最小支持度的项
+        supportData.update(supK)
+        L.append(Lk)# 低位集合不频繁那么它的超集一定不频繁.L中只会添加频繁的集合
+        k += 1
+    return L, supportData
+</code></pre>
+<p>厘清CK，LK，supportData和L的关系.</p>
+<p>CK是将L输入到aprioriGen后得出的产物，其含义是输入元素的各种合并后的项集.AprioriGen函数的输入参数为频繁项集列表Lk与项集元素个数k，输出为Ck.“输入参数为频繁项集列表Lk与项集元素个数k，输出为Ck”的思想有效避免了计算的过度繁杂.</p>
+<p>LK是将CK输入到scanD后得出的产物.其含义是上述项集后筛选掉支持度小于最小支持度后的结果.</p>
+<p>supportData是每次scanD返回的supportData的合集.里面存放每一个组合的支持度.</p>
+<p>L初始只有L1（即初始数据集扫描以后）中的内容.随着迭代不断进行，L中只会添加频繁的集合，直到达到迭代结束的条件.</p>
+<p><strong>总的来说</strong>，apriori就是不断迭代数据，每次迭代产生一系列项集，筛选掉不频繁的，留下频繁的项集就是apriori的输出结果.</p>
+<h2 id="3-关联规则基本原理a-id3a">3. 关联规则基本原理<a id="3"></a></h2>
+<p>关联规则，差不多可以理解为某个元素或者某个元素集合是否可能会推导出另一个元素.</p>
+<p>一条规则P ➞ H的可信度定义为<strong>support(P | H)/support(P)</strong>，其中(P | H)的含义是P和H的并集.在构造关联规则时，我们先生成一个可能的规则列表，然后测试每条规则的可信度。如果可信度不满足最小要求，则去掉该规则.</p>
+<p><img class="img-zoomable" src="/Apriori/1.png" alt="png" />
+</p>
+<p>与关联分析类似，如果某条规则并不满足最小可信度要求，那么该规则的所有子集也不会满足最小可信度要求，这可以大大减少计算量.</p>
+<h2 id="4关联规则实战源码a-id4a">4.关联规则《实战》源码<a id="4"></a></h2>
+<pre><code># 频繁项集列表、包含那些频繁项集支持数据的字典、最小可信度阈值
+def generateRules(L, supportData, minConf=0.7):  #supportData is a dict coming from scanD
+    bigRuleList = []
+    # print('L is', L)
+    # print('supp is,', suppData)
+    # print('conf is', minConf)
+    for i in range(1, len(L)):# 只获取有两个或更多元素的集合.L[0]都只有一个元素 所以被舍弃
+        for freqSet in L[i]:
+            H1 = [frozenset([item]) for item in freqSet]
+            # print('---')
+            # print('h1 is', H1)
+            # print('freqSet is', freqSet)
+            if (i &gt; 1):
+                rulesFromConseq(freqSet, H1, supportData, bigRuleList, minConf) # freqSet：频繁项集；H1：可以出现在规则右部的元素列表
+            else:
+                calcConf(freqSet, H1, supportData, bigRuleList, minConf)
+    return bigRuleList         
+
+# 对规则进行评估
+def calcConf(freqSet, H, supportData, brl, minConf=0.7):
+    prunedH = [] #create new list to return
+    for conseq in H:
+        conf = supportData[freqSet]/supportData[freqSet-conseq] # 计算可信度（一条规则P ➞ H的可信度定义为support(P | H)/support(P)。）
+        if conf &gt;= minConf: # 如果某条规则满足最小可信度值，那么将这些规则输出到屏幕显示。通过检查的规则也会被返回，并被用在下一个函数rulesFromConseq()中。同时也需要对列表brl进行填充，而brl是前面通过检查的bigRuleList。
+            print(freqSet-conseq,'--&gt;',conseq,'conf:',conf)
+            brl.append((freqSet-conseq, conseq, conf))
+            prunedH.append(conseq)
+    return prunedH
+
+
+# 从最初的项集中生成更多的关联规则
+def rulesFromConseq(freqSet, H, supportData, brl, minConf=0.7):
+    m = len(H[0])# m为频繁集大小
+    # print('m is', m)
+    if (len(freqSet) &gt; (m + 1)): # 频繁集大到可以移除为m的子集
+        Hmp1 = aprioriGen(H, m+1)# 生成H元素中的无重复组合.hmp1即下一次迭代的H列表，包含所有可能的规则
+        # print('hmp1 is', Hmp1)
+        Hmp1 = calcConf(freqSet, Hmp1, supportData, brl, minConf)# 所有通过检查的规则
+        if (len(Hmp1) &gt; 1):    # 如果不止一条规则满足要求，那么使用Hmp1迭代调用函数rulesFromConseq()来判断是否可以进一步组合这些规则。
+            rulesFromConseq(freqSet, Hmp1, supportData, brl, minConf)
+
+</code></pre>
+<p>三个函数.generateRules是主函数，输入值为频繁项集列表、包含那些频繁项集支持数据的字典、最小可信度阈值.freqSet：频繁项集；H1：可以出现在规则右部的元素列表.</p>
+<p>calcConf是对规则进行评估的函数.conf = supportData[freqSet]/supportData[freqSet-conseq]，即通过上述公式support(P | H)/support(P)计算可信度.如果某条规则满足最小可信度值，那么将这些规则输出到屏幕显示。通过检查的规则也会被返回，并被用在下一个函数rulesFromConseq()中。同时也需要对列表brl进行填充，而brl是前面通过检查的bigRuleList.</p>
+<p>rulesFromConseq的作用是从最初的项集中生成更多的关联规则.通过aprioriGen生成新的项集，并通过calcConf对项集进行筛选.如果不止一条规则满足要求，那么使用Hmp1迭代调用函数rulesFromConseq()来判断是否可以进一步组合这些规则.</p>
+<p>回到主函数中.因为只获取有两个或更多元素的集合.L[0]都只有一个元素 所以被舍弃，故而循环是从L[1]开始的.从L[1]之后，不断从输入的项集中生成更多的关联规则.如果不止一条规则满足要求，那么使用Hmp1迭代调用函数rulesFromConseq()来判断是否可以进一步组合这些规则.</p>
+<h2 id="5-总结a-idconclusiona">5. 总结<a id="conclusion"></a></h2>
+<p>Apriori算法可以发现元素间的不同组合，并通过Apriori原理减少计算量.</p>
+<p>但是Apriori算法会重新扫描整个数据集。当数据集很大时，这会显著降低频繁项集发现的速度。</p>
+<h2 id="6-psa-idfinala">6. p.s.<a id="final"></a></h2>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-apriori关联分析基本原理a-id1a">1. Apriori关联分析基本原理<a id="1"></a></a></li>
+    <li><a href="#2-关联分析实战源码a-id2a">2. 关联分析《实战》源码<a id="2"></a></a></li>
+    <li><a href="#3-关联规则基本原理a-id3a">3. 关联规则基本原理<a id="3"></a></a></li>
+    <li><a href="#4关联规则实战源码a-id4a">4.关联规则《实战》源码<a id="4"></a></a></li>
+    <li><a href="#5-总结a-idconclusiona">5. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#6-psa-idfinala">6. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-apriori关联分析基本原理a-id1a">1. Apriori关联分析基本原理<a id="1"></a></a></li>
+    <li><a href="#2-关联分析实战源码a-id2a">2. 关联分析《实战》源码<a id="2"></a></a></li>
+    <li><a href="#3-关联规则基本原理a-id3a">3. 关联规则基本原理<a id="3"></a></a></li>
+    <li><a href="#4关联规则实战源码a-id4a">4.关联规则《实战》源码<a id="4"></a></a></li>
+    <li><a href="#5-总结a-idconclusiona">5. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#6-psa-idfinala">6. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
