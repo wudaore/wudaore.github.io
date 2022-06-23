@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>FP-growth算法 - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="机器学习, algo" />
+
+
+<meta property="og:title" content="FP-growth算法" />
+<meta name="twitter:title" content="FP-growth算法" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/fp-growth/" /><meta property="og:description" content="目录 FP树基本原理 FP树源码 总结 ps. 1. FP树基本原理 在寻找频繁项集时，Apriori算法对于每个潜在的频繁项集都会扫描数据集判定给定模式是否频繁.在数据量大时运行会很慢. 而FP-groth算法通过构造F" />
+<meta name="twitter:description" content="目录 FP树基本原理 FP树源码 总结 ps. 1. FP树基本原理 在寻找频繁项集时，Apriori算法对于每个潜在的频繁项集都会扫描数据集判定给定模式是否频繁.在数据量大时运行会很慢. 而FP-groth算法通过构造F" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-23T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-23T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/fp-growth/">FP-growth算法</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-23</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2486 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="fp树基本原理1"><a href="#1">FP树基本原理</a></h4>
+<h4 id="fp树源码2"><a href="#2">FP树源码</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h4 id="psfinal"><a href="#final">ps.</a></h4>
+<h2 id="1-fp树基本原理a-id1a">1. FP树基本原理<a id="1"></a></h2>
+<p>在寻找频繁项集时，Apriori算法对于每个潜在的频繁项集都会扫描数据集判定给定模式是否频繁.在数据量大时运行会很慢.</p>
+<p>而FP-groth算法通过构造FP树，只需要扫描数据集两遍即可.FP树如下图所示.</p>
+<p><img class="img-zoomable" src="/FP/1.png" alt="png" />
+</p>
+<p>区别于传统的树，FP树可以出现重复内容，并且对于重复元素，使用“node link”进行连接，方便进行回溯.</p>
+<h3 id="11-fp树节点结构">1.1 FP树节点结构</h3>
+<p>包括节点名，节点次数，linknode（指向同名节点），节点双亲和节点孩子.</p>
+<p>有inc和disp方法.inc方法用于修改节点次数，disp方法则用于打印该节点和该节点的孩子组成的树</p>
+<p><a href="#treeNode">跳转至代码</a></p>
+<h3 id="12-fp树的构建">1.2 FP树的构建</h3>
+<p>首先对于所有符合频率要求（达到指定次数）的元素，构建一个头指针表，存放这些元素.头指针表同样需要使用linknode连接树中的同名元素.头指针表需要根据元素频度进行排序</p>
+<p>第一次遍历数据集会获得每个元素项的出现频率。接下来，去掉不满足最小支持度的元素项</p>
+<p>第二次遍历之前，需要对集合项进行排序，让频度高的排在前面.</p>
+<p>然后开始构建FP树.如果树中已存在现有元素，则增加现有元素的值；如果现有元素不存在，则向树添加一个分枝.</p>
+<p><img class="img-zoomable" src="/FP/1.png" alt="png" />
+</p>
+<p><a href="#createTree">跳转至代码</a></p>
+<h3 id="13-条件模式基">1.3 条件模式基</h3>
+<p>FP树已经构造完毕.那么要如何查看频繁项集呢？引入<strong>条件模式基</strong>的概念.条件模式基即是以所查找元素项为结尾的路径集合.FP树中加入父亲节点就是为了方便回溯，构造路径.</p>
+<p><a href="#moshiji">跳转至代码</a></p>
+<h3 id="14-条件fp树">1.4 条件FP树</h3>
+<p>光构造FP树并不足以帮助我们获取所有的频繁项集.</p>
+<p><strong>总结一下过程，对于每个元素a的FP树H中的每个元素b都与a的组合频繁，而在a元素对应的H中，有与b频繁的元素c，那么{a，b，c}也频繁。</strong></p>
+<p><strong>同理可以处理c及其他元素。之所以可以这样做是应为元素a与其对应的H中的所有元素都频繁出现，而在该H中，b又与c频繁出现，c在该H中，所以a，b，c频繁。每一个元素对应不同的H，每一次递归时，对应的频繁项集的长度就会增加，H范围会在上一递归层H_old的范围的基础上缩小。</strong></p>
+<p><strong>代码具体过程如下：</strong></p>
+<p>对于每一个频繁项，都要创建一棵条件FP树.某个元素是频繁项，但是在指定元素的条件FP树中，它就不一定是了.</p>
+<p>对于输入的大批量数据，先调用createTree方法构建头结点表和树节点；先将头结点表中的元素按照出现频率从小到大进行排序，然后遍历头节点表，找到它每一个元素的条件模式基.</p>
+<p>而后，将条件基作为数据集输入到建树函数createTree中构建条件树.最后，如果树中有元素项的话，递归调用mineTree()函数.</p>
+<p><a href="#CondTree">跳转至代码</a></p>
+<p><a href="https://zhuanlan.zhihu.com/p/265982813" target="_blank">参考博客</a></p>
+<p>这篇博客举了树上了例子，很好的帮助我们了解条件FP树</p>
+<h2 id="2-fp树建树更新树源码a-id2a">2. FP树建树，更新树源码<a id="2"></a></h2>
+<h3 id="21-fp树节点a-idtreenodea">2.1 FP树节点.<a id="treeNode"></a></h3>
+<pre><code># 节点值，count变量增加值，父节点
+class treeNode:
+    def __init__(self, nameValue, numOccur, parentNode):
+        self.name = nameValue
+        self.count = numOccur
+        self.nodeLink = None
+        self.parent = parentNode      #needs to be updated
+        self.children = {} 
+    
+    def inc(self, numOccur):
+        self.count += numOccur
+        
+    def disp(self, ind=1):
+        print('  '*ind, self.name, ' ', self.count)
+        for child in self.children.values():
+            child.disp(ind+1)
+
+</code></pre>
+<h3 id="22-构建fp树a-idcreatetreea">2.2 构建FP树.<a id="createTree"></a></h3>
+<p>函数updateTree用于递归增长树，updateHeader将同名元素使用LinkNode连接.主函数createTree的返回值一是树节点，二是头结点表.</p>
+<pre><code>def createTree(dataSet, minSup=1): #create FP-tree from dataset but don't mine
+    # print('data is', dataSet)
+    headerTable = {}
+    #go over dataSet twice
+    for trans in dataSet:#first pass counts frequency of occurance)
+        for item in trans:
+            headerTable[item] = headerTable.get(item, 0) + dataSet[trans]
+    # print('header table is', headerTable)
+    for k in list(headerTable.keys()):  #remove items not meeting minSup
+        if headerTable[k] &lt; minSup: 
+            del(headerTable[k])
+    freqItemSet = set(headerTable.keys())# 过滤后只剩下频繁项
+    # print('fre is ', freqItemSet)
+    #print 'freqItemSet: ',freqItemSet
+    if len(freqItemSet) == 0: return None, None  # 没有频繁项 直接结束
+    for k in headerTable:
+        headerTable[k] = [headerTable[k], None]# 将headerTable 用链表节点重新格式化
+    # print('uodate table is ', headerTable)# {'z': [5, None], 'r': [3, None],
+    # 'y': [3, None], 't': [3, None], 'x': [4, None], 's': [3, None]}
+    retTree = treeNode('Null Set', 1, None) # 建树
+    for tranSet, count in dataSet.items():  # 第二遍遍历数据
+        localD = {}
+        for item in tranSet:  # 将事务项按顺序排列
+            if item in freqItemSet:
+                localD[item] = headerTable[item][0]
+        # print('localD is', localD)
+        if len(localD) &gt; 0:
+            orderedItems = [v[0] for v in sorted(localD.items(), key=lambda p: p[1], reverse=True)] # 按频率排序.
+            # 非常漂亮的列表生成式+lambda
+            updateTree(orderedItems, retTree, headerTable, count)# 用有序的频率项集填充树
+    return retTree, headerTable #return tree and header table
+
+
+# 传入参数：按频率排序以后的列表，树，头指针列表，数据集键值对中的值（
+# 初始都为1，在init函数中设置，也即每次检测到存在就加一）
+def updateTree(items, inTree, headerTable, count):
+    # print('+++')
+    # print('item ', items)
+    # print('tree', inTree)
+    # print('header table', headerTable)
+    # print('count',count)
+
+    if items[0] in inTree.children:# 检查 Items[0] 是否在  retTree.children中
+        inTree.children[items[0]].inc(count) # 如果在，增加计数
+    else:   # 如果不在，就将 items[0] 加入到 inTree.children
+        inTree.children[items[0]] = treeNode(items[0], count, inTree)
+        if headerTable[items[0]][1] == None: # 更新 header table.更新后的格式：{'z': 
+            # [5, &lt;__main__.treeNode object at 0x00000208CEE05B20&gt;]}，值中第二个元素是一个树节点
+            headerTable[items[0]][1] = inTree.children[items[0]]
+        else: # 如果已经有值了 要确保节点链接指向树中该元素项的每一个实例
+            updateHeader(headerTable[items[0]][1], inTree.children[items[0]])
+    # print('second update is ', headerTable)
+    if len(items) &gt; 1:# 用剩余的有序项递归调用updateTree()
+        updateTree(items[1::], inTree.children[items[0]], headerTable, count)
+    # print('+++')
+def updateHeader(nodeToTest, targetNode):   #对于结点inTree.children[items[0]]和其对应元素,
+    # 此时在头指针表里该元素有指针存在（即树中已经有了该元素的存在），把这个元素所在结点和该元素上一次出现的结点“连”起来
+    while (nodeToTest.nodeLink != None):    # nodeLink,是同一元素之间的连接
+        nodeToTest = nodeToTest.nodeLink
+    nodeToTest.nodeLink = targetNode
+</code></pre>
+<h3 id="23-条件模式基a-idmoshijia">2.3 条件模式基.<a id="moshiji"></a></h3>
+<p>非常易懂的代码，不做过多解释.</p>
+<pre><code>def ascendTree(leafNode, prefixPath): 
+    if leafNode.parent != None:
+        prefixPath.append(leafNode.name)
+        ascendTree(leafNode.parent, prefixPath)
+
+# 构建条件基
+def findPrefixPath(basePat, treeNode): #treeNode comes from header table
+    condPats = {}
+    while treeNode != None:
+        prefixPath = []
+        ascendTree(treeNode, prefixPath)
+        if len(prefixPath) &gt; 1: 
+            condPats[frozenset(prefixPath[1:])] = treeNode.count
+        treeNode = treeNode.nodeLink
+    return condPats
+
+</code></pre>
+<h3 id="24-条件fp树a-idcondtreea">2.4 条件FP树.<a id="CondTree"></a></h3>
+<pre><code>def mineTree(inTree, headerTable, minSup, preFix, freqItemList):
+    bigL = [v[0] for v in sorted(headerTable.items(), key=lambda p: p[1][0])]#(sort header table)
+    # print('bigL is ', bigL)
+    for basePat in bigL:  # 从标题表的底部开始
+        newFreqSet = preFix.copy()
+        newFreqSet.add(basePat)
+        # print('finalFrequent Item: ',newFreqSet)
+        freqItemList.append(newFreqSet)
+        # print('freqItemList is', freqItemList)
+        condPattBases = findPrefixPath(basePat, headerTable[basePat][1])
+        # print('condPattBases :',basePat, condPattBases)
+        #2. construct cond FP-tree from cond. pattern base
+        myCondTree, myHead = createTree(condPattBases, minSup) #将条件基设为数据集输入到建树函数中.因为如果某元素是频繁的，那么它的条件FP树上的元素和它的组合也是频繁的.而不在该树上的元素就不一定了
+        # print('head from conditional tree: ', myHead)
+        if myHead != None: #3. mine cond. FP-tree
+            # print('conditional tree for: ',newFreqSet)
+            myCondTree.disp(1)
+            # 如若树中有元素项，则递归调用
+            mineTree(myCondTree, myHead, minSup, newFreqSet, freqItemList)
+
+</code></pre>
+<h2 id="3-总结a-idconclusiona">3. 总结<a id="conclusion"></a></h2>
+<p>FP-growth算法只需要两遍遍历数据集&ndash;第一遍获取元素频率，过滤不符合要求的元素；第二遍直接构建FP树，速度快于Apriori算法.</p>
+<p>为了和Apriori算法一样获取频繁项集，FP-growth需要对于每个频繁元素，获取它的条件模式基和它条件模式基的条件模式基&hellip;..如此迭代.原理是对于某个频繁元素，其条件FP树上与该元素的组合也是频繁的.当然，条件FP树需要再一次过滤频率不符合的元素.因为对于整体频繁，对于某元素不一定频繁.</p>
+<h2 id="4-psa-idfinala">4. p.s.<a id="final"></a></h2>
+<p>dict.get(key, default=None)作用是返回字典中键的值，如若不存在则返回默认值.</p>
+<p>sorted的key参数可以传入一个函数.使用lambda更方便.<a href="http://c.biancheng.net/view/2239.html" target="_blank">示例</a></p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-fp树基本原理a-id1a">1. FP树基本原理<a id="1"></a></a>
+      <ul>
+        <li><a href="#11-fp树节点结构">1.1 FP树节点结构</a></li>
+        <li><a href="#12-fp树的构建">1.2 FP树的构建</a></li>
+        <li><a href="#13-条件模式基">1.3 条件模式基</a></li>
+        <li><a href="#14-条件fp树">1.4 条件FP树</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-fp树建树更新树源码a-id2a">2. FP树建树，更新树源码<a id="2"></a></a>
+      <ul>
+        <li><a href="#21-fp树节点a-idtreenodea">2.1 FP树节点.<a id="treeNode"></a></a></li>
+        <li><a href="#22-构建fp树a-idcreatetreea">2.2 构建FP树.<a id="createTree"></a></a></li>
+        <li><a href="#23-条件模式基a-idmoshijia">2.3 条件模式基.<a id="moshiji"></a></a></li>
+        <li><a href="#24-条件fp树a-idcondtreea">2.4 条件FP树.<a id="CondTree"></a></a></li>
+      </ul>
+    </li>
+    <li><a href="#3-总结a-idconclusiona">3. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#4-psa-idfinala">4. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-fp树基本原理a-id1a">1. FP树基本原理<a id="1"></a></a>
+      <ul>
+        <li><a href="#11-fp树节点结构">1.1 FP树节点结构</a></li>
+        <li><a href="#12-fp树的构建">1.2 FP树的构建</a></li>
+        <li><a href="#13-条件模式基">1.3 条件模式基</a></li>
+        <li><a href="#14-条件fp树">1.4 条件FP树</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-fp树建树更新树源码a-id2a">2. FP树建树，更新树源码<a id="2"></a></a>
+      <ul>
+        <li><a href="#21-fp树节点a-idtreenodea">2.1 FP树节点.<a id="treeNode"></a></a></li>
+        <li><a href="#22-构建fp树a-idcreatetreea">2.2 构建FP树.<a id="createTree"></a></a></li>
+        <li><a href="#23-条件模式基a-idmoshijia">2.3 条件模式基.<a id="moshiji"></a></a></li>
+        <li><a href="#24-条件fp树a-idcondtreea">2.4 条件FP树.<a id="CondTree"></a></a></li>
+      </ul>
+    </li>
+    <li><a href="#3-总结a-idconclusiona">3. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#4-psa-idfinala">4. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
