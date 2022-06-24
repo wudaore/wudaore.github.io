@@ -6,7 +6,16 @@
     <description>Recent content on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 23 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 24 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>特征降维-主成分分析PCA</title>
+      <link>https://wudaore.github.io/post/pca/</link>
+      <pubDate>Fri, 24 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/pca/</guid>
+      <description>目录 PCA基本原理 PCA数学推导 PCA代码实现 PCA接口实现 总结 ps. 1. PCA基本原理 太高维度的数据处理时会大大增加计算难度和时间.所以必要时需要对特征进行降维. PCA，主成分分析 是一种数据降维的方法. 首</description>
+    </item>
+    
     <item>
       <title>FP-growth算法</title>
       <link>https://wudaore.github.io/post/fp-growth/</link>

@@ -16,7 +16,7 @@
 
 
 
-<title>algo - wudao的博客</title>
+<title>特征降维-主成分分析PCA - wudao的博客</title>
 
 
 <meta name="author" content="DSRKafuU" />
@@ -25,14 +25,16 @@
 <meta name="description" content="A minimal Hugo theme with nice theme color." />
 
 
-<link rel="alternate" type="application/rss+xml" href="https://wudaore.github.io/tags/algo/index.xml" title="wudao的博客" />
+<meta name="keywords" content="机器学习, algo" />
 
-<meta property="og:title" content="algo" />
-<meta name="twitter:title" content="algo" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://wudaore.github.io/tags/algo/" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+
+<meta property="og:title" content="特征降维-主成分分析PCA" />
+<meta name="twitter:title" content="特征降维-主成分分析PCA" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/pca/" /><meta property="og:description" content="目录 PCA基本原理 PCA数学推导 PCA代码实现 PCA接口实现 总结 ps. 1. PCA基本原理 太高维度的数据处理时会大大增加计算难度和时间.所以必要时需要对特征进行降维. PCA，主成分分析 是一种数据降维的方法. 首" />
+<meta name="twitter:description" content="目录 PCA基本原理 PCA数学推导 PCA代码实现 PCA接口实现 总结 ps. 1. PCA基本原理 太高维度的数据处理时会大大增加计算难度和时间.所以必要时需要对特征进行降维. PCA，主成分分析 是一种数据降维的方法. 首" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="og:updated_time" content="2022-06-24T00:00:00+08:00" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-24T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-24T00:00:00+08:00" />
 
 
 <style>
@@ -95,57 +97,112 @@
             
             <div class="col-12 col-md-9 float-left content">
                 
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/pca/">特征降维-主成分分析PCA</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-24</span>
 
-<div class="page-info">
-  <span>Posts with the tag algo: </span>
-</div>
-
-
-
-<div class="post">
-  <h2 class="post-item post-title">
-    <a href="https://wudaore.github.io/post/svm2/">svm学习(2)--简易SMO算法代码理解</a>
-  </h2>
-  <div class="post-item post-meta">
-    <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-13</span>
-
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1003 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1013 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
 
-  </div>
-  <div class="post-item post-summary markdown-body">
-    Introduction SMO算法 即序列最小优化算法 对&laquo;实战&raquo;中的smoSimple函数尝试理解 def smoSimple(dataMatIn, classLabels, C, toler, maxIter): &quot;&quot;&quot;smoSimple Args: dataMatIn 特征集合 classLabels 类别标签 C 松弛变量(常量值)，允许有些数据点可以处于分隔面的错误一侧。 控制
-  </div>
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="pca基本原理1"><a href="#1">PCA基本原理</a></h4>
+<h4 id="pca数学推导2"><a href="#2">PCA数学推导</a></h4>
+<h4 id="pca代码实现4"><a href="#4">PCA代码实现</a></h4>
+<h4 id="pca接口实现4"><a href="#4">PCA接口实现</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h4 id="psfinal"><a href="#final">ps.</a></h4>
+<h2 id="1-pca基本原理a-id1a">1. PCA基本原理<a id="1"></a></h2>
+<p>太高维度的数据处理时会大大增加计算难度和时间.所以必要时需要对特征进行降维.</p>
+<p>PCA，主成分分析 是一种数据降维的方法.</p>
+<p>首先，拿二维数据距离.对于一批数据点，如果其在x和y轴上的分布比较均匀，那么就难以舍去一些特征，做到降维了.此时要做的就是沿着覆盖数据的最大方差位置旋转坐标轴.</p>
+<p>如下图所示，经过旋转后，y轴的分散程度大大提高，对数据有更好的识别能力</p>
+<p><strong>旋转前</strong></p>
+<p><img class="img-zoomable" src="/PCA/1.png" alt="png" />
+</p>
+<p><strong>旋转后</strong></p>
+<p><img class="img-zoomable" src="/PCA/2.png" alt="png" />
+</p>
+<p>接下来要开始降维.对于输入的数据集矩阵，设为X<sub>m*n</sub>,即m条数据，有n个维度.现在想要将它降到K维.设降维后的矩阵为Z<sub>m*k</sub></p>
+<p>要实现上述降维，只需要让X乘以一个n*k的矩阵即可.设该矩阵为W<sub>n*k</sub></p>
+<p>Z<sub>m*k</sub> = X<sub>m*n</sub> * W<sub>n*k</sub></p>
+<p>接下来就是一系列数学优化过程.<a href="#2">详情跳转</a></p>
+<h2 id="2-pca数学推导a-id2a">2. PCA数学推导<a id="2"></a></h2>
+<p>对于新的坐标轴 Z ，W的取值要让其方差最大化，也即数据最分散，提高识别度.</p>
+<p><img class="img-zoomable" src="/PCA/3.png" alt="png" />
+</p>
+<p>这里需要限制W为单位向量，即||W|| = 1.这么做是为了后面的优化.不然直接取W等于无穷大就能满足最大了 .没有实际意义.</p>
+<p><img class="img-zoomable" src="/PCA/4.png" alt="png" />
+</p>
+<p>要求最大值，可以用我们数值的拉格朗日乘子法求解.</p>
+<p><img class="img-zoomable" src="/PCA/5.png" alt="png" />
+</p>
+<p>求解的过程涉及二次型求导，<a href="https://blog.csdn.net/jinglingsheshou/article/details/77746599" target="_blank">点击查看证明</a></p>
+<p>最终得到解：</p>
+<p><img class="img-zoomable" src="/PCA/7.png" alt="png" />
+</p>
+<p>令Cov(x) = S，SW−αW=0正好是特征值的定义.</p>
+<p>接着推，可知，我们需要的是最大的（若干个）特征值.</p>
+<p><img class="img-zoomable" src="/PCA/8.png" alt="png" />
+</p>
+<p><strong>最后得出PCA的基本步骤：</strong></p>
+<p>整理原始矩阵X<sub>m*n</sub>
+​
+求原始矩阵X的协防差阵S=Cov(X)</p>
+<p>求解协防差阵的特征值和特征向量。</p>
+<p>选取最大的K(人为给定)个特征值所对应的特征向量组成构成矩阵W<sub>n*k</sub>
+​
+直接进行矩阵计算 <strong>Z = XW</strong></p>
+<h2 id="3-pca代码实现a-id1a">3. PCA代码实现<a id="1"></a></h2>
+<pre><code># lowDDataMat:降维后的数据, reconMat：重构后的原始数据
+def pca(dataMat, topNfeat=9999999):
+    meanVals = mean(dataMat, axis=0)
+    meanRemoved = dataMat - meanVals # 计算并减去原始数据集的平均值
+    covMat = cov(meanRemoved, rowvar=0)# 计算协方差矩阵
+    eigVals,eigVects = linalg.eig(mat(covMat))# 计算特征值和特征向量
+    # print('特征值')
+    # print(eigVals)
+    # print('特征向量')
+    # print(eigVects)
+    eigValInd = argsort(eigVals)            # 根据特征值排序结果的逆序就可以得到topNfeat个最大的特征向量.这里得到的是下标
+    # print('eigValInd is',eigValInd)
+    eigValInd = eigValInd[:-(topNfeat+1):-1]  # 去掉不需要的数据
+    # print('val after dele', eigValInd)
+    redEigVects = eigVects[:,eigValInd]       # 重组,得到N个最大的特征向量.reorganize eig vects largest to smallest
+    # print(redEigVects)
+    lowDDataMat = meanRemoved * redEigVects# 将数据转换为新的维度
+    reconMat = (lowDDataMat * redEigVects.T) + meanVals
+    return lowDDataMat, reconMat
+
+</code></pre>
+<p>书上的代码先将数据减去了均值，最后又将重构的数据加上了均值</p>
+<h2 id="4-pca接口实现a-id4a">4. PCA接口实现<a id="4"></a></h2>
+<p><a href="https://blog.daorenwu.com/post/k-means/#52-%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90pca" target="_blank">详见之前的博客</a></p>
+<h2 id="5-总结a-idconclusiona">5. 总结<a id="conclusion"></a></h2>
+<p>PCA其实是有很多限制的。比如，可以做PCA降维的前提必须保证数据是线性分布的，如果数据不是线性的，就不适用.</p>
+<h2 id="6-psa-idfinala">6. p.s.<a id="final"></a></h2>
+<p><a href="https://blog.csdn.net/luoluonuoyasuolong/article/details/90711318" target="_blank">参考文章</a></p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
 </div>
 
-<div class="post">
-  <h2 class="post-item post-title">
-    <a href="https://wudaore.github.io/post/svm3/">svm学习(3)--SVM实现鸢尾花数据分类</a>
-  </h2>
-  <div class="post-item post-meta">
-    <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-05-13</span>
-
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;257 words</span>
-
-<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
-
-  </div>
-  <div class="post-item post-summary markdown-body">
-    Introduction sklearn的SVM算法可以调整c值和核函数.本篇并未介绍核函数 导入数据和数据-标签的处理 from sklearn.svm import SVC from sklearn import datasets iris = datasets.load_iris() X = iris['data'] X = iris['data'][:,(2,3)] y = iris['target'] SVM训练.c值设置为无穷大代表几乎不容错 使用线性核函数 setosa_or_versicolor = (y==0)|(y==1) X =
-  </div>
-</div>
 
 
-<div class="pagination"><div class="pag-first">
-    <a href="/tags/algo/"><i class="iconfont icon-caret-back-circle-sharp"></i></a>
-  </div><div class="pag-previous">
-    <a href="/tags/algo/"><i class="iconfont icon-chevron-back-circle-sharp"></i></a>
-  </div><div class="pag-item">
-    <a href="/tags/algo/">1</a>
-  </div><div class="pag-item pag-current">
-    <a href="/tags/algo/page/2/">2</a>
-  </div></div>
             </div>
             <aside class="col-12 col-md-3 float-left sidebar">
     
@@ -257,9 +314,22 @@
             
         </div>
     </div>
-    
-    
-    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-pca基本原理a-id1a">1. PCA基本原理<a id="1"></a></a></li>
+    <li><a href="#2-pca数学推导a-id2a">2. PCA数学推导<a id="2"></a></a></li>
+    <li><a href="#3-pca代码实现a-id1a">3. PCA代码实现<a id="1"></a></a></li>
+    <li><a href="#4-pca接口实现a-id4a">4. PCA接口实现<a id="4"></a></a></li>
+    <li><a href="#5-总结a-idconclusiona">5. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#6-psa-idfinala">6. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav></div>
 </aside>
 
         </div>
@@ -384,6 +454,27 @@
             </span>
             
         </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-pca基本原理a-id1a">1. PCA基本原理<a id="1"></a></a></li>
+    <li><a href="#2-pca数学推导a-id2a">2. PCA数学推导<a id="2"></a></a></li>
+    <li><a href="#3-pca代码实现a-id1a">3. PCA代码实现<a id="1"></a></a></li>
+    <li><a href="#4-pca接口实现a-id4a">4. PCA接口实现<a id="4"></a></a></li>
+    <li><a href="#5-总结a-idconclusiona">5. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#6-psa-idfinala">6. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav>
     </div>
     
     
