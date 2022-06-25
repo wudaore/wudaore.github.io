@@ -6,7 +6,16 @@
     <description>Recent content in Posts on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 24 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 25 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>特征降维-奇异值分解SVD</title>
+      <link>https://wudaore.github.io/post/svd/</link>
+      <pubDate>Sat, 25 Jun 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/svd/</guid>
+      <description>目录 SVD基本原理 SVD数学推导 相似度 SVD《实战》代码 总结 ps. 1. SVD基本原理 SVD就是将原始的数据集矩阵Data分解成三个矩阵U、Σ 和VT. 1.1 矩阵的拉伸和旋转 在了解SVD之前 首先要知道矩阵的拉伸和旋</description>
+    </item>
+    
     <item>
       <title>特征降维-主成分分析PCA</title>
       <link>https://wudaore.github.io/post/pca/</link>
