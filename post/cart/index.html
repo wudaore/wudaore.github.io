@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>CART决策树 - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="机器学习, algo" />
+
+
+<meta property="og:title" content="CART决策树" />
+<meta name="twitter:title" content="CART决策树" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/cart/" /><meta property="og:description" content="目录 CART树基本原理 CART建树 CART剪枝 CART回归树 CART模型树 总结 ps. 1. CART树基本原理 和ID3的切割特征所有取值相比，CART树使用了二元切割法.即，大于给定值的走左子树，小于的则走右子" />
+<meta name="twitter:description" content="目录 CART树基本原理 CART建树 CART剪枝 CART回归树 CART模型树 总结 ps. 1. CART树基本原理 和ID3的切割特征所有取值相比，CART树使用了二元切割法.即，大于给定值的走左子树，小于的则走右子" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-06-29T00:00:00+08:00" /><meta property="article:modified_time" content="2022-06-29T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/cart/">CART决策树</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-06-29</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2286 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0">机器学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="cart树基本原理1"><a href="#1">CART树基本原理</a></h4>
+<h4 id="cart建树2"><a href="#2">CART建树</a></h4>
+<h4 id="cart剪枝3"><a href="#3">CART剪枝</a></h4>
+<h4 id="cart回归树4"><a href="#4">CART回归树</a></h4>
+<h4 id="cart模型树5"><a href="#5">CART模型树</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h4 id="psfinal"><a href="#final">ps.</a></h4>
+<h2 id="1-cart树基本原理a-id1a">1. CART树基本原理<a id="1"></a></h2>
+<p>和ID3的切割特征所有取值相比，CART树使用了二元切割法.即，大于给定值的走左子树，小于的则走右子树.这就让CART树可以处理连续型数据.</p>
+<p>因此对于每个树节点，应当有一下几个值：</p>
+<p>进行分割的特征；进行分割的特征值；左子树；右子树.</p>
+<p><img class="img-zoomable" src="/CART/1.png" alt="png" />
+</p>
+<p>伪代码为：</p>
+<p>找到最佳切分特征：</p>
+<p>&mdash;-如果不能分：则存为叶子节点</p>
+<p>&mdash;-切分，得到左右子树</p>
+<p>&mdash;-左子树调用建树函数</p>
+<p>&mdash;-右子树调用建树函数</p>
+<h2 id="2-cart树建树a-id2a">2. CART树建树<a id="2"></a></h2>
+<p>导入数据</p>
+<pre><code>def loadDataSet(fileName):      # 用于解析TAB分隔的浮点数的通用函数
+    dataMat = []                # 假设最后一列是目标值
+    fr = open(fileName)
+    for line in fr.readlines():
+        curLine = line.strip().split('\t')
+        fltLine = list(map(float,curLine)) # 将所有元素映射为浮点数.注意外面需要嵌套list函数.因为py2和py3是不一样的
+        dataMat.append(fltLine)
+    return dataMat
+
+</code></pre>
+<p>切分数据集</p>
+<pre><code># 参数为数据集合、待切分的特征和该特征的某个值
+def binSplitDataSet(dataSet, feature, value):
+    mat0 = dataSet[nonzero(dataSet[:,feature] &gt; value)[0],:]
+    mat1 = dataSet[nonzero(dataSet[:,feature] &lt;= value)[0],:]
+    return mat0,mat1
+</code></pre>
+<p>建树.leafType有两种，一种是模型树一种是回归树.后面总结.errType代表误差计算函数；而ops是一个包含树构建所需其他参数的元组。</p>
+<p>切分函数chooseBestSplit.满足条件时，如果是回归树则返回None和某类模型的值.如果是模型树则返回None和一个线性方程.后面总结.</p>
+<pre><code>def createTree(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):#assume dataSet is NumPy Mat so we can array filtering
+    feat, val = chooseBestSplit(dataSet, leafType, errType, ops)# 选择最优的分割特征
+    if feat == None: return val # 如果构建的是回归树，该模型是一个常数。如果是模型树，其模型是一个线性方程
+    retTree = {}
+    retTree['spInd'] = feat
+    retTree['spVal'] = val
+    lSet, rSet = binSplitDataSet(dataSet, feat, val)
+    retTree['left'] = createTree(lSet, leafType, errType, ops)
+    retTree['right'] = createTree(rSet, leafType, errType, ops)
+    return retTree  
+</code></pre>
+<h2 id="3-cart剪枝a-id3a">3. CART剪枝<a id="3"></a></h2>
+<h3 id="31-预剪枝">3.1 预剪枝</h3>
+<p>停止条件(S - bestS) &lt; tolS对数据非常敏感.如果缩放一定比例，tolS就很有可能不准.不断修改停止条件，花费时间并对上述误差容忍度取平方值，即预剪枝&ndash;构建树之前进行剪枝.但是这么做很麻烦</p>
+<h3 id="32-后剪枝">3.2 后剪枝</h3>
+<p>后减枝即构造树之后进行剪枝.CART树的剪枝流程如下：</p>
+<p>基于已有的树切分测试数据：</p>
+<p>&ndash;如果存在任一子集是一棵树，则在该子集递归剪枝过程</p>
+<p>&ndash;计算将当前两个叶节点合并后的误差</p>
+<p>&ndash;计算不合并的误差</p>
+<p>&ndash;如果合并会降低误差的话，就将叶节点合并</p>
+<p>后剪枝使用了训练集和测试集.使用训练集构造树将测试集代入.如果分支是树则递归剪枝；直到左右都不是树，则计算误差，尝试合并.</p>
+<pre><code># 判断是不是树
+def isTree(obj):
+    return (type(obj).__name__=='dict')
+
+# 递归函数，它从上往下遍历树直到叶节点为止。如果找到两个叶节点则计算它们的平均值。
+def getMean(tree):
+    if isTree(tree['right']): tree['right'] = getMean(tree['right'])
+    if isTree(tree['left']): tree['left'] = getMean(tree['left'])
+    return (tree['left']+tree['right'])/2.0
+
+# ：待剪枝的树与剪枝所需的测试数据
+def prune(tree, testData):
+    if shape(testData)[0] == 0: return getMean(tree) # 如果我们没有测试数据，就将树折叠起来
+    if (isTree(tree['right']) or isTree(tree['left'])):# 如果分支是树，尝试剪枝
+        lSet, rSet = binSplitDataSet(testData, tree['spInd'], tree['spVal'])
+    if isTree(tree['left']): tree['left'] = prune(tree['left'], lSet)
+    if isTree(tree['right']): tree['right'] =  prune(tree['right'], rSet)
+    # 如果都是叶节点 则看看能不能合并
+    if not isTree(tree['left']) and not isTree(tree['right']):
+        lSet, rSet = binSplitDataSet(testData, tree['spInd'], tree['spVal'])
+        errorNoMerge = sum(power(lSet[:,-1] - tree['left'],2)) +sum(power(rSet[:,-1] - tree['right'],2))
+        treeMean = (tree['left']+tree['right'])/2.0
+        errorMerge = sum(power(testData[:,-1] - treeMean,2))
+        if errorMerge &lt; errorNoMerge: # 对合并前后的误差进行比较。如果合并后的误差比不合并的误差小就进行合并操作，反之则不合并直接返回
+            print(&quot;merging&quot;)
+            return treeMean
+        else: return tree
+    else: return tree
+
+</code></pre>
+<h2 id="4-cart回归树a-id4a">4. CART回归树<a id="4"></a></h2>
+<p>建树函数已经在上面陈列.回归树和模型树的区别就在选择最优分割特征的方式（chooseBestSplit）准确来说是误差计算函数和叶节点返回的值.</p>
+<p>回归树的误差计算使用的是总方差.对于一个叶子节点，返回的是平均值.</p>
+<p>chooseBestSplit函数总体来说可以概括为：</p>
+<p>对每个特征：</p>
+<p>&ndash;对每个特征值：</p>
+<p>&mdash;-将数据集切分成两份</p>
+<p>&mdash;-计算切分的误差</p>
+<p>&mdash;-如果当前误差小于当前最小误差，那么将当前切分设定为最佳切分并更新最小误差</p>
+<p>代码如下：</p>
+<pre><code>def regLeaf(dataSet):#returns the value used for each leaf
+    return mean(dataSet[:,-1])
+
+# 误差估计函数regErr()。该函数在给定数据上计算目标变量的平方误差。当
+# 然也可以先计算出均值，然后计算每个差值再平方.
+# 因为这里需要返回的是总方差，所以要用均方差乘以数据集中样本的个数。
+def regErr(dataSet):
+    return var(dataSet[:,-1]) * shape(dataSet)[0]
+
+def chooseBestSplit(dataSet, leafType=regLeaf, errType=regErr, ops=(1,4)):
+    # tolS是容许的误差下降值，tolN是切分的最少样本数
+    tolS = ops[0]; tolN = ops[1]
+    # 如果所有目标变量都是同一个值: 就停止并返回值
+    if len(set(dataSet[:,-1].T.tolist()[0])) == 1: # 结束条件1 只剩一个特征值，不进行切分
+        return None, leafType(dataSet)
+    m,n = shape(dataSet)
+    # 最佳特性的选择是由减少平均RSS误差驱动的.S是当前数据集的大小和误差
+    S = errType(dataSet)
+    bestS = inf; bestIndex = 0; bestValue = 0
+    for featIndex in range(n-1):
+        for splitVal in set((dataSet[:,featIndex].T.A.tolist())[0]):
+            mat0, mat1 = binSplitDataSet(dataSet, featIndex, splitVal)
+            if (shape(mat0)[0] &lt; tolN) or (shape(mat1)[0] &lt; tolN): continue
+            newS = errType(mat0) + errType(mat1)
+            if newS &lt; bestS: 
+                bestIndex = featIndex
+                bestValue = splitVal
+                bestS = newS
+    # 如果减小 (S-bestS) 小于阈值，则不进行分离
+    if (S - bestS) &lt; tolS:
+        return None, leafType(dataSet) # 结束条件2.误差不够大 不进行切分 而是构建叶节点.
+    mat0, mat1 = binSplitDataSet(dataSet, bestIndex, bestValue)
+    if (shape(mat0)[0] &lt; tolN) or (shape(mat1)[0] &lt; tolN):  # 结束条件3 子集太小 不进行切分
+        return None, leafType(dataSet)
+    return bestIndex,bestValue# 返回最优的返回条件和用于该次分割的值（即特征和特征值）
+</code></pre>
+<h2 id="5-cart模型树a-id5a">5. CART模型树<a id="5"></a></h2>
+<p>区别于回归树，模型树的误差计算计算线性预测值和真实值的平方误差.对于一个叶子节点，返回的是一个模型ws.</p>
+<pre><code># 主要功能是将数据集格式化成目标变量Y和自变量X
+def linearSolve(dataSet):   #在两个地方使用了辅助函数
+    m,n = shape(dataSet)
+    X = mat(ones((m,n))); Y = mat(ones((m,1)))
+    X[:,1:n] = dataSet[:,0:n-1]; Y = dataSet[:,-1]#and strip out Y
+    xTx = X.T*X
+    if linalg.det(xTx) == 0.0:
+        raise NameError('This matrix is singular（单数）, cannot do inverse（不可求逆）,\n\
+        try increasing the second value of ops')
+    ws = xTx.I * (X.T * Y) # .I：逆矩阵.ws即为当前估计出的w的最优值，表示最佳估计.
+    return ws,X,Y
+
+def modelLeaf(dataSet):#创建一个线性模型并返回解.
+    ws,X,Y = linearSolve(dataSet)
+    return ws
+
+def modelErr(dataSet):
+    ws,X,Y = linearSolve(dataSet)
+    yHat = X * ws
+    return sum(power(Y - yHat,2))
+
+</code></pre>
+<p>至于ws = xTx.I * (X.T * Y)，这其实是线性回归找出最拟合曲线（<a href="https://blog.daorenwu.com/post/linear-regression/#22-%E4%BC%98%E5%8C%96---%E6%AD%A3%E8%A7%84%E6%96%B9%E7%A8%8B" target="_blank">正规方程&ndash;点击跳转</a>）的知识点.</p>
+<h2 id="6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></h2>
+<pre><code>
+最后对回归树，模型树，线性模型进行比对总结：
+
+trainMat = mat(loadDataSet('bikeSpeedVsIq_train.txt'))
+testMat = mat(loadDataSet('bikeSpeedVsIq_test.txt'))
+# 回归树
+myTree = createTree(trainMat, ops=(1, 20))
+yhat = createForeCast(myTree, testMat[:,0])
+print(corrcoef(yhat, testMat[:, 1], rowvar=0)[0, 1])
+# 模型树
+myTree2 = createTree(trainMat, modelLeaf, modelErr, (1,20))
+yhat2 = createForeCast(myTree2, testMat[:,0], modelTreeEval)
+# 线性模型
+print(corrcoef(yhat2, testMat[:, 1], rowvar=0)[0, 1])
+ws, X, Y = linearSolve(trainMat)
+for i in range(shape(testMat)[0]):
+    yhat[i] = testMat[i,0]*ws[1,0]+ws[0,0]
+
+print(corrcoef(yhat, testMat[:, 1], rowvar=0)[0, 1]
+
+
+</code></pre>
+<p>结果如下：</p>
+<p>0.964085231822215
+0.9760412191380619
+0.9434684235674767</p>
+<p>在该数据集上，回归树和模型树获得了比线性模型更好的结果.</p>
+<h2 id="7-psa-idfinala">7. p.s.<a id="final"></a></h2>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-cart树基本原理a-id1a">1. CART树基本原理<a id="1"></a></a></li>
+    <li><a href="#2-cart树建树a-id2a">2. CART树建树<a id="2"></a></a></li>
+    <li><a href="#3-cart剪枝a-id3a">3. CART剪枝<a id="3"></a></a>
+      <ul>
+        <li><a href="#31-预剪枝">3.1 预剪枝</a></li>
+        <li><a href="#32-后剪枝">3.2 后剪枝</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-cart回归树a-id4a">4. CART回归树<a id="4"></a></a></li>
+    <li><a href="#5-cart模型树a-id5a">5. CART模型树<a id="5"></a></a></li>
+    <li><a href="#6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#7-psa-idfinala">7. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-cart树基本原理a-id1a">1. CART树基本原理<a id="1"></a></a></li>
+    <li><a href="#2-cart树建树a-id2a">2. CART树建树<a id="2"></a></a></li>
+    <li><a href="#3-cart剪枝a-id3a">3. CART剪枝<a id="3"></a></a>
+      <ul>
+        <li><a href="#31-预剪枝">3.1 预剪枝</a></li>
+        <li><a href="#32-后剪枝">3.2 后剪枝</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-cart回归树a-id4a">4. CART回归树<a id="4"></a></a></li>
+    <li><a href="#5-cart模型树a-id5a">5. CART模型树<a id="5"></a></a></li>
+    <li><a href="#6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></a></li>
+    <li><a href="#7-psa-idfinala">7. p.s.<a id="final"></a></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
