@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>pytorch基础(1) - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="深度学习" />
+
+
+<meta property="og:title" content="pytorch基础(1)" />
+<meta name="twitter:title" content="pytorch基础(1)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/pytorchb1/" /><meta property="og:description" content="目录 序 神经元与神经网络 pytorch基础 梯度下降 pytorch手动实现线性回归 pytorch模型实现线性回归 总结 1. 序 NLP和CV学习之前需要的一些前置知识. 2. 神经元与神经网络 神经元是神经网络的基本单位" />
+<meta name="twitter:description" content="目录 序 神经元与神经网络 pytorch基础 梯度下降 pytorch手动实现线性回归 pytorch模型实现线性回归 总结 1. 序 NLP和CV学习之前需要的一些前置知识. 2. 神经元与神经网络 神经元是神经网络的基本单位" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-09T00:00:00+08:00" /><meta property="article:modified_time" content="2022-07-09T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/pytorchb1/">pytorch基础(1)</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-09</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2559 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0">深度学习</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="序1"><a href="#1">序</a></h4>
+<h4 id="神经元与神经网络2"><a href="#2">神经元与神经网络</a></h4>
+<h4 id="pytorch基础3"><a href="#3">pytorch基础</a></h4>
+<h4 id="梯度下降4"><a href="#4">梯度下降</a></h4>
+<h4 id="pytorch手动实现线性回归5"><a href="#5">pytorch手动实现线性回归</a></h4>
+<h4 id="pytorch模型实现线性回归6"><a href="#6">pytorch模型实现线性回归</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
+<p>NLP和CV学习之前需要的一些前置知识.</p>
+<h2 id="2-神经元与神经网络a-id2a">2. 神经元与神经网络<a id="2"></a></h2>
+<p>神经元是神经网络的基本单位.相互连接，组成了神经网络.</p>
+<p>神经元的结构如下图所示：</p>
+<p><img class="img-zoomable" src="/NLPB/1.png" alt="png" />
+</p>
+<p>其中a<sub>1</sub>到a<sub>n</sub>是输入的分量；w<sub>1</sub>到w<sub>n</sub>为各分量对应的权重.</p>
+<p>b为偏置；f为激活函数.常见的激活函数有sigmod，relu，tanh等；</p>
+<p>t表示输出,表达为t=f(W<sup>T</sup>X+b)</p>
+<h3 id="21-单层神经网络">2.1 单层神经网络</h3>
+<p>有有限个神经元构成.每个神经元的输入向量相同.由于每个神经元输出一个标量，单层神经网络输出一个向量.维度等于神经元个数</p>
+<p><img class="img-zoomable" src="/NLPB/2.png" alt="png" />
+</p>
+<p>线性回归其实就是一个单层神经网络.</p>
+<h3 id="22-感知机">2.2 感知机</h3>
+<p>感知机是<strong>两层</strong>的神经网络.模型表达为f(x)=sign(W<sup>T</sup>X+b).其中W<sup>T</sup>X+b可以视为线性回归.</p>
+<p>这篇博客比较好的总结了线性回归，逻辑回归和感知机的区别.<a href="https://www.cnblogs.com/muzixi/p/6642203.html" target="_blank">点击跳转</a></p>
+<p>感知机是一个简单的二分类模型.其作用就是将一个n维向量空间分为两部分.给定一个输入向量，得出输出向量是正例或者反例.</p>
+<h3 id="23-多层神经网络">2.3 多层神经网络</h3>
+<p>分为输入层，输出层和隐藏层.</p>
+<p>输入层的数量一般等同于输入向量维度.对于分类问题，输出等的数量一般等于类别个数.而对于回归问题，输出为一个值.</p>
+<p>隐藏层的神经元越多，神经网络的非线性越强，健壮性越显著.</p>
+<p><strong>全连接层</strong>：第N层（n个神经元）和第N-1层（m个神经元）两两之间都有连接.全连接层其实就是在前一层的输出的基础上进行了一次Y=WX+b的操作.如下图所示：</p>
+<p><img class="img-zoomable" src="/NLPB/3.png" alt="png" />
+</p>
+<h3 id="23-激活函数">2.3 激活函数</h3>
+<p>对于一些直线不好分割的数据，若单单添加神经元层数，依旧只能绘制出直线，对分割没有改进</p>
+<p>引入激活函数.激活函数的一个作用就是提高模型的非线性分割能力.将神经元的输出输入到激活函数中，可以实现对问题的非线性分割.对于复杂的数据，可以使用多层的激活函数.</p>
+<p>常见的激活函数有：</p>
+<p><img class="img-zoomable" src="/NLPB/4.png" alt="png" />
+</p>
+<p>除了提高非线性分割能力外，激活函数还能</p>
+<p>1.提高模型鲁棒（稳健）性</p>
+<p>2.缓解梯度消失</p>
+<p>3.加速模型收敛</p>
+<h2 id="3--pytorch基础a-id3a">3.  pytorch基础<a id="3"></a></h2>
+<p><a href="https://pytorch.org/get-started/locally/" target="_blank">pytorch下载地址：</a>，选用conda下载.</p>
+<h3 id="31-张量">3.1 张量</h3>
+<p>0阶张量:常数,df:1</p>
+<p>1阶张量:向量,df :[1,2,3]</p>
+<p>2阶张量:矩阵,df:[[1,2]]</p>
+<h3 id="32-张量的一些属性和方法">3.2 张量的一些属性和方法</h3>
+<p><strong>tensor中只有一个元素的时候,获取数据:</strong></p>
+<p>tansor.itdm()</p>
+<p><strong>tansor转化为ndarray:</strong></p>
+<p>tansor.numpy()</p>
+<p><strong>获取tansor的形状:</strong></p>
+<p>tansor.size(dim)</p>
+<p><strong>tdnsor的变形和转置:</strong></p>
+<p>tansor.view()</p>
+<p>tansor.t(0,1)</p>
+<p><strong>tansor的切片和索引:</strong></p>
+<p>和numpy相同</p>
+<p><strong>获取tansor中的最大值:</strong></p>
+<p>i.  tansor.max()</p>
+<p>ii.  tansor.max(dim=-1)#dim=-1获取行方向的最大值</p>
+<p><strong>tansor.view和tensor.permute区别</strong></p>
+<p>view 相当于将原来的张量展开成一位的数据如 [1，2，3，4，5，6]，然后再进行变形</p>
+<p>permute 是更灵活的transpose，可以灵活的对原数据的维度进行调换，而数据本身不变。</p>
+<p>举例如下：</p>
+<pre><code>a = torch.tensor([[[1,2,3],[4,5,6]]])
+b = a.view(3,2)
+c = a.permute(0,2,1)
+print(a.size(),a)
+print(b.size(),b)
+print(c.size(),c)
+
+</code></pre>
+<p>结果：</p>
+<pre><code>a: torch.Size([1, 2, 3]) 
+tensor([[[1, 2, 3],
+         [4, 5, 6]]])
+b: torch.Size([3, 2]) 
+tensor([[1, 2],
+        [3, 4],
+        [5, 6]])     
+c: torch.Size([1, 3, 2]) 
+ tensor([[[1, 4],
+         [2, 5],
+         [3, 6]]])        
+
+</code></pre>
+<h2 id="4--梯度下降a-id4a">4.  梯度下降<a id="4"></a></h2>
+<p>在前面的逻辑回归等算法中已经对梯度下降进行了一些阐述.本篇结合pytorch进行总结.</p>
+<p>梯度下降中，梯度的更新模式如下：</p>
+<p><img class="img-zoomable" src="/NLPB/5.png" alt="png" />
+</p>
+<h3 id="41-计算图">4.1 计算图</h3>
+<p>计算图，即通过图的方式来描述函数.</p>
+<p>举例：对于J(a,b,c) = 3(a+bc), u=a+v,v=bc，可以绘制以下计算图，并对其每个节点求偏导：</p>
+<p><img class="img-zoomable" src="/NLPB/6.png" alt="png" />
+</p>
+<h3 id="42-反向传播">4.2 反向传播</h3>
+<p>反向传播就是上图从右到左的一个过程.自变量abc各自的偏导就是图上连线的乘积.</p>
+<p><img class="img-zoomable" src="/NLPB/7.png" alt="png" />
+</p>
+<p>将反向传播运用到神经网络中，可以计算输出结果对每一个权重参数的偏导数：</p>
+<p><img class="img-zoomable" src="/NLPB/8.png" alt="png" />
+</p>
+<p>结果中，括号外的内容是红蓝线共享部分，括号内加号左右边分别代表红蓝线.</p>
+<p>实际的计算中，反向传播是从后往前一层层进行计算的，且会保存值方便下一次计算.</p>
+<h3 id="43-pytorch实现反向传播">4.3 pytorch实现反向传播</h3>
+<pre><code>x = torch.ones([2,2],requires_grad=True) # x=tensor([[1., 1.],[1., 1.]], requires_grad=True)
+y = x+2
+z = 3*y.pow(2)
+out = z.mean()
+
+out.backward(retain_graph=True)
+print(x.grad) # tensor([[4.5000, 4.5000],[4.5000, 4.5000]])
+# 如果x.grad不是None则需要清空，不然会把上次计算的结果累积上去
+out.backward(retain_graph=True)
+print(x.grad) # tensor([[9., 9.],[9., 9.]])
+
+</code></pre>
+<p>还有以下<strong>注意点</strong></p>
+<p>1.对于retain_graph=False的情况，torch.tensor和torch.tenser.data并无二致.而当torch.tenser.data，两者是有区别的</p>
+<pre><code>t = torch.tensor(np.arange(12).reshape(3,4))
+print(p) #tensor([[ 0,  1,  2,  3],[ 4,  5,  6,  7],[ 8,  9, 10, 11]], dtype=torch.int32)
+print(p.data) #tensor([[ 0,  1,  2,  3],[ 4,  5,  6,  7],[ 8,  9, 10, 11]], dtype=torch.int32)
+
+t.data[-1,-1] = 100
+print(t) #tensor([[  0,   1,   2,   3],[  4,   5,   6,   7],[  8,   9,  10, 100]], dtype=torch.int32)
+
+</code></pre>
+<p>2.对于torch.tenser.data，并不能直接使用tensor.numpy()，而是要用tensor.detach().numpy()或者tensor.data.numpy()</p>
+<p>3.对于带下划线的函数，都会改变原对象的值；不带下划线就不会.如：</p>
+<pre><code>a.zero_() # 会改变a
+a.zero() # 不会改变a
+
+
+</code></pre>
+<h2 id="5--pytorch手动实现线性回归a-id5a">5.  pytorch手动实现线性回归<a id="5"></a></h2>
+<p>线性回归的过程就是：</p>
+<p>1.给出初始的w和b</p>
+<p>2.计算wx+b，计算误差（均方误差）</p>
+<p>3.使用梯度下降算法优化误差，计算新的w和b</p>
+<p>4.不断迭代过程2,3，直到达到迭代次数或者满足误差阈值.</p>
+<p>使用w.grad和b.grad可以计算loss对w和b的偏导从而完成梯度下降.代码如下：</p>
+<pre><code>
+import torch
+import matplotlib.pyplot as plt
+
+learning_rate = 0.1
+
+# 1. 准备数据 #y = 3x + 0.8
+x = torch.randn([500,1])
+y_true = 3*x + 0.8
+
+# 2. 计算预测值 y_pred = x * w + b
+w = torch.rand([],requires_grad=True)
+print(&quot;w is&quot;, w)
+# 只有浮点型的tensor才能使用requires_grad=True这个属性.所以需要添加dtype
+b = torch.tensor(0,dtype=torch.float,requires_grad=True)
+
+for k in range(30):
+    # 如果w和b已经有值了，则需要清0
+    for i in [w,b]:
+        if i.grad is not None:
+            i.grad.data.zero_()
+
+    y_predict = x * w + b
+    # 3. 计算损失，把参数的梯度置为0，进行反向传播
+    # 此时使用均方误差
+    loss =  (y_predict-y_true).pow(2).mean()
+
+    loss.backward()
+    # 3.1 能够得到w和b的梯度
+    # 4. 梯度下降更新参数
+    w.data = w.data - learning_rate * w.grad
+    b.data = b.data - learning_rate * b.grad
+    if k%10 == 0:
+        print(k,loss.item(),w.item(),b.item())
+# print(w,b)
+
+#绘图
+plt.figure(figsize=(20,8))
+plt.scatter(x.numpy(),y_true.numpy())
+
+y_predict =  x * w + b
+plt.plot(x.numpy(),y_predict.detach().numpy(),c=&quot;red&quot;)
+plt.show()
+
+
+</code></pre>
+<h2 id="6--pytorch模型实现线性回归a-id6a">6.  pytorch，模型实现线性回归<a id="6"></a></h2>
+<p>模型的原理将在<a href="https://blog.daorenwu.com/post/PytorchB2/" target="_blank">下一篇</a>中进行阐述.此处只给出代码.</p>
+<pre><code>import torch
+import torch.nn as nn
+from torch import optim
+import time
+
+#定义一个device
+device = torch.device(&quot;cuda:0&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+
+class MyModel(nn.Module):
+    def __init__(self):
+        super(MyModel,self).__init__()
+        self.lr = nn.Linear(1,1)
+
+    def forward(self, x):  #x [500,1]  ---&gt; y_predict :[500,1]
+        return self.lr(x)
+
+#0 准备数据
+x = torch.rand([500,1]).to(device)
+y_true = 3*x + 0.8
+# print(y_true)
+
+#1. 实例化模型
+model = MyModel().to(device)
+#2. 实例化优化器
+optimizer = optim.Adam(model.parameters(),lr=0.1)
+#3. 实例化损失函数
+loss_fn = nn.MSELoss()
+
+t0 = time.time()
+for i in range(500):
+    #4. 梯度置为0
+    optimizer.zero_grad()
+    #5. 调用模型得到预测值
+    y_predict = model(x)
+    #6. 通过损失函数，计算得到损失
+    loss = loss_fn(y_predict,y_true)
+    #7. 反向传播，计算梯度
+    loss.backward()
+    #8. 更新参数
+    optimizer.step()
+
+    #打印部分数据
+    if i%10 ==0:
+        print(i,loss.item())
+
+for param in model.parameters():
+    print(param.item())
+
+print(&quot;total cost time:&quot;,time.time()-t0) #1.3463990688323975
+
+</code></pre>
+<h2 id="7--总结a-idconclusiona">7.  总结<a id="conclusion"></a></h2>
+<p>对神经网络，感知机，多层神经网络，激活函数等的工作原理有了初步的了解.</p>
+<p>对Pytorch开始了新的学习，并使用Pytorch实现反向传播.而后，利用反向传播的原理，手动实现了线性回归.</p>
+<p>下一篇将对Pytorch的模型进行初步的学习，方便编程.</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-神经元与神经网络a-id2a">2. 神经元与神经网络<a id="2"></a></a>
+      <ul>
+        <li><a href="#21-单层神经网络">2.1 单层神经网络</a></li>
+        <li><a href="#22-感知机">2.2 感知机</a></li>
+        <li><a href="#23-多层神经网络">2.3 多层神经网络</a></li>
+        <li><a href="#23-激活函数">2.3 激活函数</a></li>
+      </ul>
+    </li>
+    <li><a href="#3--pytorch基础a-id3a">3.  pytorch基础<a id="3"></a></a>
+      <ul>
+        <li><a href="#31-张量">3.1 张量</a></li>
+        <li><a href="#32-张量的一些属性和方法">3.2 张量的一些属性和方法</a></li>
+      </ul>
+    </li>
+    <li><a href="#4--梯度下降a-id4a">4.  梯度下降<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-计算图">4.1 计算图</a></li>
+        <li><a href="#42-反向传播">4.2 反向传播</a></li>
+        <li><a href="#43-pytorch实现反向传播">4.3 pytorch实现反向传播</a></li>
+      </ul>
+    </li>
+    <li><a href="#5--pytorch手动实现线性回归a-id5a">5.  pytorch手动实现线性回归<a id="5"></a></a></li>
+    <li><a href="#6--pytorch模型实现线性回归a-id6a">6.  pytorch，模型实现线性回归<a id="6"></a></a></li>
+    <li><a href="#7--总结a-idconclusiona">7.  总结<a id="conclusion"></a></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/dsrkafuu" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/dsrkafuu" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/19767474" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-神经元与神经网络a-id2a">2. 神经元与神经网络<a id="2"></a></a>
+      <ul>
+        <li><a href="#21-单层神经网络">2.1 单层神经网络</a></li>
+        <li><a href="#22-感知机">2.2 感知机</a></li>
+        <li><a href="#23-多层神经网络">2.3 多层神经网络</a></li>
+        <li><a href="#23-激活函数">2.3 激活函数</a></li>
+      </ul>
+    </li>
+    <li><a href="#3--pytorch基础a-id3a">3.  pytorch基础<a id="3"></a></a>
+      <ul>
+        <li><a href="#31-张量">3.1 张量</a></li>
+        <li><a href="#32-张量的一些属性和方法">3.2 张量的一些属性和方法</a></li>
+      </ul>
+    </li>
+    <li><a href="#4--梯度下降a-id4a">4.  梯度下降<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-计算图">4.1 计算图</a></li>
+        <li><a href="#42-反向传播">4.2 反向传播</a></li>
+        <li><a href="#43-pytorch实现反向传播">4.3 pytorch实现反向传播</a></li>
+      </ul>
+    </li>
+    <li><a href="#5--pytorch手动实现线性回归a-id5a">5.  pytorch手动实现线性回归<a id="5"></a></a></li>
+    <li><a href="#6--pytorch模型实现线性回归a-id6a">6.  pytorch，模型实现线性回归<a id="6"></a></a></li>
+    <li><a href="#7--总结a-idconclusiona">7.  总结<a id="conclusion"></a></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
