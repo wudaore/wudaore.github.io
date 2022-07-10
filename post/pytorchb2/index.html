@@ -16,25 +16,25 @@
 
 
 
-<title>Markdown Syntax - wudao的博客</title>
+<title>pytorch基础(2) - wudao的博客</title>
 
 
 <meta name="author" content="DSRKafuU" />
 
 
-<meta name="description" content="Markdown Syntax test page" />
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
 
 
-<meta name="keywords" content="markdown, css, html, themes" />
+<meta name="keywords" content="深度学习, Pytorch" />
 
 
-<meta property="og:title" content="Markdown Syntax" />
-<meta name="twitter:title" content="Markdown Syntax" />
+<meta property="og:title" content="pytorch基础(2)" />
+<meta name="twitter:title" content="pytorch基础(2)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/markdown-syntax/" /><meta property="og:description" content="Markdown Syntax test page" />
-<meta name="twitter:description" content="Markdown Syntax test page" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/pytorchb2/" /><meta property="og:description" content="目录 序 pytorch模型实现线性回归 各种梯度下降算法 总结 1. 序 进一步学习Pytorch 2. pytorch模型实现线性回归 上一章中值给出了代码，这一章对代码进行详解. 2.1 nn.module init:自定义的方法实现的位置 fo" />
+<meta name="twitter:description" content="目录 序 pytorch模型实现线性回归 各种梯度下降算法 总结 1. 序 进一步学习Pytorch 2. pytorch模型实现线性回归 上一章中值给出了代码，这一章对代码进行详解. 2.1 nn.module init:自定义的方法实现的位置 fo" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2020-05-11T00:00:00+00:00" /><meta property="article:modified_time" content="2020-05-11T00:00:00+00:00" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-10T00:00:00+08:00" /><meta property="article:modified_time" content="2022-07-10T00:00:00+08:00" />
 
 
 <style>
@@ -100,142 +100,163 @@
 <article>
     
     <h2 class="post-item post-title">
-        <a href="https://wudaore.github.io/post/markdown-syntax/">Markdown Syntax</a>
+        <a href="https://wudaore.github.io/post/pytorchb2/">pytorch基础(2)</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2020-05-11</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-10</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;424 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1153 words</span>
 
-<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/markdown">markdown</a>&nbsp;<a href="/tags/css">css</a>&nbsp;<a href="/tags/html">html</a>&nbsp;<a href="/tags/themes">themes</a>&nbsp;</span>
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0">深度学习</a>&nbsp;<a href="/tags/pytorch">Pytorch</a>&nbsp;</span>
 
     </div>
     
     <div class="post-content markdown-body">
-        <p>This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.</p>
-<h2 id="headings">Headings</h2>
-<p>The following HTML <code>&lt;h1&gt;</code>—<code>&lt;h6&gt;</code> elements represent six levels of section headings. <code>&lt;h1&gt;</code> is the highest section level while <code>&lt;h6&gt;</code> is the lowest.</p>
-<h1 id="h1">H1</h1>
-<h2 id="h2">H2</h2>
-<h3 id="h3">H3</h3>
-<h4 id="h4">H4</h4>
-<h5 id="h5">H5</h5>
-<h6 id="h6">H6</h6>
-<h2 id="paragraph">Paragraph</h2>
-<p>Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.</p>
-<p>Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.</p>
-<h2 id="blockquotes">Blockquotes</h2>
-<p>The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a <code>footer</code> or <code>cite</code> element, and optionally with in-line changes such as annotations and abbreviations.</p>
-<h4 id="blockquote-without-attribution">Blockquote without attribution</h4>
-<blockquote>
-<p>Tiam, ad mint andaepu dandae nostion secatur sequo quae.
-<strong>Note</strong> that you can use <em>Markdown syntax</em> within a blockquote.</p>
-</blockquote>
-<h4 id="blockquote-with-attribution">Blockquote with attribution</h4>
-<blockquote>
-<p>Don&rsquo;t communicate by sharing memory, share memory by communicating.</p>
-— <cite>Rob Pike<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></cite></p>
-</blockquote>
-<h2 id="tables">Tables</h2>
-<p>Tables aren&rsquo;t part of the core Markdown spec, but Hugo supports supports them out-of-the-box.</p>
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Age</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Bob</td>
-<td>27</td>
-</tr>
-<tr>
-<td>Alice</td>
-<td>23</td>
-</tr>
-</tbody>
-</table>
-<h4 id="inline-markdown-within-tables">Inline Markdown within tables</h4>
-<table>
-<thead>
-<tr>
-<th>Inline   </th>
-<th>Markdown   </th>
-<th>In   </th>
-<th>Table</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em>italics</em></td>
-<td><strong>bold</strong></td>
-<td><del>strikethrough</del>   </td>
-<td><code>code</code></td>
-</tr>
-</tbody>
-</table>
-<h2 id="code-blocks">Code Blocks</h2>
-<h4 id="code-block-with-backticks">Code block with backticks</h4>
-<pre><code class="language-html">html
-&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-    &lt;head&gt;
-        &lt;meta charset=&quot;UTF-8&quot; /&gt;
-        &lt;title&gt;Example HTML5 Document&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;p&gt;Test&lt;/p&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
+        <h1 id="目录">目录</h1>
+<h4 id="序1"><a href="#1">序</a></h4>
+<h4 id="pytorch模型实现线性回归2"><a href="#2">pytorch模型实现线性回归</a></h4>
+<h4 id="各种梯度下降算法3"><a href="#3">各种梯度下降算法</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
+<p>进一步学习Pytorch</p>
+<h2 id="2-pytorch模型实现线性回归a-id2a">2. pytorch模型实现线性回归<a id="2"></a></h2>
+<p>上一章中值给出了代码，这一章对代码进行详解.</p>
+<h3 id="21-nnmodule">2.1 nn.module</h3>
+<ol>
+<li>init:自定义的方法实现的位置</li>
+<li>forword:完成一次向前计算的过程</li>
+</ol>
+<pre><code>class MyModel(nn.Module):
+    def __init__(self):
+        super(MyModel,self).__init__() # 继承父类的init的参数
+        # self.lr = nn.Linear(1,1)  # 通过全连接层.
+        self.fc1 = nn.Linear(1,1)
+
+    def forward(self, x):  #x [500,1]  ---&gt; y_predict :[500,1]
+        out = self.lr(x)
+        # out = fc1(out)
+        return ot
+
 </code></pre>
-<h4 id="code-block-indented-with-four-spaces">Code block indented with four spaces</h4>
-<pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;Example HTML5 Document&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;p&gt;Test&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;
+<p>nn.Linear是预先定义好的线性模型，两个参数分别是输入和输出的维度.</p>
+<p>nn.Module实际上调用forword方法.</p>
+<pre><code>model = LR()
+predict = model(x)
+
 </code></pre>
-<h2 id="list-types">List Types</h2>
-<h4 id="ordered-list">Ordered List</h4>
-<ol>
-<li>First item</li>
-<li>Second item</li>
-<li>Third item</li>
-</ol>
-<h4 id="unordered-list">Unordered List</h4>
-<ul>
-<li>List item</li>
-<li>Another item</li>
-<li>And another item</li>
-</ul>
-<h4 id="nested-list">Nested list</h4>
-<ul>
-<li>Item</li>
-</ul>
-<ol>
-<li>First Sub-item</li>
-<li>Second Sub-item</li>
-</ol>
-<h2 id="other-elements--abbr-sub-sup-kbd-mark">Other Elements — abbr, sub, sup, kbd, mark</h2>
-<p><abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.</p>
-<p>H<sub>2</sub>O</p>
-<p>X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup></p>
-<p>Press <kbd><kbd>CTRL</kbd>+<kbd>ALT</kbd>+<kbd>Delete</kbd></kbd> to end the session.</p>
-<p>Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1">
-<p>The above quote is excerpted from Rob Pike&rsquo;s <a href="https://www.youtube.com/watch?v=PAAkCSZUG1c" target="_blank">talk</a> during Gopherfest, November 18, 2015.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</div>
+<h3 id="22-优化器类">2.2 优化器类</h3>
+<p>nn.optimizer优化器类,是torch封装的更新参数的方法.比如随机梯度下降SGD.</p>
+<p>torch.optim(参数,学习率)</p>
+<p>对于模型中所有requires_grad=True的参数，可以通过model.parameters()获取</p>
+<p>使用方法：</p>
+<p>1.实例化</p>
+<p>2.参数梯度置0</p>
+<p>3.反向传播计算梯度</p>
+<p>4.更新参数</p>
+<pre><code>#1. 实例化模型
+model = MyModel().to(device)
+#2. 实例化优化器
+optimizer = optim.Adam(model.parameters(),lr=0.1)
+#3. 实例化损失函数
+loss_fn = nn.MSELoss()
+
+for i in range(500):
+    #4. 梯度置为0
+    optimizer.zero_grad()
+    #5. 调用模型得到预测值
+    y_predict = model(x)
+    #6. 通过损失函数，计算得到损失
+    loss = loss_fn(y_predict,y_true)
+    #7. 反向传播，计算梯度
+    loss.backward()
+    #8. 更新参数
+    optimizer.step()
+
+</code></pre>
+<h3 id="总体代码">总体代码</h3>
+<pre><code>import torch
+import torch.nn as nn
+from torch import optim
+import time
+
+#定义一个device
+device = torch.device(&quot;cuda:0&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+
+class MyModel(nn.Module):
+    def __init__(self):
+        super(MyModel,self).__init__()
+        self.lr = nn.Linear(1,1)
+
+    def forward(self, x):  #x [500,1]  ---&gt; y_predict :[500,1]
+        return self.lr(x)
+
+#0 准备数据
+x = torch.rand([500,1]).to(device)
+y_true = 3*x + 0.8
+# print(y_true)
+
+#1. 实例化模型，模型定义GPU运行
+model = MyModel().to(device)
+#2. 实例化优化器
+optimizer = optim.Adam(model.parameters(),lr=0.1) # 使用Adam算法.当然也可以用SGD算法.
+#3. 实例化损失函数
+loss_fn = nn.MSELoss() # 使用均方误差
+
+t0 = time.time()
+for i in range(500):
+    #4. 梯度置为0
+    optimizer.zero_grad()
+    #5. 调用模型得到预测值
+    y_predict = model(x)
+    #6. 通过损失函数，计算得到损失
+    loss = loss_fn(y_predict,y_true)
+    #7. 反向传播，计算梯度
+    loss.backward()
+    #8. 更新参数
+    optimizer.step()
+
+    #打印部分数据
+    if i%10 ==0:
+        print(i,loss.item())
+
+for param in model.parameters(): # parameter中就是存的w和b
+    print(param.item())
+
+print(&quot;total cost time:&quot;,time.time()-t0) #1.3463990688323975
+
+</code></pre>
+<p>需要注意的是，在一些模型中，训练的参数和预测的参数有所不同.比如模型中存在<strong>Dropout</strong>，BatchNorm的时候.</p>
+<pre><code>model.eval()# 表示模型为评估（预测模式）
+model.train(model=True) # 表示模型为训练模式
+
+</code></pre>
+<h2 id="3-各种梯度下降算法a-id3a">3. 各种梯度下降算法<a id="3"></a></h2>
+<p>一些梯度下降算法已经在<a href="https://blog.daorenwu.com/post/linear-regression/#23-%E4%BC%98%E5%8C%96---%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%9B%B4%E5%A4%9A%E7%94%A8%E5%88%B0" target="_blank">之前的博客</a>简单的提到过了.现在进行补充和扩展.</p>
+<p>除了上述的四种算法，还有：</p>
+<h3 id="31-动量法">3.1 动量法.</h3>
+<p>minibatch在选择小学习率是收敛慢，大学习率时可能会跳过最优点.使用动量法（Momentum）可以解决这个问题.</p>
+<p>动量法基于梯度的移动指数进行加权平均，对参数进行平滑处理.</p>
+<p>令当前梯度=v，前一次梯度为δw，学习率为α则:</p>
+<p>v=0.8*v+0.2*δw</p>
+<p>w=w-αv</p>
+<h3 id="32-adagrad">3.2 AdaGrad.</h3>
+<p>AdaGrad可以达到自适应学习率的效果.具体算法如下图：</p>
+<p><img class="img-zoomable" src="/NLPB/9.png" alt="png" />
+</p>
+<h3 id="33-rmsprop">3.3 RMSProp</h3>
+<p>RMSProp算法通过对学习率进行加权，对动量法进行了改进，进一步加快收敛和防止摆动过大.具体算法如下图：</p>
+<p><img class="img-zoomable" src="/NLPB/10.png" alt="png" />
+</p>
+<p><strong>注意</strong> 这里的δw表示本次梯度，这个动量法不同.</p>
+<h3 id="34-adam">3.4 Adam</h3>
+<p>Adam算法结合了动量法和RMSProp，同时对学习率和梯度进行了限制.算法的具体流程如下图：</p>
+<p><img class="img-zoomable" src="/NLPB/11.png" alt="png" />
+</p>
+<p>api为：</p>
+<pre><code>torch.optim.Adam()
+
+</code></pre>
+
     </div>
 </article>
 
@@ -371,37 +392,27 @@
     <div class="sidebar-item sidebar-toc">
         <h3>Table of Contents</h3><nav id="TableOfContents">
   <ul>
-    <li><a href="#headings">Headings</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#h2">H2</a>
-      <ul>
-        <li><a href="#h3">H3</a></li>
-      </ul>
-    </li>
-    <li><a href="#paragraph">Paragraph</a></li>
-    <li><a href="#blockquotes">Blockquotes</a>
+    <li>
       <ul>
         <li></li>
       </ul>
     </li>
-    <li><a href="#tables">Tables</a>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-pytorch模型实现线性回归a-id2a">2. pytorch模型实现线性回归<a id="2"></a></a>
       <ul>
-        <li></li>
+        <li><a href="#21-nnmodule">2.1 nn.module</a></li>
+        <li><a href="#22-优化器类">2.2 优化器类</a></li>
+        <li><a href="#总体代码">总体代码</a></li>
       </ul>
     </li>
-    <li><a href="#code-blocks">Code Blocks</a>
+    <li><a href="#3-各种梯度下降算法a-id3a">3. 各种梯度下降算法<a id="3"></a></a>
       <ul>
-        <li></li>
+        <li><a href="#31-动量法">3.1 动量法.</a></li>
+        <li><a href="#32-adagrad">3.2 AdaGrad.</a></li>
+        <li><a href="#33-rmsprop">3.3 RMSProp</a></li>
+        <li><a href="#34-adam">3.4 Adam</a></li>
       </ul>
     </li>
-    <li><a href="#list-types">List Types</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-    <li><a href="#other-elements--abbr-sub-sup-kbd-mark">Other Elements — abbr, sub, sup, kbd, mark</a></li>
   </ul>
 </nav></div>
 </aside>
@@ -544,37 +555,27 @@
         <h3>Table of Contents</h3>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#headings">Headings</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#h2">H2</a>
-      <ul>
-        <li><a href="#h3">H3</a></li>
-      </ul>
-    </li>
-    <li><a href="#paragraph">Paragraph</a></li>
-    <li><a href="#blockquotes">Blockquotes</a>
+    <li>
       <ul>
         <li></li>
       </ul>
     </li>
-    <li><a href="#tables">Tables</a>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-pytorch模型实现线性回归a-id2a">2. pytorch模型实现线性回归<a id="2"></a></a>
       <ul>
-        <li></li>
+        <li><a href="#21-nnmodule">2.1 nn.module</a></li>
+        <li><a href="#22-优化器类">2.2 优化器类</a></li>
+        <li><a href="#总体代码">总体代码</a></li>
       </ul>
     </li>
-    <li><a href="#code-blocks">Code Blocks</a>
+    <li><a href="#3-各种梯度下降算法a-id3a">3. 各种梯度下降算法<a id="3"></a></a>
       <ul>
-        <li></li>
+        <li><a href="#31-动量法">3.1 动量法.</a></li>
+        <li><a href="#32-adagrad">3.2 AdaGrad.</a></li>
+        <li><a href="#33-rmsprop">3.3 RMSProp</a></li>
+        <li><a href="#34-adam">3.4 Adam</a></li>
       </ul>
     </li>
-    <li><a href="#list-types">List Types</a>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
-    <li><a href="#other-elements--abbr-sub-sup-kbd-mark">Other Elements — abbr, sub, sup, kbd, mark</a></li>
   </ul>
 </nav>
     </div>
