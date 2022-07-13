@@ -6,7 +6,25 @@
     <description>Recent content on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 10 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>pytorch基础(3)</title>
+      <link>https://wudaore.github.io/post/pytorchb3/</link>
+      <pubDate>Wed, 13 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/pytorchb3/</guid>
+      <description>目录 序 pytorch数据加载器 pytorch自带数据集 数据处理方法 案例：手写数字识别 总结 1. 序 进一步学习Pytorch 2. pytorch数据加载器 定义数据类并读取数据： class SmsDataset(Dataset): def __init__(self): &amp;quot;&amp;quot;&amp;quot; 初始化 :param None: :return None: &amp;quot;&amp;quot;&amp;quot; self.file_path = &amp;quot;./data/SMSSpamCollection&amp;quot; self.lines =</description>
+    </item>
+    
+    <item>
+      <title>CSS(1)</title>
+      <link>https://wudaore.github.io/post/css1/</link>
+      <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/css1/</guid>
+      <description>目录 序 HTML基础 PCA代码实现 PCA接口实现 总结 ps. 1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览</description>
+    </item>
+    
     <item>
       <title>pytorch基础(2)</title>
       <link>https://wudaore.github.io/post/pytorchb2/</link>
@@ -287,6 +305,15 @@ lumine cognoscere flos nubis! Fronde ipsamque patulos Dryopen deorum.&lt;/p&gt;<
       <guid>https://wudaore.github.io/post/wtf-article/</guid>
       <description>&lt;p&gt;本文内容无实际意义，由狗屁不通文章生成器自动生成，不代表作者本人观点。&lt;/p&gt;
 &lt;p&gt;可是，即使是这样，一段代码写一天的出现仍然代表了一定的意义。一段代码写一天，到底应该如何实现。马克思在不经意间这样说过，一切节省，归根到底都归结为时间的节省。这不禁令我深思。马克思曾经说过，一切节省，归根到底都归结为时间的节省。&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://wudaore.github.io/post/nlp-rnn/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://wudaore.github.io/post/nlp-rnn/</guid>
+      <description></description>
     </item>
     
   </channel>

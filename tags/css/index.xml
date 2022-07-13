@@ -6,7 +6,16 @@
     <description>Recent content in css on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 11 May 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://wudaore.github.io/tags/css/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 10 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/css/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSS(1)</title>
+      <link>https://wudaore.github.io/post/css1/</link>
+      <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/css1/</guid>
+      <description>目录 序 HTML基础 PCA代码实现 PCA接口实现 总结 ps. 1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览</description>
+    </item>
+    
     <item>
       <title>Markdown Syntax</title>
       <link>https://wudaore.github.io/post/markdown-syntax/</link>

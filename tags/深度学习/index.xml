@@ -6,7 +6,16 @@
     <description>Recent content in 深度学习 on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 10 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 13 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>pytorch基础(3)</title>
+      <link>https://wudaore.github.io/post/pytorchb3/</link>
+      <pubDate>Wed, 13 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/pytorchb3/</guid>
+      <description>目录 序 pytorch数据加载器 pytorch自带数据集 数据处理方法 案例：手写数字识别 总结 1. 序 进一步学习Pytorch 2. pytorch数据加载器 定义数据类并读取数据： class SmsDataset(Dataset): def __init__(self): &amp;quot;&amp;quot;&amp;quot; 初始化 :param None: :return None: &amp;quot;&amp;quot;&amp;quot; self.file_path = &amp;quot;./data/SMSSpamCollection&amp;quot; self.lines =</description>
+    </item>
+    
     <item>
       <title>pytorch基础(2)</title>
       <link>https://wudaore.github.io/post/pytorchb2/</link>

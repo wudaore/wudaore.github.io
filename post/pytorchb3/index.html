@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>pytorch基础(3) - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="深度学习, Pytorch" />
+
+
+<meta property="og:title" content="pytorch基础(3)" />
+<meta name="twitter:title" content="pytorch基础(3)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/pytorchb3/" /><meta property="og:description" content="目录 序 pytorch数据加载器 pytorch自带数据集 数据处理方法 案例：手写数字识别 总结 1. 序 进一步学习Pytorch 2. pytorch数据加载器 定义数据类并读取数据： class SmsDataset(Dataset): def __init__(self): &quot;&quot;&quot; 初始化 :param None: :return None: &quot;&quot;&quot; self.file_path = &quot;./data/SMSSpamCollection&quot; self.lines =" />
+<meta name="twitter:description" content="目录 序 pytorch数据加载器 pytorch自带数据集 数据处理方法 案例：手写数字识别 总结 1. 序 进一步学习Pytorch 2. pytorch数据加载器 定义数据类并读取数据： class SmsDataset(Dataset): def __init__(self): &quot;&quot;&quot; 初始化 :param None: :return None: &quot;&quot;&quot; self.file_path = &quot;./data/SMSSpamCollection&quot; self.lines =" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-13T00:00:00+08:00" /><meta property="article:modified_time" content="2022-07-13T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/pytorchb3/">pytorch基础(3)</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-13</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2430 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0">深度学习</a>&nbsp;<a href="/tags/pytorch">Pytorch</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h1 id="目录">目录</h1>
+<h4 id="序1"><a href="#1">序</a></h4>
+<h4 id="pytorch数据加载器2"><a href="#2">pytorch数据加载器</a></h4>
+<h4 id="pytorch自带数据集3"><a href="#3">pytorch自带数据集</a></h4>
+<h4 id="数据处理方法4"><a href="#4">数据处理方法</a></h4>
+<h4 id="案例手写数字识别5"><a href="#5">案例：手写数字识别</a></h4>
+<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
+<h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
+<p>进一步学习Pytorch</p>
+<h2 id="2-pytorch数据加载器a-id2a">2. pytorch数据加载器<a id="2"></a></h2>
+<p>定义数据类并读取数据：</p>
+<pre><code>
+class SmsDataset(Dataset):
+    def __init__(self):
+        &quot;&quot;&quot;
+            初始化
+           :param None:
+           :return None:
+        &quot;&quot;&quot;
+        self.file_path = &quot;./data/SMSSpamCollection&quot;
+        self.lines = open(self.file_path, encoding='utf-8').readlines()
+
+    def __getitem__(self, index):
+        &quot;&quot;&quot;
+           获取索引对应位置的一条数据
+           :param index: 索引
+           :return: label: 标签
+           :return: content: 文本
+        &quot;&quot;&quot;
+        line = self.lines[index].strip()
+        label = line.split(&quot;\t&quot;)[0]
+        content = line.split(&quot;\t&quot;)[1]
+        return label, content
+
+    def __len__(self):
+        # 获取数据的总数量.
+        return len(self.lines)
+
+
+</code></pre>
+<p>直接在类内用open方法读取数据，不能实现数据的批处理，打乱和多线程处理.</p>
+<p>故使用数据加载器，torch.utils.data.Dataloader加载，迭代数据集.</p>
+<p>DataLoader的参数详解如下：</p>
+<p><img class="img-zoomable" src="/NLPB/12.png" alt="png" />
+</p>
+<pre><code>sms_dataset = SmsDataset()
+dataloader = DataLoader(sms_dataset,batch_size=2,shuffle=True,drop_last=True)  #  droplast:防止读取最后数据的时候因为个数不匹配batch_size报错.
+if __name__ == '__main__':
+    # Mydata = SmsDataset()
+    # print(Mydata[0])
+    # print(Mydata.__len__())
+
+    for x in dataloader:
+        print(x)
+    for idx,(labels,contents) in enumerate(dataloader):
+        print(idx)
+        print(labels)
+        print(contents)
+        break
+    print(len(sms_dataset))
+    print(len(dataloader))
+</code></pre>
+<h2 id="3-pytorch自带数据集a-id3a">3. pytorch自带数据集<a id="3"></a></h2>
+<p>图像数据：torchvision.datasets</p>
+<p>文本数据：torchtext.datasets</p>
+<p>以免费的图像识别数据集MNIST为例，只要对torchvision.datasets.MNIST进行实例化，就能读取数据：</p>
+<pre><code>mnist = MNIST(root=&quot;./data&quot;,train=True,download=True,transform=func)
+
+</code></pre>
+<p>其中参数如下图：</p>
+<p><img class="img-zoomable" src="/NLPB/13.png" alt="png" />
+</p>
+<h2 id="4-数据处理方法a-id4a">4. 数据处理方法<a id="4"></a></h2>
+<h3 id="41-torchvisiontransformtotensor">4.1 torchvision.transform.ToTensor</h3>
+<p>将一个PIL.Img对象或者一个(H，W，C)转换为取值范围为0到1的，形状为[C,H,W]的torch.FloatTensor.</p>
+<p>对于[H,W,C]的转换，并非使用<strong>tensor.transpose(0,2)<strong>而是使用</strong>tensor.permute(2,0,1)</strong></p>
+<h3 id="42-torchvisiontransformnormalize">4.2 torchvision.transform.Normalize</h3>
+<pre><code>torchvision.transform.Normalize(mean,std)
+</code></pre>
+<p>给定均值mean和方差std，（注意，均值和方差的个数都必须和图片的通道数相同.因为这里指的是每个通道的均值和方差）即可进行标准化处理.</p>
+<p>即：Normalized_img = (img-mean)/std.</p>
+<h3 id="43-torchvisiontransformcompose">4.3 torchvision.transform.Compose</h3>
+<p>将多个数据处理方法集合起来，传入数据时依次通过这些方法：</p>
+<pre><code>def mnist_dataset(train):
+    func = torchvision.transforms.Compose([
+        torchvision.transforms.ToTensor(),
+        torchvision.transforms.Normalize(
+            mean=(0.1307,),
+            std=(0.3081,)
+        )]
+    )
+
+</code></pre>
+<h2 id="5-案例手写数字识别a-id5a">5. 案例：手写数字识别<a id="5"></a></h2>
+<h3 id="51-数据的导入和处理">5.1 数据的导入和处理.</h3>
+<p>先在config.py中添加配置选项：</p>
+<pre><code>&quot;&quot;&quot;
+项目配置
+&quot;&quot;&quot;
+import torch
+
+
+train_batch_size = 128
+test_batch_size = 1000
+device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
+</code></pre>
+<p>然后在dataset.py中导入数据.</p>
+<pre><code>&quot;&quot;&quot;
+准备数据集
+&quot;&quot;&quot;
+import torch
+from torch.utils.data import DataLoader
+from torchvision.datasets import MNIST
+import torchvision
+import conf
+
+
+# 准备minist的dataset MINSET只有一个通道，是黑白照片，所以均值和标准差是一维元组.
+# 处理后的图片形状为[batch_size,通道数(1),宽,高]
+def mnist_dataset(train):
+    func = torchvision.transforms.Compose([
+        torchvision.transforms.ToTensor(),
+        torchvision.transforms.Normalize(
+            mean=(0.1307,),
+            std=(0.3081,)
+        )]
+    )
+
+    # 1. 准备Mnist数据集
+    return MNIST(root=&quot;../data/MNIST&quot;, train=train, download=False, transform=func)
+
+def get_dataloader(train=True):
+    mnist = mnist_dataset(train)
+    batch_size = conf.train_batch_size if train else conf.test_batch_size
+    return DataLoader(mnist,batch_size=batch_size,shuffle=True)
+
+if __name__ == '__main__':
+    for (images,labels) in get_dataloader():
+        print(images.size())
+        print(labels.size())
+        break
+
+
+</code></pre>
+<h3 id="52-模型的建立">5.2 模型的建立.</h3>
+<p>数据集读入，处理完毕后带入模型中</p>
+<p>在进入全连接层之前需要处理数据形状.</p>
+<p>在models.py中输入以下代码：batch_size肯定是不能变的，照样传入；而后面的1,28,28则需要相乘之后才能传入.</p>
+<p>前面的博客已经解释了，全连接层其实就是一次线性回归或者一次矩阵乘法，可以实现维度的转换.</p>
+<p>传入第一层全连接层后，将1*28*28维的数据转换为100维的数据；传入第二层全连接层后，转换为10维的数据.</p>
+<pre><code>&quot;&quot;&quot;定义模型&quot;&quot;&quot;
+
+import torch.nn as nn
+import torch.nn.functional as F
+
+class MnistModel(nn.Module):
+    def __init__(self):
+        super(MnistModel,self).__init__()
+        self.fc1 = nn.Linear(1*28*28,100)
+        self.fc2 = nn.Linear(100,10)
+
+    def forward(self, image):
+        # 修改形状.batch_size不能变
+        image_viwed = image.view(-1,1*28*28) #[batch_size,1*28*28]
+        # 全连接层
+        fc1_out = self.fc1(image_viwed) #[batch_size,100]
+        # 激活函数处理，形状不变
+        fc1_out_relu = F.relu(fc1_out) #[batch_siz3,100]
+        out = self.fc2(fc1_out_relu) #[batch_size,10]
+        # dim代表在哪个维度上进行操作.一般都在最后一个维度，代表对每一个数据
+        return F.log_softmax(out,dim=-1)
+</code></pre>
+<h3 id="53-多分类的损失函数">5.3 多分类的损失函数.</h3>
+<p>在学习逻辑回归时，我们通过sigmod函数计算对数似然损失，从而定义<a href="http://localhost:1313/post/logistic-regression/#2-%E5%AF%B9%E6%95%B0%E4%BC%BC%E7%84%B6%E5%87%BD%E6%95%B0a-id2a" target="_blank">二分类的损失</a></p>
+<p>而在这个多分类问题中，我们使用softmax函数来实现.区别于sigmod函数只需要计算一次，softmax需要计算样本属于每个类别的概率.公式如下图：</p>
+<p><img class="img-zoomable" src="/NLPB/14.png" alt="png" />
+</p>
+<p>整个过程可以抽象为：</p>
+<p><img class="img-zoomable" src="/NLPB/15.png" alt="png" />
+</p>
+<p>与二分类一样，多分类的损失函数依然是对数似然损失</p>
+<p><img class="img-zoomable" src="/NLPB/16.png" alt="png" />
+</p>
+<p>最后，计算每个样本的损失，也即上式的平均值.</p>
+<p>把softmax传入对数似然损失得到的损失函数叫<strong>交叉熵损失</strong></p>
+<p>pytorch中有两种实现交叉熵损失的方法</p>
+<p>1.</p>
+<pre><code>criterion = nn.CrossEntropyLoss()
+loss = criterion(input, target)
+
+</code></pre>
+<p>2.</p>
+<pre><code># 1.对输出值计算softmax和取对数
+output = F.log_softmax(out,dim=-1)
+# 2.使用torch中带权损失.F.nll_loss:带权损失.其中设target为权值和output相乘累加，契合对数似然损失的公式
+loss = F.nll_loss(output, target)
+</code></pre>
+<h3 id="54-模型的训练">5.4 模型的训练</h3>
+<p>模型的训练有以下步骤：</p>
+<p>1.实例化模型，将模型设置为训练模式</p>
+<p>2.实例化优化器类，实例化损失函数</p>
+<p>3.获取，并遍历dataloader</p>
+<p>4.梯度置为0</p>
+<p>5.进行向前计算</p>
+<p>6.计算损失</p>
+<p>7.反向传播</p>
+<p>8.更新参数.</p>
+<p>训练完毕后保存模型，需要测试时直接调用</p>
+<pre><code>&quot;&quot;&quot;
+进行模型的训练
+&quot;&quot;&quot;
+from dataset import get_dataloader
+from models import  MnistModel
+from torch import optim
+import torch.nn.functional as F
+import conf
+from tqdm import tqdm
+import numpy as np
+import torch
+import os
+from test import eval
+
+#1. 实例化模型，优化器，损失函数
+model = MnistModel().to(conf.device)
+optimizer = optim.Adam(model.parameters(),lr=1e-3)
+
+# if os.path.exists(&quot;./models/model.pkl&quot;):
+#     model.load_state_dict(torch.load(&quot;./models/model.pkl&quot;))
+#     optimizer.load_state_dict(torch.load(&quot;./models/optimizer.pkl&quot;))
+
+
+#2. 进行循环，进行训练
+def train(epoch):
+    train_dataloader = get_dataloader(train=True)
+    bar = tqdm(enumerate(train_dataloader),total=len(train_dataloader))
+    total_loss = []
+    for idx,(input,target) in bar:
+        input = input.to(conf.device)
+        target = target.to(conf.device)
+        #梯度置为0
+        optimizer.zero_grad()
+        #计算得到预测值
+        output = model(input)
+        #得到损失
+        loss = F.nll_loss(output,target)
+        #反向传播，计算损失
+        loss.backward()
+        total_loss.append(loss.item())
+        #参数的更新
+        optimizer.step()
+        #打印数据
+        if idx%10 ==0 :
+            # 输出进度条
+            bar.set_description(&quot;epcoh:{} idx:{},loss:{:.6f}&quot;.format(epoch,idx,np.mean(total_loss)))
+            torch.save(model.state_dict(),&quot;./models/model.pkl&quot;)
+            torch.save(optimizer.state_dict(),&quot;./models/optimizer.pkl&quot;)
+
+if __name__ == '__main__':
+    for i in range(10):
+        train(i)
+        # eval是测试函数
+        eval()
+</code></pre>
+<h3 id="55-模型的测试">5.5 模型的测试</h3>
+<p>训练好模型之后保存，需要测试时直接调用</p>
+<p>测试不需要计算梯度和反向传播，直接计算损失和正确率</p>
+<pre><code>&quot;&quot;&quot;
+进行模型的评估
+&quot;&quot;&quot;
+
+&quot;&quot;&quot;
+进行模型的训练
+&quot;&quot;&quot;
+from dataset import get_dataloader
+from models import  MnistModel
+from torch import optim
+import torch.nn.functional as F
+import conf
+from tqdm import tqdm
+import numpy as np
+import torch
+import os
+
+
+def eval():
+    # 1. 实例化模型，优化器，损失函数
+    model = MnistModel().to(conf.device)
+
+    if os.path.exists(&quot;./models/model.pkl&quot;):
+        # 模型的加载
+        model.load_state_dict(torch.load(&quot;./models/model.pkl&quot;))
+
+    test_dataloader = get_dataloader(train=False)
+    total_loss = []
+    total_acc = []
+    with torch.no_grad():
+        # 其实与训练的时候大同小异，只是不需要计算梯度，不需要反向传播，只需要计算损失即可
+        for input,target in test_dataloader: #2. 进行循环，进行训练
+            input = input.to(conf.device)
+            target = target.to(conf.device)
+            #计算得到预测值
+            output = model(input)
+            #得到损失
+            loss = F.nll_loss(output,target)
+            #计算损失
+            total_loss.append(loss.item())
+
+            # 计算准确率
+            # 计算预测值
+            # output的形状是[batch_size,10], 其中每一行代表一条数据属于每个类别的概率，取其中的最大值作为预测结果;target的形状为[batch_size],代表每一行数据的真实结果
+            pred = output.max(dim=-1)[-1]
+            total_acc.append(pred.eq(target).float().mean().item())
+    print(&quot;test loss:{},test acc:{}&quot;.format(np.mean(total_loss),np.mean(total_acc)))
+
+
+if __name__ == '__main__':
+    # for i in range(10):
+    #     train(i)
+    eval()
+
+</code></pre>
+<h2 id="6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></h2>
+<p>  本章学习了pytorch的数据加载，读取和一些处理方法，如：转换为tensor，标准化和综合处理.同时通过手写识别的案例，更好地了解了多层神经网络训练模型的过程.</p>
+<p>  下一章开始将正式进入NLP&ndash;深度学习.</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">Pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-pytorch数据加载器a-id2a">2. pytorch数据加载器<a id="2"></a></a></li>
+    <li><a href="#3-pytorch自带数据集a-id3a">3. pytorch自带数据集<a id="3"></a></a></li>
+    <li><a href="#4-数据处理方法a-id4a">4. 数据处理方法<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-torchvisiontransformtotensor">4.1 torchvision.transform.ToTensor</a></li>
+        <li><a href="#42-torchvisiontransformnormalize">4.2 torchvision.transform.Normalize</a></li>
+        <li><a href="#43-torchvisiontransformcompose">4.3 torchvision.transform.Compose</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-案例手写数字识别a-id5a">5. 案例：手写数字识别<a id="5"></a></a>
+      <ul>
+        <li><a href="#51-数据的导入和处理">5.1 数据的导入和处理.</a></li>
+        <li><a href="#52-模型的建立">5.2 模型的建立.</a></li>
+        <li><a href="#53-多分类的损失函数">5.3 多分类的损失函数.</a></li>
+        <li><a href="#54-模型的训练">5.4 模型的训练</a></li>
+        <li><a href="#55-模型的测试">5.5 模型的测试</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">Pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-pytorch数据加载器a-id2a">2. pytorch数据加载器<a id="2"></a></a></li>
+    <li><a href="#3-pytorch自带数据集a-id3a">3. pytorch自带数据集<a id="3"></a></a></li>
+    <li><a href="#4-数据处理方法a-id4a">4. 数据处理方法<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-torchvisiontransformtotensor">4.1 torchvision.transform.ToTensor</a></li>
+        <li><a href="#42-torchvisiontransformnormalize">4.2 torchvision.transform.Normalize</a></li>
+        <li><a href="#43-torchvisiontransformcompose">4.3 torchvision.transform.Compose</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-案例手写数字识别a-id5a">5. 案例：手写数字识别<a id="5"></a></a>
+      <ul>
+        <li><a href="#51-数据的导入和处理">5.1 数据的导入和处理.</a></li>
+        <li><a href="#52-模型的建立">5.2 模型的建立.</a></li>
+        <li><a href="#53-多分类的损失函数">5.3 多分类的损失函数.</a></li>
+        <li><a href="#54-模型的训练">5.4 模型的训练</a></li>
+        <li><a href="#55-模型的测试">5.5 模型的测试</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-总结a-idconclusiona">6. 总结<a id="conclusion"></a></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
