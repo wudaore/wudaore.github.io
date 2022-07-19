@@ -25,5 +25,14 @@
       <description>目录 序 pytorch模型实现线性回归 各种梯度下降算法 总结 1. 序 进一步学习Pytorch 2. pytorch模型实现线性回归 上一章中值给出了代码，这一章对代码进行详解. 2.1 nn.module init:自定义的方法实现的位置 fo</description>
     </item>
     
+    <item>
+      <title>pytorch基础(1)</title>
+      <link>https://wudaore.github.io/post/pytorchb1/</link>
+      <pubDate>Sat, 09 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/pytorchb1/</guid>
+      <description>目录 序 神经元与神经网络 pytorch基础 梯度下降 pytorch手动实现线性回归 pytorch模型实现线性回归 总结 1. 序 NLP和CV学习之前需要的一些前置知识. 2. 神经元与神经网络 神经元是神经网络的基本单位</description>
+    </item>
+    
   </channel>
 </rss>

@@ -6,14 +6,23 @@
     <description>Recent content in css on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 10 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/css/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/css/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSS(2)</title>
+      <link>https://wudaore.github.io/post/css2/</link>
+      <pubDate>Tue, 19 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/css2/</guid>
+      <description>1. 序 对页面布局 layout进行学习 2. 文档流 文档流（normal flow） - 网页是一个多层的结构，一层摞着一层 - 通过CSS可以分别为每一层来设置样式 - 作为用户来讲只能看到最顶上一层 - 这些层中，最底下的一</description>
+    </item>
+    
     <item>
       <title>CSS(1)</title>
       <link>https://wudaore.github.io/post/css1/</link>
       <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/css1/</guid>
-      <description>目录 序 HTML基础 PCA代码实现 PCA接口实现 总结 ps. 1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览</description>
+      <description>1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览器内核 chrome:webkit/blink ie:Trident Safari:webkit Firefox:Gecko Opera:Presto/blink 2. HTML基础 记一些知识点 1.写HT</description>
     </item>
     
     <item>

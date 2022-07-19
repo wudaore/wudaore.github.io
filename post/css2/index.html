@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>CSS(2) - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="对页面布局 layout进行学习" />
+
+
+<meta name="keywords" content="web, css" />
+
+
+<meta property="og:title" content="CSS(2)" />
+<meta name="twitter:title" content="CSS(2)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/css2/" /><meta property="og:description" content="对页面布局 layout进行学习" />
+<meta name="twitter:description" content="对页面布局 layout进行学习" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-19T00:00:00+08:00" /><meta property="article:modified_time" content="2022-07-19T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/css2/">CSS(2)</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-19</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2579 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/web">web</a>&nbsp;<a href="/tags/css">css</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
+<p>对页面布局 layout进行学习</p>
+<h2 id="2-文档流">2. 文档流</h2>
+<p>文档流（normal flow）</p>
+<pre><code>- 网页是一个多层的结构，一层摞着一层
+- 通过CSS可以分别为每一层来设置样式
+- 作为用户来讲只能看到最顶上一层
+- 这些层中，最底下的一层称为文档流，文档流是网页的基础
+    我们所创建的元素默认都是在文档流中进行排列
+- 对于我们来元素主要有两个状态
+    在文档流中
+    不在文档流中（脱离文档流）
+
+- 元素在文档流中有什么特点：
+    - 块元素
+        - 块元素会在页面中独占一行(自上向下垂直排列)
+        - 默认宽度是父元素的全部（会把父元素撑满）
+        - 默认高度是被内容撑开（子元素）
+
+    - 行内元素
+        - 行内元素不会独占页面的一行，只占自身的大小
+        - 行内元素在页面中左向右水平排列，如果一行之中不能容纳下所有的行内元素
+            则元素会换到第二行继续自左向右排列（书写习惯一致）
+        - 行内元素的默认宽度和高度都是被内容撑开
+</code></pre>
+<p>常见的块元素：address、article、aside、audio、blockquote、canvas、dd、div、dl、fieldset、figcaption、figure、footer、form、h1、header、hgroup、hr、noscript、ol output p pre section table tfootul video</p>
+<p>常见的行内元素：b,big,i,small,ttabbr,acronym,cite,code,dfn,em,kbd,strong,samp,var,a,bdo,br,img,map,object,q,script,span,sub,sup,button,input,label,select,textarea</p>
+<h2 id="3-盒子模型">3. 盒子模型</h2>
+<p>每一个盒子都由以下几个部分组成：</p>
+<ol>
+<li>
+<p>内容区（content）</p>
+</li>
+<li>
+<p><a href="#padding">内边距（padding）</a></p>
+</li>
+<li>
+<p><a href="#border">边框（border）</a></p>
+</li>
+<li>
+<p><a href="#margin">外边距（margin）</a></p>
+</li>
+</ol>
+<h3 id="31-边框a-idbordera">3.1 边框<a id="border"></a></h3>
+<p>这么写就行了:</p>
+<pre><code>border-bottom: 10px solid red;
+</code></pre>
+<p>border-style：solid 表示实线;dotted 点状虚线;dashed 虚线;double 双线</p>
+<h3 id="32-内边距a-idpaddinga">3.2 内边距<a id="padding"></a></h3>
+<p>padding 内边距的简写属性，可以同时指定四个方向的内边距,规则和border-width 一样</p>
+<pre><code>padding-bottom: 100px;
+</code></pre>
+<h3 id="33-外边距a-idmargina">3.3 外边距<a id="margin"></a></h3>
+<p>外边距不会影响盒子可见框的大小，但是外边距会影响盒子的位置.一共有四个方向的外边距：规则和border-width 一样</p>
+<pre><code>margin-bottom: 100px;
+</code></pre>
+<h3 id="34-盒子的水平布局a-idbox-spa">3.4 盒子的水平布局<a id="box-sp"></a></h3>
+<p>margin-left+border-left+padding-left+width+padding-right+border-right+margin-right = 其父元素内容区的宽度 （必须满足）</p>
+<p>当不满足时，会有以下调整：</p>
+<ol>
+<li>
+<p>如果这七个值中没有为 auto 的情况，则浏览器会自动调整margin-right值以使等式满足</p>
+</li>
+<li>
+<p>对于width，margin-left，maring-right三个值：</p>
+<ol>
+<li>
+<p>如果某个值为auto，则会自动调整为auto的那个值以使等式成立</p>
+</li>
+<li>
+<p>如果将一个宽度和一个外边距设置为auto，则宽度会调整到最大，设置为auto的外边距会自动为0</p>
+</li>
+<li>
+<p>如果将三个值都设置为auto，则外边距都是0，宽度最大</p>
+</li>
+<li>
+<p>如果将两个外边距设置为auto，宽度固定值，则会将外边距设置为相同的值.所以我们经常利用这个特点来使一个元素在其父元素中<strong>水平居中</strong></p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="35-盒子的垂直布局a-idbox-cza">3.5 盒子的垂直布局<a id="box-cz"></a></h3>
+<p>子元素是在父元素的内容区中排列的，如果子元素的大小超过了父元素，则子元素会从父元素中溢出.</p>
+<p>使用 overflow 属性来设置父元素如何处理溢出的子元素</p>
+<p>可选值：</p>
+<pre><code>    overflow:visible，默认值 子元素会从父元素中溢出，在父元素外部的位置显示
+    overflow:hidden 溢出内容将会被裁剪不会显示
+    overflow:scroll 生成两个滚动条(x和y轴)，通过滚动条来查看完整的内容
+    overflow:auto 根据需要生成滚动条
+</code></pre>
+<h3 id="36-盒子的外边距折叠a-idbox-zda">3.6 盒子的外边距折叠<a id="box-zd"></a></h3>
+<p>垂直外边距的重叠（折叠）</p>
+<pre><code>1. 相邻的垂直方向外边距会发生重叠现象
+2. 兄弟元素
+    -2.1 当两外边距都是正值时：兄弟元素间的相邻垂直外边距会取两者之间的较大值.
+    -2.2 特殊情况：
+        2.2.1 如果相邻的外边距一正一负，则取两者的和
+        2.2.2如果相邻的外边距都是负值，则取两者中绝对值较大的
+
+    -2.3 兄弟元素之间的外边距的重叠，对于开发是有利的，所以我们不需要进行处理
+
+
+- 3 父子元素
+    - 3.1 父子元素间相邻外边距，子元素的会传递给父元素（上外边距）
+    - 3.2 父子外边距的折叠会影响到页面的布局，必须要进行处理
+</code></pre>
+<p>对于情况3(父子元素)：现有以下代码</p>
+<pre><code>&lt;div class=&quot;box3&quot;&gt;
+        &lt;div class=&quot;box4&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+<p>样式如下：</p>
+<pre><code>.box3{
+            width: 200px;
+            height: 200px;
+            background-color: #bfa;
+            /* padding-top: 100px; */
+            /* border-top: 1px #bfa solid; */
+        }
+
+        .box4{
+            width: 100px;
+            height: 99px;
+            background-color: orange;
+            /* margin-top: 100px; */
+        }
+</code></pre>
+<p>效果如下图：</p>
+<p><img class="img-zoomable" src="/css/2.png" alt="png" />
+</p>
+<p>如果想将内部的box移动到下方，是否可以直接咋在内部盒子中添加代码<code>margin-top: 100px;</code>？答案是不行，因为子元素的会传递给父元素（上外边距）.结果会导致内外一起向下移动如下图：</p>
+<p><img class="img-zoomable" src="/css/3.png" alt="png" />
+</p>
+<p>这个问题怎么解决呢？有两种办法但是都比较麻烦.</p>
+<p>办法1：设置外box的<code>padding-top: 100px;</code>，同时将height属性调到100</p>
+<p>办法2：设置外box的<code>border-top: 1px #bfa solid;</code>，为了保证对齐，需要调整，再设置内box<code>margin-top: 100px;</code>.</p>
+<h3 id="37-行内元素的盒模型a-idbox-hna">3.7 行内元素的盒模型<a id="box-hn"></a></h3>
+<p>行内元素，如span，有以下特性</p>
+<pre><code>- 行内元素不支持设置宽度和高度
+- 行内元素可以设置padding，但是垂直方向padding不会影响页面的布局
+- 行内元素可以设置border，垂直方向的border不会影响页面的布局
+- 行内元素可以设置margin，垂直方向的margin不会影响布局
+</code></pre>
+<p>不会影响页面的布局是指仍然会生效，但不会影响到其他块的位置</p>
+<h3 id="练习购物栏目">练习：购物栏目</h3>
+<p><strong>效果如下：</strong></p>
+<p><img class="img-zoomable" src="/css/4.png" alt="png" />
+</p>
+<p><strong>设计思路</strong></p>
+<p>大块竖直嵌套三个小块，可以使用ui-li来实现，但需要先去除其样式.</p>
+<p>要实现大块在页面中的居中，可以将左右margin设为auto</p>
+<p>要实现前两块底部有空最后一块没有，可以使用伪元素选择器<code>.img-list li:not(:last-child)</code>来实现</p>
+<p>要实现图片可点击，将图片放在a标签内；希望点击以后无跳转，设置<code>&lt;a href=&quot;javascript:;&quot;&gt;</code>给予一个空的js文件.</p>
+<p>最后，测试图片宽度 可以直接使用截图工具.京东的图片已经调整过了，只需要确定宽度是父元的100%，高度就不会出错.</p>
+<p><strong>代码如下：</strong></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;图片列表&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./css/reset.css&quot;&gt;
+    &lt;style&gt;
+
+
+        /* 设置body的背景颜色 */
+        body{
+            background-color: antiquewhite
+        }
+
+        /* 设置外部ul的样式 */
+        .img-list{
+            /* 设置ul的宽度 */
+            width: 190px;
+            /* 设置ul的高度 */
+            height: 470px;
+            /* 裁剪溢出的内容 */
+            overflow: hidden;
+            /* 使ul在页面中居中（实际示例中不需要这么写） */
+            /* margin 50代表上下 auto代表左右.左右auto可以表示居中 */
+            margin: 50px auto;
+            background-color: #F4F4F4;
+        }
+        /* 设置li的位置 */
+        .img-list li:not(:last-child){
+            margin-bottom: 9px;
+        }
+
+        /* 设置图片的大小 */
+        .img-list img{
+            width: 100%;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!-- &lt;div&gt;
+        &lt;a href=&quot;javascript:;&quot;&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/a&gt;
+        &lt;a href=&quot;javascript:;&quot;&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/a&gt;
+        &lt;a href=&quot;javascript:;&quot;&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/a&gt;
+    &lt;/div&gt; --&gt;
+
+    &lt;ul class=&quot;img-list&quot;&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;javascript:;&quot;&gt;
+                &lt;img src=&quot;./img/01/1.jpg&quot; alt=&quot;&quot;&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+
+        &lt;li&gt;
+            &lt;a href=&quot;javascript:;&quot;&gt;
+                &lt;img src=&quot;./img/01/2.jpg&quot; alt=&quot;&quot;&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+
+        &lt;li&gt;
+            &lt;a href=&quot;javascript:;&quot;&gt;
+                &lt;img src=&quot;./img/01/3.jpg&quot; alt=&quot;&quot;&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+
+    &lt;/ul&gt;
+    
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/nlp/">NLP</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">Pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-文档流">2. 文档流</a></li>
+    <li><a href="#3-盒子模型">3. 盒子模型</a>
+      <ul>
+        <li><a href="#31-边框a-idbordera">3.1 边框<a id="border"></a></a></li>
+        <li><a href="#32-内边距a-idpaddinga">3.2 内边距<a id="padding"></a></a></li>
+        <li><a href="#33-外边距a-idmargina">3.3 外边距<a id="margin"></a></a></li>
+        <li><a href="#34-盒子的水平布局a-idbox-spa">3.4 盒子的水平布局<a id="box-sp"></a></a></li>
+        <li><a href="#35-盒子的垂直布局a-idbox-cza">3.5 盒子的垂直布局<a id="box-cz"></a></a></li>
+        <li><a href="#36-盒子的外边距折叠a-idbox-zda">3.6 盒子的外边距折叠<a id="box-zd"></a></a></li>
+        <li><a href="#37-行内元素的盒模型a-idbox-hna">3.7 行内元素的盒模型<a id="box-hn"></a></a></li>
+        <li><a href="#练习购物栏目">练习：购物栏目</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/aplayer/">aplayer</a>
+            </span>
+            
+            <span>
+                <a href="/tags/cjk/">cjk</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/emoji/">emoji</a>
+            </span>
+            
+            <span>
+                <a href="/tags/html/">html</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/nlp/">NLP</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">Pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/themes/">themes</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/wtf/">wtf</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-文档流">2. 文档流</a></li>
+    <li><a href="#3-盒子模型">3. 盒子模型</a>
+      <ul>
+        <li><a href="#31-边框a-idbordera">3.1 边框<a id="border"></a></a></li>
+        <li><a href="#32-内边距a-idpaddinga">3.2 内边距<a id="padding"></a></a></li>
+        <li><a href="#33-外边距a-idmargina">3.3 外边距<a id="margin"></a></a></li>
+        <li><a href="#34-盒子的水平布局a-idbox-spa">3.4 盒子的水平布局<a id="box-sp"></a></a></li>
+        <li><a href="#35-盒子的垂直布局a-idbox-cza">3.5 盒子的垂直布局<a id="box-cz"></a></a></li>
+        <li><a href="#36-盒子的外边距折叠a-idbox-zda">3.6 盒子的外边距折叠<a id="box-zd"></a></a></li>
+        <li><a href="#37-行内元素的盒模型a-idbox-hna">3.7 行内元素的盒模型<a id="box-hn"></a></a></li>
+        <li><a href="#练习购物栏目">练习：购物栏目</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>

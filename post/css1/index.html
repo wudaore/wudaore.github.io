@@ -31,8 +31,8 @@
 <meta property="og:title" content="CSS(1)" />
 <meta name="twitter:title" content="CSS(1)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/css1/" /><meta property="og:description" content="目录 序 HTML基础 PCA代码实现 PCA接口实现 总结 ps. 1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览" />
-<meta name="twitter:description" content="目录 序 HTML基础 PCA代码实现 PCA接口实现 总结 ps. 1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/css1/" /><meta property="og:description" content="1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览器内核 chrome:webkit/blink ie:Trident Safari:webkit Firefox:Gecko Opera:Presto/blink 2. HTML基础 记一些知识点 1.写HT" />
+<meta name="twitter:description" content="1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览器内核 chrome:webkit/blink ie:Trident Safari:webkit Firefox:Gecko Opera:Presto/blink 2. HTML基础 记一些知识点 1.写HT" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-10T00:00:00+08:00" /><meta property="article:modified_time" content="2022-07-10T00:00:00+08:00" />
 
@@ -105,21 +105,14 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-10</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;631 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;6328 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/web">web</a>&nbsp;<a href="/tags/css">css</a>&nbsp;</span>
 
     </div>
     
     <div class="post-content markdown-body">
-        <h1 id="目录">目录</h1>
-<h4 id="序1"><a href="#1">序</a></h4>
-<h4 id="html基础2"><a href="#2">HTML基础</a></h4>
-<h4 id="pca代码实现3"><a href="#3">PCA代码实现</a></h4>
-<h4 id="pca接口实现4"><a href="#4">PCA接口实现</a></h4>
-<h4 id="总结conclusion"><a href="#conclusion">总结</a></h4>
-<h4 id="psfinal"><a href="#final">ps.</a></h4>
-<h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
+        <h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
 <p>机器学习也就图一乐，赚工资还得靠web.</p>
 <p>web也就图一乐，赚米还得靠想法.</p>
 <p>总之先把工资赚了.</p>
@@ -152,6 +145,541 @@
   &lt;label for=&quot;sex&quot;&gt;男&lt;/label&gt;
   &lt;input type=&quot;radio&quot; name=&quot;sex&quot;  id=&quot;sex&quot;&gt;
 </code></pre>
+<p><strong>浏览器进程</strong></p>
+<p>从用户输入到页面展示，是由不同的进程相互作用的</p>
+<ol>
+<li><strong>用户输入url,处理输入信息，主进程开始导航，交给网络进程干活</strong></li>
+</ol>
+<p>用户输入url，处理输入信息：</p>
+<p>如果为非url结构的字符串，交给浏览器默认引擎去搜索该字符串；</p>
+<p>若为url结构的字符串，浏览器主进程会交给 网络进程 ,开始干活。</p>
+<ol start="2">
+<li><strong>网络进程发起网络请求，其中有可能会发生重定向</strong></li>
+</ol>
+<p>网络进程会先看看是否存在本地缓存，如果有就直接返回资源给浏览器进程，无则下一步 DNS-&gt; IP -&gt; TCP</p>
+<p>网络进程拿到url后，先会进行DNS域名解析得到IP地址。如果请求协议是HTTPS，那么还需要建立TLS连接。</p>
+<p>接下来就是利用IP地址和服务器建立TCP连接。连接建立之后，向服务器发送请求。</p>
+<p><strong>重定向：</strong> 如果响应行状态码为301（永久重定向）和302（临时），那么说明需要重定向到其他url。这时候网络进程会从响应头中的Location字段里读取重定向的地址，并重新发起网络请求</p>
+<ol start="3">
+<li><strong>服务器响应URL之后，主进程就要通知渲染进程，你要开始干活了</strong></li>
+</ol>
+<p>服务器收到请求信息后，会根据请求信息生成响应行、响应头、响应体，并发给网络进程。网络进程接受了响应信息之后，就开始解析响应头的内容。</p>
+<p>导航会通过请求头的Content-type字段判断响应体数据的类型。浏览器通过这个来决定如何显示响应体的内容。</p>
+<p>比如：若为application/octet-stream，则会按照下载类型来处理这个请求，导航结束。</p>
+<p>若为text/html，这就告诉浏览器服务器返回的是html格式，浏览器会通知渲染进程，你要干活了。</p>
+<ol start="4">
+<li><strong>渲染进程准备好了，要想渲染进程提交数据，这个时间叫做提交文档</strong></li>
+</ol>
+<p>默认情况，每个页面一个渲染进程。但若处于同一站点（同根域名+协议），那么渲染进程就会复用。</p>
+<ol start="5">
+<li><strong>渲染进程接受到数据，完成页面渲染。</strong></li>
+</ol>
+<p>渲染进程准备好后，浏览器进程发出<strong>提交文档的消息</strong>，渲染进程接受了消息之后，会跟网络进程简历传输数据的管道。</p>
+<p>等数据传输完成了，渲染进程会告诉浏览器进程，确认文档提交，这时候浏览器会更新页面，安全状态，url，前进后退的历史。</p>
+<p>到这里导航结束，进入渲染阶段。</p>
+<p>注：当浏览器刚开始加载一个地址之后，标签页上的图标便进入了加载状态。但此时图中页面显示的依然是之前打开的页面内容，并没立即替换为百度首页的页面。因为需要等待提交文档阶段，页面内容才会被替换。</p>
+<p><img class="img-zoomable" src="/css/1.png" alt="png" />
+</p>
+<p><strong>多进程架构</strong></p>
+<ol>
+<li>
+<p>浏览器主进程: 管理子进程、提供服务功能</p>
+</li>
+<li>
+<p>渲染进程：将HTML、CSS、JS渲染成界面，js引擎v8和排版引擎Blink就在上面，他会为每一个tab页面创建一个渲染进程</p>
+</li>
+<li>
+<p>GPU进程：本来是负责处理3Dcss的，后来慢慢的UI界面也交给GPU来绘制</p>
+</li>
+<li>
+<p>网络进程：就是负责网络请求，网络资源加载的进程</p>
+</li>
+<li>
+<p>插件进程：负责插件的运行的，因为插件很容易崩溃，把它放到独立的进程里不要让它影响别人</p>
+</li>
+</ol>
+<p><strong>put和post的区别</strong></p>
+<p>PUT被定义为idempotent的方法，POST则不是idempotent的方法。PUT请求：如果两个请求相同，后一个请求会把第一个请求覆盖掉。（所以PUT用来改资源）Post请求：后一个请求不会把第一个请求覆盖掉。（所以Post用来增资源）</p>
+<h2 id="3-html面试题a-id3a">3. HTML面试题<a id="3"></a></h2>
+<p><strong>1. iframe的优缺点</strong></p>
+<p>iframe是一种框架，也是一种很常见的网页嵌入方式。</p>
+<p><strong>1.1优点：</strong></p>
+<p>iframe能够原封不动的把嵌入的网页展现出来。</p>
+<p>如果有多个网页引用iframe，那么你只需要修改iframe的内容，就可以实现调用的每一个页面内容的更改，方便快捷。</p>
+<p>网页如果为了统一风格，头部和版本都是一样的，就可以写成一个页面，用iframe来嵌套，可以增加代码的可重用。</p>
+<p>如果遇到加载缓慢的第三方内容如图标和广告，这些问题可以由iframe来解决。</p>
+<p><strong>1.2缺点：</strong></p>
+<p>会产生很多页面，不容易管理。</p>
+<p>iframe框架结构有时会让人感到迷惑，如果框架个数多的话，可能会出现上下、左右滚动条，会分散访问者的注意力，用户体验度差。</p>
+<p>代码复杂，无法被一些搜索引擎索引到，这一点很关键，现在的搜索引擎爬虫还不能很好的处理iframe中的内容，所以使用iframe会不利于搜索引擎优化。</p>
+<p>很多的移动设备（PDA 手机）无法完全显示框架，设备兼容性差。</p>
+<p>iframe框架页面会增加服务器的http请求，对于大型网站是不可取的。</p>
+<p>现在基本上都是用Ajax来代替iframe，所以iframe已经渐渐的退出了前端开发。</p>
+<p><strong>2. HTML5的form如何关闭自动完成功能？</strong></p>
+<p>HTML的输入框可以拥有自动完成的功能，当你往输入框输入内容的时候，浏览器会从你以前的同名输入框的历史记录中查找出类似的内容并列在输入框面，这样就不用全部输入进去了，直接选择列表中的项目就可以了。</p>
+<p>但有时候我们希望关闭输入框的自动完成功能，例如当用户输入内容的时候，我们希望使用AJAX技术从数据库搜索并列举而不是在用户的历史记录中搜索。</p>
+<p>关闭输入框的自动完成功能有3种方法：</p>
+<ol>
+<li>
+<p>在IE的Internet选项菜单里的内容&ndash;自动完成里面设置</p>
+</li>
+<li>
+<p>设置form的autocomplete为&quot;on&quot;或者&quot;off&quot;来开启或者关闭自动完成功能</p>
+</li>
+<li>
+<p>设置输入框的autocomplete为&quot;on&quot;或者&quot;off&quot;来开启或者关闭该输入框的自动完成功能</p>
+</li>
+</ol>
+<p><strong>什么是 HTML5 的基本构件（building block）？</strong></p>
+<ol>
+<li>
+<p>语义 - 提供更准确地描述内容。</p>
+</li>
+<li>
+<p>连接 - 提供新的方式与服务器通信。</p>
+</li>
+<li>
+<p>离线和存储 - 允许网页在本地存储数据并有效地离线运行。</p>
+</li>
+<li>
+<p>多媒体 - 在 Open Web 中，视频和音频被视为一等公民（first-class citizens）。</p>
+</li>
+<li>
+<p>2D/3D 图形和特效 - 提供更多种演示选项。</p>
+</li>
+<li>
+<p>性能和集成 - 提供更快的访问速度和性能更好的计算机硬件。</p>
+</li>
+<li>
+<p>设备访问 - 允许使用各种输入、输出设备。</p>
+</li>
+<li>
+<p>外观 - 可以开发丰富的主题。</p>
+</li>
+</ol>
+<p><strong>浏览器是怎么对HTML5的离线储存资源进行管理和加载的？</strong></p>
+<ol>
+<li>
+<p>将获取的html解析成dom树</p>
+</li>
+<li>
+<p>处理css，构成层叠样式表模型CSSOM</p>
+</li>
+<li>
+<p>将dom树和CSSOM合并为渲染树</p>
+</li>
+<li>
+<p>根据CSSOM将渲染树的节点布局计算</p>
+</li>
+<li>
+<p>将渲染树节点样式绘制到页面上</p>
+</li>
+</ol>
+<p>注意：</p>
+<p>在渲染的过程中是自上而下渲染，js会阻塞页面的渲染，优先等js执行完成.如果在渲染的过程中改变了样式，会造成回流需要重新渲染</p>
+<p><strong>link和@import的区别？</strong></p>
+<p><strong>1、从属关系区别：</strong></p>
+<p>link属于html标签，而@import是css提供的。</p>
+<p><strong>2、加载顺序区别：</strong></p>
+<p>页面被加载时，link会同时被加载，而@import引用的css会等到页面被加载完再加载。</p>
+<p><strong>3、兼容性区别：</strong></p>
+<p>import只在IE5以上才能识别，而link是html标签，无兼容问题。</p>
+<p><strong>4、dom可操作性区别：</strong></p>
+<p>可以通过JS 操作 DOM ，插入link标签来改变样式；由于 DOM 方法是基于文档的，无法使用@import的方式插入样式</p>
+<p><strong>5、权重区别：</strong></p>
+<p>如果已经存在相同样式，@import引入的这个样式将被该 CSS 文件本身的样式层叠掉，表现出link方式的样式权重高于@import的权重这样的直观效果。
+简而言之，link和@import，谁写在后面，谁的样式就被应用，后面的样式覆盖前面的样式。）</p>
+<p><strong>src与href的区别？</strong></p>
+<p>1、href 是指向网络资源所在位置，建立和当前元素（锚点）或当前文档（链接）之间的链接，用于超链接。</p>
+<p>2、src是指向外部资源的位置，指向的内容将会嵌入到文档中当前标签所在位置；在请求src资源时会将其指向的资源下载并应用到文档内，例如js脚本，img图片和frame等元素。当浏览器解析到该元素时，会暂停其他资源的下载和处理，直到将该资源加载、编译、执行完毕，图片和框架等元素也如此，类似于将所指向资源嵌入当前标签内。这也是为什么将js脚本放在底部而不是头部。</p>
+<h2 id="4-css基础--选择器a-id4a">4. CSS基础&ndash;选择器<a id="4"></a></h2>
+<p>外部css的好处：方便通过link引入;方便利用浏览器的缓存机制</p>
+<h3 id="41-选择器优先级">4.1 选择器优先级：</h3>
+<p><strong>（1）CSS选择器都有权重值，权重值越大优先级越高。</strong></p>
+<p>内联样式表的权重值最高，值为1000。</p>
+<p>id选择器的权重值为100。</p>
+<pre><code>#red{
+            color: red;
+        }
+</code></pre>
+<p>class选择器的权值为10。</p>
+<pre><code>.blue{
+            color: blue;
+        }
+</code></pre>
+<p>类型（元素）选择器的优先级为1。</p>
+<pre><code>p{
+            color: red;
+        }
+</code></pre>
+<p>通配符选择器的优先级为0。</p>
+<pre><code>*{
+            color: red;
+        }
+</code></pre>
+<p><strong>（2）当权值相等时，后定义的样式表要优于先定义的样式表。</strong></p>
+<p><strong>（3）在同一组属性设置中表有</strong>“!important&quot;<strong>规则的优先级最大。</strong></p>
+<p>比较优先级时，需要将所有的选择器的优先级进行相加计算，最后优先级越高，则越优先显示（分组选择器是单独计算的）,选择器的累加不会超过其最大数量级，类选择器在高也不会超过id选择器</p>
+<p>如果优先级计算后相同，此时则优先使用靠下的样式</p>
+<p>可以在某一个样式的后边添加 !important ，则此时该样式会获取到最高的优先级，甚至超过内联样式，注意：在开发中这个玩意一定要慎用！</p>
+<h3 id="42-复合选择器">4.2 复合选择器：</h3>
+<p><strong>1. 后代选择器</strong></p>
+<p>样例：</p>
+<pre><code>ul li { 样式声明 } 		/* 选择 ul 里面所有的 li 标签元素 */
+</code></pre>
+<p><strong>2. 子选择器</strong></p>
+<p>与后代选择器的区别是只能选择亲儿子.</p>
+<p>样例：</p>
+<pre><code>div&gt;p { 样式声明 } 	/* 选择 div 里面所有最近一级 p 标签元素 */
+
+</code></pre>
+<p><strong>3. 并集选择器</strong></p>
+<p>并集选择器 可以选择<strong>多组标签</strong>，同时为他们定义相同的样式，通常用于<strong>集体声明</strong>。</p>
+<p>并集选择器是各选择器通过英文逗号 , 连接而成，任何形式的选择器都可以作为并集选择器的一部分</p>
+<p>样例：</p>
+<pre><code>ul, div { 样式声明 }		 /* 选择 ul 和 div标签元素 */
+</code></pre>
+<p><strong>4. 伪类选择器</strong></p>
+<p>伪类选择器 用于向某些选择器添加特殊的效果，比如：给链接添加特殊效果（链接伪类），或选择第 n 个元素（结构伪类）。</p>
+<p>伪类选择器 书写最大的特点是用冒号 : 表示，比如：:hover、:first-child。</p>
+<p>因为伪类选择器很多，比如：链接伪类、结构伪类 等，所以这里先讲解常用的<strong>链接伪类</strong>选择器和 <strong>:focus伪类</strong> 选择器。</p>
+<p><strong>链接伪类</strong>：</p>
+<p>用于选择不同状态的链接.</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;复合选择器之链接伪类选择器&lt;/title&gt;
+    &lt;style&gt;
+        /* 注意：要学会触类旁通，这里不只是可以改变颜色，当链接为图片时还可以改图片 */
+        /* 1、a:link 把没有点击过的（访问过的）链接选出来 */
+        a:link {
+            color: #333;
+            text-decoration: none;
+        }
+
+        /* 2、a:visited 选择点击过的（访问过的）链接选出来 */
+        a:visited {
+            color: orange;
+        }
+
+        /* 3、a:hover 选择鼠标经过（停留）的那个链接 */
+        a:hover {
+            color: skyblue;
+        }
+
+        /* 4、a:active 选择的是我们鼠标正在按下还没有弹起鼠标的那个链接 */
+        a:active {
+            color: green;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;a href=&quot;#&quot;&gt;小猪佩奇&lt;/a&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+<p><strong>:focus伪类选择器</strong></p>
+<p>:focus 伪类选择器用于选取获得焦点的表单元素。</p>
+<p>焦点就是光标，一般情况 <strong>input</strong> 类表单元素才能获取，因此这个选择器也主要针对于表单元素来说。</p>
+<pre><code>&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;复合选择器之focus伪类选择器&lt;/title&gt;
+    &lt;style&gt;
+        /* 把获得光标的 input 表单元素选区出来 */
+        input:focus {
+            background-color: pink;
+            color: red;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;input type=&quot;text&quot;&gt;
+    &lt;input type=&quot;text&quot;&gt;
+    &lt;input type=&quot;text&quot;&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+
+</code></pre>
+<p><strong>复合选择器总结</strong></p>
+<table>
+<thead>
+<tr>
+<th>选择器</th>
+<th>作用</th>
+<th>特征</th>
+<th>使用情况</th>
+<th>用法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>后代</td>
+<td>用来选择后代元素</td>
+<td>可以是子孙后代</td>
+<td>较多</td>
+<td>符号是空格 .nav a</td>
+</tr>
+<tr>
+<td>子代</td>
+<td>选择最近一级元素</td>
+<td>只选亲儿子</td>
+<td>较少</td>
+<td>符号是大于 .nav&gt;p</td>
+</tr>
+<tr>
+<td>并集</td>
+<td>选择某些相同样式的元素</td>
+<td>可以用于集体声明</td>
+<td>较多</td>
+<td>符号是逗号 .nav, .header</td>
+</tr>
+<tr>
+<td>链接伪类</td>
+<td>选择不同状态的链接</td>
+<td>跟链接相关</td>
+<td>较多</td>
+<td>重点记住 a{} 和 a:hover 实际开发的写法</td>
+</tr>
+<tr>
+<td>：focus</td>
+<td>选择获得光标的表单</td>
+<td>跟表单相关</td>
+<td>较少</td>
+<td>input:focus 记住这个写法</td>
+</tr>
+</tbody>
+</table>
+<p>复合选择器的层级写得越细越好（可读性，可维护性，安全性），同时将复合选择器的层级写得越细，可以提前避免大部分的选择器优先级混乱！</p>
+<h3 id="43-伪元素选择器">4.3 伪元素选择器：</h3>
+<p>伪元素，表示页面中一些特殊的并不真实的存在的元素（特殊的位置）</p>
+<p>伪元素使用 :: 开头</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+
+    &lt;style&gt;
+        p{
+            font-size: 20px;
+        }
+
+       /* 
+            伪元素，表示页面中一些特殊的并不真实的存在的元素（特殊的位置）
+                伪元素使用 :: 开头
+
+                ::first-letter 表示第一个字母
+                ::first-line 表示第一行
+                ::selection 表示选中的内容
+                ::before 元素的开始 
+                ::after 元素的最后
+                    - before 和 after 必须结合content属性来使用
+        */
+        p::first-letter{
+            font-size: 50px;
+        }
+
+        p::first-line{
+            background-color: yellow; 
+        }
+
+        p::selection{
+            background-color: purple;
+        }
+
+        div::before{
+            content: 'abc';
+            color: red;
+        }
+
+        div::after{
+            content: 'haha';
+            color: blue;
+        }
+
+        /* div::before{
+            content: '『';
+         }
+
+        div::after{
+            content: '』';
+        } */
+
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!-- &lt;q&gt;hello&lt;/q&gt; --&gt;
+    &lt;div&gt;Hello Hello How are you&lt;/div&gt;
+    
+    &lt;p&gt;
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque velit modi veniam nisi veritatis tempore laborum nemo ipsa itaque optio. Id odit consequatur mollitia excepturi, minus saepe nostrum vel porro.
+    &lt;/p&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<h2 id="5-样式的继承">5. 样式的继承：</h2>
+<p>样式的继承，我们为一个元素设置的样式同时也会应用到它的后代元素上.继承是发生在祖先后代之间的</p>
+<p>继承的设计是为了方便我们的开发，利用继承我们可以将一些通用的样式统一设置到共同的祖先元素上，这样只需设置一次即可让所有的元素都具有该样式</p>
+<p><strong>注意</strong>：并不是所有的样式都会被继承：比如 背景相关的，布局相关等的这些样式都不会被继承。</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;style&gt;
+
+        body{
+            font-size: 19px;
+        }
+        
+        p{
+            color: red;
+            background-color: orange;
+        }
+
+        div{
+            color: purple;
+            background-color: blue;
+        }
+    
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;p&gt;
+        我是一个p元素
+        &lt;span&gt;我是p元素中的span&lt;/span&gt;
+    &lt;/p&gt;
+
+    &lt;span&gt;我是p元素外的span&lt;/span&gt;
+
+    &lt;div&gt;
+        我是div
+        &lt;span&gt;
+            我是div中的span
+            &lt;em&gt;我是span中的em&lt;/em&gt;
+        &lt;/span&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<h2 id="6-单位和颜色">6. 单位和颜色：</h2>
+<p><strong>单位</strong></p>
+<p>长度单位：</p>
+<pre><code>像素
+    - 屏幕（显示器）实际上是由一个一个的小点点构成的
+    - 不同屏幕的像素大小是不同的，像素越小的屏幕显示的效果越清晰
+    - 所以同样的200px在不同的设备下显示效果不一样
+
+百分比
+    - 也可以将属性值设置为相对于其父元素属性的百分比
+    - 设置百分比可以使子元素跟随父元素的改变而改变
+
+em
+    - em是相对于元素的字体大小来计算的
+    - 1em = 1font-size
+    - em会根据字体大小的改变而改变
+
+rem
+    - rem是相对于根元素的字体大小来计算
+</code></pre>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;style&gt;
+
+        html{
+            font-size: 30px;
+        }
+
+        .box1{
+            width:300px;
+            height: 100px;
+            background-color: orange;
+        }
+
+        .box2{
+            width: 50%;
+            height: 50%;
+            background-color:aqua; 
+        }
+
+        .box3{
+            font-size: 50px;
+            /* width: 10em;
+            height: 10em; */
+            width: 10rem;
+            height: 10rem;
+            background-color: greenyellow;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;div class=&quot;box1&quot;&gt;
+
+        &lt;div class=&quot;box2&quot;&gt;&lt;/div&gt;
+
+    &lt;/div&gt;
+
+    &lt;div class=&quot;box3&quot;&gt;&lt;/div&gt;
+    
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<p><strong>颜色</strong></p>
+<p>颜色单位：</p>
+<pre><code>在CSS中可以直接使用颜色名来设置各种颜色
+    比如：red、orange、yellow、blue、green ... ...
+    但是在css中直接使用颜色名是非常的不方便
+
+RGB值：
+    - RGB通过三种颜色的不同浓度来调配出不同的颜色
+    - R red，G green ，B blue
+    - 每一种颜色的范围在 0 - 255 (0% - 100%) 之间
+    - 语法：RGB(红色,绿色,蓝色)
+
+RGBA:
+    - 就是在rgb的基础上增加了一个a表示不透明度
+    - 需要四个值，前三个和rgb一样，第四个表示不透明度
+        1表示完全不透明   0表示完全透明  .5半透明
+
+十六进制的RGB值：
+    - 语法：#红色绿色蓝色
+    - 颜色浓度通过 00-ff
+    - 如果颜色两位两位重复可以进行简写  
+        #aabbcc --&gt; #abc
+
+HSL值 HSLA值
+    H 色相(0 - 360)
+    S 饱和度，颜色的浓度 0% - 100%
+    L 亮度，颜色的亮度 0% - 100%</code></pre>
 
     </div>
 </article>
@@ -296,17 +824,22 @@
     <div class="sidebar-item sidebar-toc">
         <h3>Table of Contents</h3><nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
     <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a>
       <ul>
         <li><a href="#11-浏览器内核">1.1 浏览器内核</a></li>
       </ul>
     </li>
     <li><a href="#2-html基础a-id2a">2. HTML基础<a id="2"></a></a></li>
+    <li><a href="#3-html面试题a-id3a">3. HTML面试题<a id="3"></a></a></li>
+    <li><a href="#4-css基础--选择器a-id4a">4. CSS基础&ndash;选择器<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-选择器优先级">4.1 选择器优先级：</a></li>
+        <li><a href="#42-复合选择器">4.2 复合选择器：</a></li>
+        <li><a href="#43-伪元素选择器">4.3 伪元素选择器：</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-样式的继承">5. 样式的继承：</a></li>
+    <li><a href="#6-单位和颜色">6. 单位和颜色：</a></li>
   </ul>
 </nav></div>
 </aside>
@@ -457,17 +990,22 @@
         <h3>Table of Contents</h3>
         <nav id="TableOfContents">
   <ul>
-    <li>
-      <ul>
-        <li></li>
-      </ul>
-    </li>
     <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a>
       <ul>
         <li><a href="#11-浏览器内核">1.1 浏览器内核</a></li>
       </ul>
     </li>
     <li><a href="#2-html基础a-id2a">2. HTML基础<a id="2"></a></a></li>
+    <li><a href="#3-html面试题a-id3a">3. HTML面试题<a id="3"></a></a></li>
+    <li><a href="#4-css基础--选择器a-id4a">4. CSS基础&ndash;选择器<a id="4"></a></a>
+      <ul>
+        <li><a href="#41-选择器优先级">4.1 选择器优先级：</a></li>
+        <li><a href="#42-复合选择器">4.2 复合选择器：</a></li>
+        <li><a href="#43-伪元素选择器">4.3 伪元素选择器：</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-样式的继承">5. 样式的继承：</a></li>
+    <li><a href="#6-单位和颜色">6. 单位和颜色：</a></li>
   </ul>
 </nav>
     </div>

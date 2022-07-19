@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://wudaore.github.io/tags/css/</loc>
+    <lastmod>2022-07-19T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://wudaore.github.io/post/css2/</loc>
+    <lastmod>2022-07-19T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://wudaore.github.io/post/</loc>
+    <lastmod>2022-07-19T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://wudaore.github.io/tags/web/</loc>
+    <lastmod>2022-07-19T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://wudaore.github.io/</loc>
+    <lastmod>2022-07-19T00:00:00+08:00</lastmod>
+  </url><url>
     <loc>https://wudaore.github.io/tags/nlp/</loc>
     <lastmod>2022-07-14T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://wudaore.github.io/post/nlp-rnn/</loc>
-    <lastmod>2022-07-14T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://wudaore.github.io/post/</loc>
-    <lastmod>2022-07-14T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://wudaore.github.io/</loc>
     <lastmod>2022-07-14T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://wudaore.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</loc>
@@ -23,16 +32,10 @@
     <loc>https://wudaore.github.io/post/pytorchb3/</loc>
     <lastmod>2022-07-13T00:00:00+08:00</lastmod>
   </url><url>
-    <loc>https://wudaore.github.io/tags/css/</loc>
-    <lastmod>2022-07-10T00:00:00+08:00</lastmod>
-  </url><url>
     <loc>https://wudaore.github.io/post/css1/</loc>
     <lastmod>2022-07-10T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://wudaore.github.io/post/pytorchb2/</loc>
-    <lastmod>2022-07-10T00:00:00+08:00</lastmod>
-  </url><url>
-    <loc>https://wudaore.github.io/tags/web/</loc>
     <lastmod>2022-07-10T00:00:00+08:00</lastmod>
   </url><url>
     <loc>https://wudaore.github.io/post/pytorchb1/</loc>
