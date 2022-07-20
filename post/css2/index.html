@@ -105,7 +105,7 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-19</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;2579 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;6296 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/web">web</a>&nbsp;<a href="/tags/css">css</a>&nbsp;</span>
 
@@ -339,6 +339,309 @@
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
+<h3 id="练习导航栏">练习：导航栏</h3>
+<p><strong>效果如下：</strong></p>
+<p><img class="img-zoomable" src="/css/5.png" alt="png" />
+</p>
+<p><strong>设计思路</strong></p>
+<p>可以用ul-li也可以直接div嵌套.</p>
+<p>选项需要点击所以用a标签；斜杠不能点击用span标签.</p>
+<p>a标签移动经过时需要变色.使用链接伪类来实现<code>.item a:hover{}</code>;同时需要去除下划线<code>text-decoration: none</code></p>
+<p>最后 要让字体在父元素中垂直居中，只需将父元素的line-height设置为一个和父元素height一样的值</p>
+<p><strong>代码如下：</strong></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;title&gt;京东的左侧导航&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./css/reset.css&quot;&gt;
+    &lt;style&gt;
+
+        /* 设置body */
+        body{
+            /* 设置一个网页的背景，以使我们方便查看 */
+            background-color: #bfa;
+        }
+
+        /* 设置菜单外部容器 */
+        .left-nav{
+            /* 设置宽度 */
+            width: 190px;
+            /* 设置高度 */
+            height: 450px;
+            /* 设置padding */
+            padding: 10px 0;
+            /* 设置一个背景颜色 */
+            background-color: #fff;
+
+            margin: 50px auto;
+        }
+
+        /* 设置菜单内部的item */
+        .left-nav .item{
+            height: 25px;
+            /* 要让一个文字在父元素中垂直居中，只需将父元素的line-height设置为一个和父元素height一样的值 */
+            line-height: 25px;
+            /* 设置item的右内边距，将文字向内移动  */
+            padding-left: 18px;
+            /* 设置字体大小 */
+            font-size: 12px;
+        }
+
+        /* 设置/的距离 */
+        .item .line{
+            padding: 0 2px;
+        }
+
+        /* 为item设置一个鼠标移入的状态 */
+        .item:hover{
+            background-color: yellow;
+        }
+
+        /* 设置超链接的样式 */
+        .item a{
+            /* 设置字体大小 */
+            font-size: 14px;
+            /* 设置字体的颜色 */
+            color: #333;
+            /* 去除下划线 */
+            text-decoration: none;
+        }
+
+        /* 设置超链接的hover的样式 */
+        .item a:hover{
+            color: #c81623;
+        }
+
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+
+    &lt;!-- 创建一个外部的容器 nav(div) div(div) ul(li)  --&gt;
+    &lt;nav class=&quot;left-nav&quot;&gt;
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;家用电器&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;手机&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;运营商&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;数码&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;电脑&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;办公&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;家居&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;家具&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;家装&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;厨具&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;男装&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;女装&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;童装&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;内衣&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;美妆&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;个护清洁&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;宠物&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;女鞋&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;箱包&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;钟表&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;珠宝&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;男鞋&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;运动&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;户外&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;房产&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;汽车&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;汽车用品&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;母婴&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;玩具乐器&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;食品&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;酒类&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;生鲜&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;特产&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;艺术&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;礼品鲜花&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;农资绿植&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;医药保健&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;计生情趣&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;图书&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;文娱&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;电子书&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;机票&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;酒店&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;旅游&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;生活&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;理财&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;众筹&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;白条&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;保险&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;安装&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;维修&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;清洗&lt;/a&gt;&lt;span class='line'&gt;/&lt;/span&gt;&lt;a href=&quot;#&quot;&gt;二手&lt;/a&gt;
+        &lt;/div&gt;
+
+        &lt;div class=&quot;item&quot;&gt;
+            &lt;a href=&quot;#&quot;&gt;工业品&lt;/a&gt;
+        &lt;/div&gt;
+
+
+    &lt;/nav&gt;
+
+&lt;/body&gt;
+
+&lt;/html&gt;
+</code></pre>
+<h3 id="练习新闻列表">练习：新闻列表</h3>
+<p><strong>效果如下：</strong></p>
+<p><img class="img-zoomable" src="/css/6.png" alt="png" />
+</p>
+<p><strong>设计思路</strong></p>
+<p>div里面嵌套ul-li.消除样式后要使li前面有框框，需要使用before伪元素.</p>
+<pre><code>.news-list li::before{
+            content: '■';
+            color: rgb(218, 218, 218);
+            font-size: 12px;
+            margin-right: 4px;
+        }
+</code></pre>
+<p>要使文字覆盖在图片上，需要使用<code>margin-top:-300px;</code></p>
+<p><strong>特别注意</strong>在使用ul-li时想要在第一个li上方空一格，对li使用<code>margin-top</code>是没有用的，子类的margin-top会传递给父类.正确的做法是父类设置padding-bottom</p>
+<p><strong>代码如下：</strong></p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=edge&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;Document&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;../css/reset.css&quot;&gt;
+    &lt;style&gt;
+        .big {
+            width: 300px;
+            height: 450px;
+            background-color: yellow;
+            margin: 50px auto;
+            padding-top: 30px;
+        }
+        .inside li{
+            list-style-type:armenian;
+        }
+        .big li{
+            margin-bottom: 20px;
+        }
+        .big li span{
+            font-size: 20px;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;ul class=&quot;big&quot;&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;#&quot;&gt;
+                &lt;span&gt;
+                    新闻
+                &lt;/span&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=&quot;#&quot;&gt;
+                &lt;img class=&quot;imga&quot; src=&quot;../img/03/1.jpeg&quot; alt=&quot;费德勒&quot;&gt;
+            &lt;/a&gt;
+        &lt;/li&gt;
+        &lt;ul class=&quot;inside&quot;&gt;
+            &lt;li&gt;
+                &lt;a href=&quot;www.baidu.com&quot;&gt;
+                    震惊,我居然单抽出了苍古
+                &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;a href=&quot;www.baidu.com&quot;&gt;
+                    震惊,我居然单抽出了胡桃
+                &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+                &lt;a href=&quot;www.baidu.com&quot;&gt;
+                    震惊,我居然单抽出了护摩
+                &lt;/a&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+
+    &lt;/ul&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+
+</code></pre>
+<h3 id="38-盒子的尺寸a-idbox-cca">3.8 盒子的尺寸<a id="box-cc"></a></h3>
+<p>默认情况下，盒子可见框的大小由内容区、内边距和边框共同决定</p>
+<p>box-sizing 用来设置盒子尺寸的计算方式（设置width和height的作用）
+可选值：</p>
+<pre><code>content-box 默认值，宽度和高度用来设置内容区的大小
+border-box 宽度和高度用来设置整个盒子可见框的大小.此时width 和 height 指的是内容区 和 内边距 和 边框的总大小
+</code></pre>
+<p><strong>使用样例:</strong></p>
+<pre><code>.box1{
+            width: 100px;
+            height: 100px;
+            background-color: #bfa;
+            padding: 10px;
+            border: 10px red solid;
+            /* 
+                默认情况下，盒子可见框的大小由内容区、内边距和边框共同决定
+
+                    box-sizing 用来设置盒子尺寸的计算方式（设置width和height的作用）
+                        可选值：
+                            content-box 默认值，宽度和高度用来设置内容区的大小
+                            border-box 宽度和高度用来设置整个盒子可见框的大小
+                                width 和 height 指的是内容区 和 内边距 和 边框的总大小
+             */
+            
+            box-sizing: content-box;
+        }
+</code></pre>
+<h3 id="39-轮廓和圆角a-idbox-lkyja">3.9 轮廓和圆角<a id="box-lkyj"></a></h3>
+<p><strong>阴影</strong></p>
+<p>box-shadow 用来设置元素的阴影效果，阴影不会影响页面布局</p>
+<pre><code>第一个值 水平偏移量 设置阴影的水平位置 正值向右移动 负值向左移动
+第二个值 垂直偏移量 设置阴影的水平位置 正值向下移动 负值向上移动
+第三个值 阴影的模糊半径
+第四个值 阴影的颜色
+</code></pre>
+<p>用法：</p>
+<pre><code>box-shadow: 0px 0px 50px rgba(0, 0, 0, .3) ; 
+</code></pre>
+<p><strong>轮廓</strong></p>
+<p>outline 用来设置元素的轮廓线，用法和border一模一样</p>
+<p>与边框的区别在于：1.轮廓不占用空间。 2.轮廓线可能不是矩形的。</p>
+<p>用法：</p>
+<pre><code>.box1:hover{
+            outline: 10px red solid;
+        }
+</code></pre>
+<p><strong>圆角</strong></p>
+<p>border-radius 可以分别指定四个角的圆角</p>
+<pre><code>四个值 左上 右上 右下 左下
+三个值 左上 右上/左下 右下 
+两个个值 左上/右下 右上/左下  
+</code></pre>
+<p>用法：</p>
+<pre><code>border-radius: 20px / 40px;    /*设置椭圆*/
+</code></pre>
+<pre><code>border-radius: 50%;/* 将元素设置为一个圆形 */
+</code></pre>
 
     </div>
 </article>
@@ -495,6 +798,10 @@
         <li><a href="#36-盒子的外边距折叠a-idbox-zda">3.6 盒子的外边距折叠<a id="box-zd"></a></a></li>
         <li><a href="#37-行内元素的盒模型a-idbox-hna">3.7 行内元素的盒模型<a id="box-hn"></a></a></li>
         <li><a href="#练习购物栏目">练习：购物栏目</a></li>
+        <li><a href="#练习导航栏">练习：导航栏</a></li>
+        <li><a href="#练习新闻列表">练习：新闻列表</a></li>
+        <li><a href="#38-盒子的尺寸a-idbox-cca">3.8 盒子的尺寸<a id="box-cc"></a></a></li>
+        <li><a href="#39-轮廓和圆角a-idbox-lkyja">3.9 轮廓和圆角<a id="box-lkyj"></a></a></li>
       </ul>
     </li>
   </ul>
@@ -659,6 +966,10 @@
         <li><a href="#36-盒子的外边距折叠a-idbox-zda">3.6 盒子的外边距折叠<a id="box-zd"></a></a></li>
         <li><a href="#37-行内元素的盒模型a-idbox-hna">3.7 行内元素的盒模型<a id="box-hn"></a></a></li>
         <li><a href="#练习购物栏目">练习：购物栏目</a></li>
+        <li><a href="#练习导航栏">练习：导航栏</a></li>
+        <li><a href="#练习新闻列表">练习：新闻列表</a></li>
+        <li><a href="#38-盒子的尺寸a-idbox-cca">3.8 盒子的尺寸<a id="box-cc"></a></a></li>
+        <li><a href="#39-轮廓和圆角a-idbox-lkyja">3.9 轮廓和圆角<a id="box-lkyj"></a></a></li>
       </ul>
     </li>
   </ul>
