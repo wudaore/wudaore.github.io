@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>CSS(4) - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="对页面定位 position进行学习" />
+
+
+<meta name="keywords" content="web, css" />
+
+
+<meta property="og:title" content="CSS(4)" />
+<meta name="twitter:title" content="CSS(4)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/css4/" /><meta property="og:description" content="对页面定位 position进行学习" />
+<meta name="twitter:description" content="对页面定位 position进行学习" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-22T15:14:00+08:00" /><meta property="article:modified_time" content="2022-07-22T15:14:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/css4/">CSS(4)</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-22</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;869 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/web">web</a>&nbsp;<a href="/tags/css">css</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
+<p>对页面定位 position进行学习</p>
+<p>使用position属性来设置定位</p>
+<p>可选值：</p>
+<pre><code>static 默认值，元素是静止的没有开启定位
+relative 开启元素的相对定位
+absolute 开启元素的绝对定位
+fixed 开启元素的固定定位
+sticky 开启元素的粘滞定位
+</code></pre>
+<h2 id="2-相对定位a-id2a">2. 相对定位<a id="2"></a></h2>
+<p><strong>自己概括就是 相对定位的参照物是它本身；且移动以后不影响文档流：类似于灵魂出窍，肉体还占在原地. 和margin的区别在于它只改变自己的位置.且只适用于定位</strong></p>
+<p>相对定位的<strong>特性</strong>：</p>
+<pre><code>1.元素开启相对定位以后，如果不设置偏移量元素不会发生任何的变化
+2.相对定位是参照于元素在文档流中的位置进行定位的
+3.相对定位会提升元素的层级（会盖住层级低的元素）
+4.相对定位不会使元素脱离文档流（下面的元素位置不会变）
+5.相对定位不会改变元素的性质块还是块，行内还是行内
+</code></pre>
+<h2 id="3-绝对定位a-id3a">3. 绝对定位<a id="3"></a></h2>
+<p>绝对定位的<strong>特性</strong>：</p>
+<pre><code>1.开启绝对定位后，如果不设置偏移量元素的位置不会发生变化但是其他元素位置会变（相对定位的话其他元素不会）
+2.开启绝对定位后，元素会从文档流中脱离
+3.绝对定位会改变元素的性质，行内变成块，块的宽高被内容撑开（2,3两条相当于浮动.）
+4.绝对定位会使元素提升一个层级
+5.绝对定位元素是相对于其包含块进行定位的
+</code></pre>
+<p><strong>包含块</strong>( containing block )</p>
+<pre><code>- 正常情况下：
+    包含块就是离当前元素最近的祖先块元素
+    &lt;div&gt; &lt;div&gt;&lt;/div&gt; &lt;/div&gt;
+    &lt;div&gt;&lt;span&gt;&lt;em&gt;hello&lt;/em&gt;&lt;/span&gt;&lt;/div&gt;
+
+- 绝对定位的包含块:
+    包含块就是离它最近的开启了定位的祖先元素，
+        如果所有的祖先元素都没有开启定位则根元素就是它的包含块
+
+- html（根元素、初始包含块）
+</code></pre>
+<h2 id="4-固定定位a-id4a">4. 固定定位<a id="4"></a></h2>
+<p>固定定位：</p>
+<pre><code>- 将元素的position属性设置为fixed则开启了元素的固定定位
+- 固定定位也是一种绝对定位，所以固定定位的大部分特点都和绝对定位一样
+    唯一不同的是固定定位永远参照于浏览器的视口进行定位
+    固定定位的元素不会随网页的滚动条滚动（也即视口和根元素的区别.如果参照根元素，那么上下拉的时候定位元素不会动；如果参照视口，则会一直定位在视口，会动）
+</code></pre>
+<h2 id="5-沾滞定位a-id5a">5. 沾滞定位<a id="5"></a></h2>
+<p>粘滞定位:</p>
+<pre><code>- 当元素的position属性设置为sticky时则开启了元素的粘滞定位
+- 粘滞定位和相对定位的特点基本一致，
+    不同的是粘滞定位可以在元素到达某个位置时将其固定
+</code></pre>
+<h2 id="5-沾滞定位a-id5a-1">5. 沾滞定位<a id="5"></a></h2>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/nlp/">NLP</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">Pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-相对定位a-id2a">2. 相对定位<a id="2"></a></a></li>
+    <li><a href="#3-绝对定位a-id3a">3. 绝对定位<a id="3"></a></a></li>
+    <li><a href="#4-固定定位a-id4a">4. 固定定位<a id="4"></a></a></li>
+    <li><a href="#5-沾滞定位a-id5a">5. 沾滞定位<a id="5"></a></a></li>
+    <li><a href="#5-沾滞定位a-id5a-1">5. 沾滞定位<a id="5"></a></a></li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/nlp/">NLP</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">Pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#2-相对定位a-id2a">2. 相对定位<a id="2"></a></a></li>
+    <li><a href="#3-绝对定位a-id3a">3. 绝对定位<a id="3"></a></a></li>
+    <li><a href="#4-固定定位a-id4a">4. 固定定位<a id="4"></a></a></li>
+    <li><a href="#5-沾滞定位a-id5a">5. 沾滞定位<a id="5"></a></a></li>
+    <li><a href="#5-沾滞定位a-id5a-1">5. 沾滞定位<a id="5"></a></a></li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>

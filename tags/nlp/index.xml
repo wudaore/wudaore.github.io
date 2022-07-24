@@ -6,14 +6,23 @@
     <description>Recent content in NLP on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 14 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/nlp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>NLP--RNN</title>
+      <link>https://wudaore.github.io/post/nlp-rnn/</link>
+      <pubDate>Wed, 20 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/nlp-rnn/</guid>
+      <description>目录 1. 序 NLP&amp;ndash;RNN的学习 在普通的神经网络中，信息是单向传递的.这么做虽然让网络更容易学习，但是在很多的现实任务中，网络的输出不仅依赖于当前的输入，也依赖于过去的输出.此外，普通的神经网</description>
+    </item>
+    
     <item>
       <title>NLP--word embedding</title>
       <link>https://wudaore.github.io/post/nlp-word-embedding/</link>
       <pubDate>Thu, 14 Jul 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/nlp-word-embedding/</guid>
-      <description>目录 序 RNN-NLP基础 RNN-文本情感分类 总结 1. 序 NLP&amp;ndash;word embedding的学习 2. RNN-NLP基础 2.1 N-gram N表示能够用在一起的词语的数量.使用N-gram模型时，往往将N个词语当成一个单位使用 区别于传统分</description>
+      <description>目录 序 NLP基础 文本情感分类 总结 1. 序 NLP&amp;ndash;word embedding的学习 2. RNN-NLP基础 2.1 N-gram N表示能够用在一起的词语的数量.使用N-gram模型时，往往将N个词语当成一个单位使用 区别于传统分词， N-gram</description>
     </item>
     
   </channel>

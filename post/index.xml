@@ -6,7 +6,34 @@
     <description>Recent content in Posts on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 19 Jul 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 22 Jul 2022 15:14:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CSS(4)</title>
+      <link>https://wudaore.github.io/post/css4/</link>
+      <pubDate>Fri, 22 Jul 2022 15:14:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/css4/</guid>
+      <description>1. 序 对页面定位 position进行学习 使用position属性来设置定位 可选值： static 默认值，元素是静止的没有开启定位 relative 开启元素的相对定位 absolute 开启元素的绝对定位 fixed 开启元素的固定定位 sticky 开启元素的粘滞定位 2. 相对</description>
+    </item>
+    
+    <item>
+      <title>CSS(3)</title>
+      <link>https://wudaore.github.io/post/css3/</link>
+      <pubDate>Fri, 22 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/css3/</guid>
+      <description>1. 序 对页面浮动 float进行学习 2. 浮动的简介与特点 通过浮动可以使一个元素向其父元素的左侧或右侧移动. 注意，元素设置浮动以后，水平布局的等式便不需要强制成立元素设置浮动以后，会完全从文档流中脱离，不再占</description>
+    </item>
+    
+    <item>
+      <title>NLP--RNN</title>
+      <link>https://wudaore.github.io/post/nlp-rnn/</link>
+      <pubDate>Wed, 20 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/nlp-rnn/</guid>
+      <description>目录 1. 序 NLP&amp;ndash;RNN的学习 在普通的神经网络中，信息是单向传递的.这么做虽然让网络更容易学习，但是在很多的现实任务中，网络的输出不仅依赖于当前的输入，也依赖于过去的输出.此外，普通的神经网</description>
+    </item>
+    
     <item>
       <title>CSS(2)</title>
       <link>https://wudaore.github.io/post/css2/</link>
@@ -22,7 +49,7 @@
       <pubDate>Thu, 14 Jul 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/nlp-word-embedding/</guid>
-      <description>目录 序 RNN-NLP基础 RNN-文本情感分类 总结 1. 序 NLP&amp;ndash;word embedding的学习 2. RNN-NLP基础 2.1 N-gram N表示能够用在一起的词语的数量.使用N-gram模型时，往往将N个词语当成一个单位使用 区别于传统分</description>
+      <description>目录 序 NLP基础 文本情感分类 总结 1. 序 NLP&amp;ndash;word embedding的学习 2. RNN-NLP基础 2.1 N-gram N表示能够用在一起的词语的数量.使用N-gram模型时，往往将N个词语当成一个单位使用 区别于传统分词， N-gram</description>
     </item>
     
     <item>
