@@ -6,7 +6,16 @@
     <description>Recent content in algo on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 29 Jun 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/algo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 06 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/algo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>李宏毅-深度学习课程学习笔记(1)</title>
+      <link>https://wudaore.github.io/post/deeplearning-lhy1/</link>
+      <pubDate>Tue, 06 Sep 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/deeplearning-lhy1/</guid>
+      <description>1. 序 李宏毅-深度学习课程学习笔记(1)</description>
+    </item>
+    
     <item>
       <title>CART决策树</title>
       <link>https://wudaore.github.io/post/cart/</link>
