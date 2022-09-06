@@ -31,8 +31,8 @@
 <meta property="og:title" content="李宏毅-深度学习课程学习笔记(1)" />
 <meta name="twitter:title" content="李宏毅-深度学习课程学习笔记(1)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/deeplearning-lhy1/" /><meta property="og:description" content="1. 序 李宏毅-深度学习课程学习笔记(1)" />
-<meta name="twitter:description" content="1. 序 李宏毅-深度学习课程学习笔记(1)" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/deeplearning-lhy1/" /><meta property="og:description" content="0. 序 开始李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. pytorch中dataset的使用 要使用自己的数据集，首先要导入pytorch对应的库 from torch.utils.data import DataLoader,Dataset DataLoa" />
+<meta name="twitter:description" content="0. 序 开始李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. pytorch中dataset的使用 要使用自己的数据集，首先要导入pytorch对应的库 from torch.utils.data import DataLoader,Dataset DataLoa" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-09-06T00:00:00+08:00" /><meta property="article:modified_time" content="2022-09-06T00:00:00+08:00" />
 
@@ -105,15 +105,187 @@
     <div class="post-item post-meta">
         <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-09-06</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;19 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1939 words</span>
 
 <span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0">深度学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;<a href="/tags/pytorch">pytorch</a>&nbsp;</span>
 
     </div>
     
     <div class="post-content markdown-body">
-        <h2 id="1-序a-id1a">1. 序<a id="1"></a></h2>
-<p>李宏毅-深度学习课程学习笔记(1)</p>
+        <h2 id="0-序aa">0. 序<a></a></h2>
+<p>开始李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现.</p>
+<h2 id="1-pytorch中dataset的使用aa">1. pytorch中dataset的使用<a></a></h2>
+<p>要使用自己的数据集，首先要导入pytorch对应的库</p>
+<pre><code>from torch.utils.data import DataLoader,Dataset
+</code></pre>
+<p>DataLoader有两个比较重要的参数.其一batch_size代表每个batch（即一次读入的单位）中数据的数量；shuffle 在训练时一般设为True.</p>
+<p>然后要定义数据类 重写方法：</p>
+<p>一. <strong>init</strong> 方法 用于初始化导入数据</p>
+<p>二. <strong>getitem</strong> 方法 返回键对应的值.类实例化之后，通过使用下标的方法对类实例化对象进行取值</p>
+<p>三. <strong>init</strong> 方法 返回元素的长度</p>
+<p>比如现在要导入一个积极/消极言论的数据集aclImdb，可以如此构造数据类：</p>
+<pre><code>class ImdbDataset(Dataset):
+    def __init__(self, train=True):
+        # super(ImdbDataset,self).__init__()
+        data_path = r&quot;D:\BaiduNetdiskDownload\阶段9-人工智能NLP项目\第四天\代码\data\aclImdb&quot;
+        data_path += r&quot;\train&quot; if train else r&quot;\test&quot;
+        self.total_path = []  #保存所有的文件路径
+        for temp_path in [r&quot;\pos&quot;,r&quot;\neg&quot;]:
+            cur_path = data_path + temp_path
+            self.total_path += [os.path.join(cur_path,i) for i in os.listdir(cur_path) if i.endswith(&quot;.txt&quot;)]
+
+
+    def __getitem__(self, idx):
+        file = self.total_path[idx]
+        review = utils.tokenlize(open(file, encoding=&quot;utf-8&quot;).read(),) #评论
+        label = int(file.split(&quot;_&quot;)[-1].split(&quot;.&quot;)[0])
+        label = 0 if label &lt;5 else 1
+        return review, label
+
+    def __len__(self):
+        return len(self.total_path)
+
+</code></pre>
+<h2 id="2-tensor的基本使用">2. tensor的基本使用</h2>
+<p>导入后的数据类型被称为tensor.可以使用torch.tensor将数组，numpy转换成tensor.</p>
+<p>也可以使用tensor.mean(),tensor.sum()等方法进行计算，与numpy类似</p>
+<p>使用torch.squzzes/unsqueeze(维度下标)进行维度的减少/增加</p>
+<h2 id="3-pytorch怎么构建一个神经网络">3. pytorch怎么构建一个神经网络</h2>
+<p>以Linear Layer为例.本质其实是做一个矩阵的乘法和向量的加法.</p>
+<p>使用方法是要先导入对应的库：</p>
+<pre><code>import torch.nn as nn
+</code></pre>
+<p>nn.Linear有两个参数，第一个是数据原本的维度，第二个是数据转换后的维度.</p>
+<pre><code>nn.Linear(64*2, 64)
+</code></pre>
+<p>其作用就是将原本64*2维的数据转换成64维的数据.其实本质就是将4096*x的矩阵左乘一个64*4096的矩阵w，变成一个64*x的矩阵；再加上64*1的权重参数矩阵b.</p>
+<p><strong>激活函数</strong>的作用是去线性化.如若不用激活函数，无论使用多少隐藏层， 最终得到的结果都是线性的.常见的激活函数如softmax，ReLu，tanh</p>
+<p>下面依旧以数据集aclImdb的训练为例，构建一个神经网络模型</p>
+<pre><code>class ImdbModel(nn.Module):
+    def __init__(self):
+        super(ImdbModel,self).__init__()
+        self.embedding = nn.Embedding(num_embeddings=len(config.ws),embedding_dim=200,padding_idx=config.ws.PAD)
+        self.lstm = nn.LSTM(input_size=200, hidden_size=64, num_layers=2, batch_first=True, bidirectional=True, dropout=0.5)
+        self.fc1 = nn.Linear(64*2, 64)
+        self.fc2 = nn.Linear(64, 2)
+
+
+    def forward(self, input):
+        &quot;&quot;&quot;
+        :param input:[batch_size,max_len]
+        :return:
+        &quot;&quot;&quot;
+        input_embeded = self.embedding(input)  # input embeded :[batch_size,max_len,200]
+
+        output, (h_n, c_n) = self.lstm(input_embeded)  # output：[batch_size, seq_len, 64*2];h_n :[batch_size,4,hidden_size]
+        out = torch.cat([h_n[-1, :, :], h_n[-2, :, :]], dim=-1)  # 拼接正向最后一个输出和反向最后一个输出#out :[batch_size,hidden_size*2]
+
+        # 进行全连接
+        out_fc1 = self.fc1(out)
+        # 进行relu
+        out_fc1_relu = F.relu(out_fc1)
+
+        # 再经过一个全连接层全连接
+        out_fc2 = self.fc2(out_fc1_relu)  # out :[batch_size,2]
+        return F.log_softmax(out_fc2, dim=-1)
+</code></pre>
+<p>由上述代码可见，在__init__方法中我们定义了神经网络中的几个层：包括LSTM，Embedding和两个线性层.在forward方法中，我们依次使用了这些层.</p>
+<p>当然，也可以nn.Sequential将这些层整合，并在forword中直接使用</p>
+<p><img class="img-zoomable" src="/LHY/1.png" alt="png" />
+</p>
+<h2 id="4-模型的优化">4. 模型的优化</h2>
+<h3 id="41-lossfunction">4.1 lossFunction</h3>
+<p>模型的最终目的就是最小化损失.pyTorch提供了一系列的损失如nll_loss，MSELoss</p>
+<h3 id="42-优化器optimizer">4.2 优化器optimizer</h3>
+<p>optimizer优化器，作用是根据反向传播算法更新神经网络中的参数，以达到降低损失值loss的目的.</p>
+<p>使用optimizer训练和测试数据时的步骤其实大同小异.测试时不需要计算梯度，不需要反向传播，只需要计算损失即可</p>
+<p><strong>训练步骤：</strong></p>
+<p>1.准备数据</p>
+<p>2.实例化模型</p>
+<p>3.实例化优化器</p>
+<p>4.实例化损失函数</p>
+<p>然后进入循环.每次循环需要：</p>
+<p>1.优化器的梯度置0</p>
+<p>2.使用模型得到预测值</p>
+<p>3.将预测值与真实值代入损失函数，计算损失</p>
+<p>4.反向传播，计算梯度</p>
+<p>5.更新优化器参数.</p>
+<p>以Mnist数据集（手写数字识别）为例，训练代码如下：</p>
+<pre><code>#1. 实例化模型，优化器，损失函数
+model = MnistModel().to(conf.device)
+optimizer = optim.Adam(model.parameters(),lr=1e-3)
+
+# if os.path.exists(&quot;./models/model.pkl&quot;):
+#     model.load_state_dict(torch.load(&quot;./models/model.pkl&quot;))
+#     optimizer.load_state_dict(torch.load(&quot;./models/optimizer.pkl&quot;))
+
+
+#2. 进行循环，进行训练
+def train(epoch):
+    train_dataloader = get_dataloader(train=True)
+    bar = tqdm(enumerate(train_dataloader),total=len(train_dataloader))
+    total_loss = []
+    for idx,(input,target) in bar:
+        input = input.to(conf.device)
+        target = target.to(conf.device)
+        #梯度置为0
+        optimizer.zero_grad()
+        #计算得到预测值
+        output = model(input)
+        #得到损失
+        loss = F.nll_loss(output,target)
+        #反向传播，计算损失
+        loss.backward()
+        total_loss.append(loss.item())
+        #参数的更新
+        optimizer.step()
+        #打印数据
+        if idx%10 ==0 :
+            bar.set_description(&quot;epcoh:{} idx:{},loss:{:.6f}&quot;.format(epoch,idx,np.mean(total_loss)))
+            # 保存优化器和模型
+            torch.save(model.state_dict(),&quot;./models/model.pkl&quot;)
+            torch.save(optimizer.state_dict(),&quot;./models/optimizer.pkl&quot;)
+
+</code></pre>
+<p><strong>测试步骤：</strong></p>
+<p>1.实例化模型，优化器，损失函数</p>
+<p>然后对于每个数据集中的data和label，进行循环：</p>
+<p>1.通过模型得到预测值.</p>
+<p>2.得到，计算损失.</p>
+<p>3.计算准确率.</p>
+<p>4.可以通过准确率得出预测值.</p>
+<p>具体步骤代码如下：</p>
+<pre><code>def eval():
+    # 1. 实例化模型，优化器，损失函数
+    model = MnistModel().to(conf.device)
+
+    if os.path.exists(&quot;./models/model.pkl&quot;):
+        # 模型的加载
+        model.load_state_dict(torch.load(&quot;./models/model.pkl&quot;))
+
+    test_dataloader = get_dataloader(train=False)
+    total_loss = []
+    total_acc = []
+    with torch.no_grad():
+        # 其实与训练的时候大同小异，只是不需要计算梯度，不需要反向传播，只需要计算损失即可
+        for input,target in test_dataloader: #2. 进行循环，进行训练
+            input = input.to(conf.device)
+            target = target.to(conf.device)
+            #计算得到预测值
+            output = model(input)
+            #得到损失
+            loss = F.nll_loss(output,target)
+            #计算损失
+            total_loss.append(loss.item())
+
+            # 计算准确率
+            # 计算预测值
+            # output的形状是[batch_size,10], 其中每一行代表一条数据属于每个类别的概率，取其中的最大值作为预测结果;target的形状为[batch_size]代表每一行数据的真实结果
+            pred = output.max(dim=-1)[-1]
+            total_acc.append(pred.eq(target).float().mean().item())
+    print(&quot;test loss:{},test acc:{}&quot;.format(np.mean(total_loss),np.mean(total_acc)))
+
+</code></pre>
 
     </div>
 </article>
@@ -234,7 +406,16 @@
     <div class="sidebar-item sidebar-toc">
         <h3>Table of Contents</h3><nav id="TableOfContents">
   <ul>
-    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#0-序aa">0. 序<a></a></a></li>
+    <li><a href="#1-pytorch中dataset的使用aa">1. pytorch中dataset的使用<a></a></a></li>
+    <li><a href="#2-tensor的基本使用">2. tensor的基本使用</a></li>
+    <li><a href="#3-pytorch怎么构建一个神经网络">3. pytorch怎么构建一个神经网络</a></li>
+    <li><a href="#4-模型的优化">4. 模型的优化</a>
+      <ul>
+        <li><a href="#41-lossfunction">4.1 lossFunction</a></li>
+        <li><a href="#42-优化器optimizer">4.2 优化器optimizer</a></li>
+      </ul>
+    </li>
   </ul>
 </nav></div>
 </aside>
@@ -361,7 +542,16 @@
         <h3>Table of Contents</h3>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-序a-id1a">1. 序<a id="1"></a></a></li>
+    <li><a href="#0-序aa">0. 序<a></a></a></li>
+    <li><a href="#1-pytorch中dataset的使用aa">1. pytorch中dataset的使用<a></a></a></li>
+    <li><a href="#2-tensor的基本使用">2. tensor的基本使用</a></li>
+    <li><a href="#3-pytorch怎么构建一个神经网络">3. pytorch怎么构建一个神经网络</a></li>
+    <li><a href="#4-模型的优化">4. 模型的优化</a>
+      <ul>
+        <li><a href="#41-lossfunction">4.1 lossFunction</a></li>
+        <li><a href="#42-优化器optimizer">4.2 优化器optimizer</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
     </div>

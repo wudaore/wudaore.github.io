@@ -13,7 +13,7 @@
       <pubDate>Tue, 06 Sep 2022 00:00:00 +0800</pubDate>
       
       <guid>https://wudaore.github.io/post/deeplearning-lhy1/</guid>
-      <description>1. 序 李宏毅-深度学习课程学习笔记(1)</description>
+      <description>0. 序 开始李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. pytorch中dataset的使用 要使用自己的数据集，首先要导入pytorch对应的库 from torch.utils.data import DataLoader,Dataset DataLoa</description>
     </item>
     
     <item>
