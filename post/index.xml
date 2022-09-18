@@ -6,7 +6,16 @@
     <description>Recent content in Posts on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 06 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>李宏毅-深度学习课程学习笔记(2)</title>
+      <link>https://wudaore.github.io/post/deeplearning-lhy2/</link>
+      <pubDate>Mon, 12 Sep 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/deeplearning-lhy2/</guid>
+      <description>0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. 通过正则化解决过拟合 1.1 正则化的基本原理（以岭回归为例） 正则化，岭回归等内容在之前的博客已经提及，原理不加赘述.</description>
+    </item>
+    
     <item>
       <title>李宏毅-深度学习课程学习笔记(1)</title>
       <link>https://wudaore.github.io/post/deeplearning-lhy1/</link>
@@ -77,6 +86,15 @@
       
       <guid>https://wudaore.github.io/post/css1/</guid>
       <description>1. 序 机器学习也就图一乐，赚工资还得靠web. web也就图一乐，赚米还得靠想法. 总之先把工资赚了. web从前端开始，前端从html和css开始. 1.1 浏览器内核 chrome:webkit/blink ie:Trident Safari:webkit Firefox:Gecko Opera:Presto/blink 2. HTML基础 记一些知识点 1.写HT</description>
+    </item>
+    
+    <item>
+      <title>CSS的一些随笔</title>
+      <link>https://wudaore.github.io/post/css_detail/</link>
+      <pubDate>Sun, 10 Jul 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/css_detail/</guid>
+      <description>1. 实现元素的居中的方法 1.1 水平居中 方法1： margin: xpx auto 方法2：见1.2的方法1 1.2 垂直居中 方法1： 使用绝对定位实现： 绝对定位中left 和 right的值默认是auto，所以如果不指定left和right，则等式不</description>
     </item>
     
     <item>

@@ -6,7 +6,16 @@
     <description>Recent content in pytorch on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 06 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/pytorch/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/pytorch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>李宏毅-深度学习课程学习笔记(2)</title>
+      <link>https://wudaore.github.io/post/deeplearning-lhy2/</link>
+      <pubDate>Mon, 12 Sep 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/deeplearning-lhy2/</guid>
+      <description>0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. 通过正则化解决过拟合 1.1 正则化的基本原理（以岭回归为例） 正则化，岭回归等内容在之前的博客已经提及，原理不加赘述.</description>
+    </item>
+    
     <item>
       <title>李宏毅-深度学习课程学习笔记(1)</title>
       <link>https://wudaore.github.io/post/deeplearning-lhy1/</link>

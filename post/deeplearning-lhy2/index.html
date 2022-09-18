@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="HandheldFriendly" content="True" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta name="generator" content="Hugo 0.98.0" />
+
+
+<link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/dsrkafuu/dsr-cdn-main@1/images/favicons/dsrca.ico" />
+
+
+
+<title>李宏毅-深度学习课程学习笔记(2) - wudao的博客</title>
+
+
+<meta name="author" content="DSRKafuU" />
+
+
+<meta name="description" content="A minimal Hugo theme with nice theme color." />
+
+
+<meta name="keywords" content="深度学习, algo, pytorch" />
+
+
+<meta property="og:title" content="李宏毅-深度学习课程学习笔记(2)" />
+<meta name="twitter:title" content="李宏毅-深度学习课程学习笔记(2)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://wudaore.github.io/post/deeplearning-lhy2/" /><meta property="og:description" content="0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. 通过正则化解决过拟合 1.1 正则化的基本原理（以岭回归为例） 正则化，岭回归等内容在之前的博客已经提及，原理不加赘述." />
+<meta name="twitter:description" content="0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. 通过正则化解决过拟合 1.1 正则化的基本原理（以岭回归为例） 正则化，岭回归等内容在之前的博客已经提及，原理不加赘述." /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-09-12T00:00:00+08:00" /><meta property="article:modified_time" content="2022-09-12T00:00:00+08:00" />
+
+
+<style>
+    @media (prefers-color-scheme: dark) {
+        body[data-theme='auto'] img {
+            filter: brightness(60%);
+        }
+    }
+
+    body[data-theme='dark'] img {
+        filter: brightness(60%);
+    }
+</style>
+
+
+
+
+<link rel="stylesheet" href="https://wudaore.github.io/assets/css/fuji.min.css" />
+
+
+
+
+
+
+
+
+</head>
+
+<body
+  data-theme="auto"
+  data-theme-auto='true'
+  >
+    <script data-cfasync="false">
+  
+  var fujiThemeData = localStorage.getItem('fuji_data-theme');
+  
+  if (!fujiThemeData) {
+    localStorage.setItem('fuji_data-theme', 'auto');
+  } else {
+    
+    if (fujiThemeData !== 'auto') {
+      document.body.setAttribute('data-theme', fujiThemeData === 'dark' ? 'dark' : 'light');
+    }
+  }
+</script>
+
+    <header>
+    <div class="container-lg clearfix">
+        <div class="col-12 header">
+            <a class="title-main" href="https://wudaore.github.io/">wudao的博客</a>
+            
+            <span class="title-sub">钝学累功,不妨精熟</span>
+            
+        </div>
+    </div>
+</header>
+
+    <main>
+        <div class="container-lg clearfix">
+            
+            <div class="col-12 col-md-9 float-left content">
+                
+<article>
+    
+    <h2 class="post-item post-title">
+        <a href="https://wudaore.github.io/post/deeplearning-lhy2/">李宏毅-深度学习课程学习笔记(2)</a>
+    </h2>
+    <div class="post-item post-meta">
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-09-12</span>
+
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1917 words</span>
+
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0">深度学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;<a href="/tags/pytorch">pytorch</a>&nbsp;</span>
+
+    </div>
+    
+    <div class="post-content markdown-body">
+        <h2 id="0-序aa">0. 序<a></a></h2>
+<p>继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现.</p>
+<h2 id="1-通过正则化解决过拟合aa">1. 通过正则化解决过拟合<a></a></h2>
+<h3 id="11-正则化的基本原理以岭回归为例">1.1 正则化的基本原理（以岭回归为例）</h3>
+<p>正则化，岭回归等内容在<a href="https://blog.daorenwu.com/post/linear-regression/#41-%E5%B2%AD%E5%9B%9E%E5%BD%92%E6%8E%A8%E8%8D%90a-idlhga" target="_blank">之前的博客</a>已经提及，原理不加赘述.</p>
+<p>李宏毅的课程使我对正则化有了更深刻的理解.假设现在有这样的一个简单模型：</p>
+<p><img class="img-zoomable" src="/LHY/2.png" alt="png" />
+</p>
+<p>使用平方误差作为损失函数</p>
+<p><img class="img-zoomable" src="/LHY/3.png" alt="png" />
+</p>
+<p>那么正则化就是在损失函数后面再加上下图所示的内容</p>
+<p><img class="img-zoomable" src="/LHY/4.png" alt="png" />
+</p>
+<p>为什么这样做可以解决过拟合问题呢？假设输入x<sub>i</sub>改变了n，那么对于平方误差损失函数来说，它的值改变了w<sub>i</sub>*n.当w<sub>i</sub>的值非常小的时候，损失函数对输入将会不敏感.</p>
+<p>在实验过程中，λ的值可以进行调整.不断调整找到一个最合适的λ值，达到优化模型的目的</p>
+<h3 id="12-岭回归最优解">1.2 岭回归最优解</h3>
+<p>令损失函数L对参数w求偏导。最终得出结果.</p>
+<p><img class="img-zoomable" src="/LHY/5.png" alt="png" />
+</p>
+<p><a href="https://blog.csdn.net/lw_power/article/details/82953337" target="_blank">具体推导过程</a></p>
+<h2 id="2-深度学习模型训练总览-aa">2. 深度学习模型训练总览 <a></a></h2>
+<p>先上图</p>
+<p><img class="img-zoomable" src="/LHY/6.png" alt="png" />
+</p>
+<h3 id="21-model-bias">2.1 model bias</h3>
+<p>当模型在训练集上的结果不理想时，其一可能是出现了<strong>model bias</strong>.这个情况是模型不够复杂导致的.需要尝试让模型更复杂.</p>
+<h3 id="22-模型优化">2.2 模型优化</h3>
+<p>当我们的模型在测试集上的结果非常不好时，是不是一定是过拟合了？答案是不一定.因为其training data上的结果也不一定好.</p>
+<p>而挡在training data上的结果不够好时，已经是模型不够复杂(<strong>model bias</strong>)吗？也不一定.当我们用20层网络能得到较好的结果而用60层的网络却不行时，这就不是model bias，而是优化(<strong>optimization</strong>)没有做好.</p>
+<p>可以先尝试用一些不那么复杂的浅层网络，或者干脆使用机器学习的方法（如SVM）.因为这些方法的optimization比较不容易失败</p>
+<h3 id="23-过拟合">2.3 过拟合</h3>
+<p>当我们的模型在training data上的结果足够好而在testing data 上的结果却不行时，就要考虑是不是过拟合（<strong>over fitting</strong>）了.</p>
+<p>解决过拟合的方法有很多.比如：</p>
+<p>增加训练数据.可以使用data augmentation ：合理的创造一些训练数据.</p>
+<p>限制模型.包括限制参数数量或者模型共用参数</p>
+<p>还有比如使用更少的特征(CNN),early stopping,Regularization(正则化 上面提到过，如岭回归),Dropout.</p>
+<h3 id="24-使用验证集">2.4 使用验证集</h3>
+<p>可以将训练集分为训练集和验证集（validation data），将训练集上的数据在验证集上验证后再使用测试集.</p>
+<h2 id="3-optimization-aa">3. optimization <a></a></h2>
+<p>为什么有的时候会optimization失败呢？第一可能是<strong>local minima</strong>，第二可能是<strong>saddle point</strong>（鞍点）.这些都是梯度为0而非全局最低点的点.</p>
+<p>怎么区别这两点？只需要计算海森矩阵(推理看不懂，反正就是一个损失函数对参数求二次偏导组成的矩阵)并求其特征值（eigen value）.如果所有特征值都是正的，说明在局部最小值；有正有负说明在鞍点.</p>
+<p>举例：</p>
+<p><img class="img-zoomable" src="/LHY/7.png" alt="png" />
+</p>
+<p>如果是鞍点，可以通过求出海森矩阵的特征值，往特征值的方向更新参数就能逃离critical point 单这么做计算量太大.</p>
+<p><strong>经验上来看</strong>，鞍点往往比局部最小值更常见</p>
+<h2 id="4-训练技巧-aa">4. 训练技巧 <a></a></h2>
+<p>训练时需要一些技巧来避免local minima和saddle point.</p>
+<h3 id="41-batch">4.1 batch</h3>
+<p>考虑GPU并行运算，大的Batch的计算速度不一定不如小的Batch.</p>
+<p>大小Batch的优缺点比较如下图所示：</p>
+<p><img class="img-zoomable" src="/LHY/8.png" alt="png" />
+</p>
+<h3 id="42-momentum">4.2 momentum</h3>
+<p>一般来说，参数前进的方向是梯度的反方向.而momentum的前进方向是前一步的移动方向+梯度的反方向.</p>
+<h2 id="5-学习率">5. 学习率</h2>
+<p>当我们遇到training stuck的时候，不一定是small Gradient的情况。如下图所示：</p>
+<p><img class="img-zoomable" src="/LHY/9.png" alt="png" />
+</p>
+<p>这就需要调整我们的学习率(learning rate)</p>
+<p>在平缓的坡度上我们希望取更大的学习率，在陡峭的坡度上我们希望取更小的学习率.</p>
+<h3 id="51-apagrad">5.1 Apagrad</h3>
+<p>要实现学习率随坡度的改变，可以如此更新梯度下降的公式：</p>
+<p><img class="img-zoomable" src="/LHY/10.png" alt="png" />
+</p>
+<p>其中σ的值取决于前面所有的梯度.</p>
+<p><img class="img-zoomable" src="/LHY/11.png" alt="png" />
+</p>
+<h3 id="52-rmsprop">5.2 RMSProp</h3>
+<p>区别于Apagrad的地方在于可以自我调整梯度的权重</p>
+<p><img class="img-zoomable" src="/LHY/12.png" alt="png" />
+</p>
+<p>所谓的Adam算法(一种optimization方法)其实就是RMSProp+momentum.</p>
+<h3 id="53-learning-rate-scheduling">5.3 Learning rate scheduling</h3>
+<p>当参数σ很小时，根据前面的公式，学习率会变得很大，就会出现一次跳跃很大的情况.为了防止这种情况发生，就需要对上式的参数η 进行调整.</p>
+<p><strong>learning rate Decay</strong> 随时间不断减小参数η.防止学习率的突变.</p>
+<p><strong>warm up</strong>学习率先变大再变小.（玄学黑科技）</p>
+<h3 id="54-总结">5.4 总结</h3>
+<p>相对于传统的梯度下降，Adam（以Adam为例）进行了学习率的调整(RMSProp)，rate Decay，前进方向的调整（momentum）</p>
+<p><img class="img-zoomable" src="/LHY/13.png" alt="png" />
+</p>
+<h2 id="6-classification">6. Classification</h2>
+<h3 id="61-softmax">6.1 Softmax</h3>
+<p>前面的博客已经讲述过原理了.y可能取任何值，softmax可以将任何值映射到0和1之间，方便和label进行比较.</p>
+<h3 id="62-分类的误差">6.2 分类的误差</h3>
+<p>比如 均方误差和交叉熵.均方误差在Loss很大的时候是非常平坦的，不利于梯度下降，所以交叉熵用的更多.</p>
+<p><img class="img-zoomable" src="/LHY/14.png" alt="png" />
+</p>
+<p>Pytorch的交叉熵误差自带softmax.</p>
+<p>还有一种误差函数就是<strong>错误率</strong>.非常直观，即统计错误的数量并处以总数.</p>
+
+    </div>
+</article>
+
+
+<div class="license markdown-body">
+    <blockquote>
+        <p>Unless otherwise noted, the content of this site is licensed under <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+               target="_blank">CC BY-NC-SA 4.0</a>.</p>
+    </blockquote>
+</div>
+
+
+
+            </div>
+            <aside class="col-12 col-md-3 float-left sidebar">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/nlp/">NLP</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3><nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-序aa">0. 序<a></a></a></li>
+    <li><a href="#1-通过正则化解决过拟合aa">1. 通过正则化解决过拟合<a></a></a>
+      <ul>
+        <li><a href="#11-正则化的基本原理以岭回归为例">1.1 正则化的基本原理（以岭回归为例）</a></li>
+        <li><a href="#12-岭回归最优解">1.2 岭回归最优解</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-深度学习模型训练总览-aa">2. 深度学习模型训练总览 <a></a></a>
+      <ul>
+        <li><a href="#21-model-bias">2.1 model bias</a></li>
+        <li><a href="#22-模型优化">2.2 模型优化</a></li>
+        <li><a href="#23-过拟合">2.3 过拟合</a></li>
+        <li><a href="#24-使用验证集">2.4 使用验证集</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-optimization-aa">3. optimization <a></a></a></li>
+    <li><a href="#4-训练技巧-aa">4. 训练技巧 <a></a></a>
+      <ul>
+        <li><a href="#41-batch">4.1 batch</a></li>
+        <li><a href="#42-momentum">4.2 momentum</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-学习率">5. 学习率</a>
+      <ul>
+        <li><a href="#51-apagrad">5.1 Apagrad</a></li>
+        <li><a href="#52-rmsprop">5.2 RMSProp</a></li>
+        <li><a href="#53-learning-rate-scheduling">5.3 Learning rate scheduling</a></li>
+        <li><a href="#54-总结">5.4 总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-classification">6. Classification</a>
+      <ul>
+        <li><a href="#61-softmax">6.1 Softmax</a></li>
+        <li><a href="#62-分类的误差">6.2 分类的误差</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+</aside>
+
+        </div>
+        <div class="btn">
+    <div class="btn-menu" id="btn-menu">
+        <i class="iconfont icon-grid-sharp"></i>
+    </div>
+    <div class="btn-toggle-mode">
+        <i class="iconfont icon-contrast-sharp"></i>
+    </div>
+    <div class="btn-scroll-top">
+        <i class="iconfont icon-chevron-up-circle-sharp"></i>
+    </div>
+</div>
+<aside class="sidebar-mobile" style="display: none;">
+  <div class="sidebar-wrapper">
+    
+    <div class="sidebar-item sidebar-pages">
+        <h3>Pages</h3>
+        <ul>
+            
+            <li>
+                <a href="/">Home</a>
+            </li>
+            
+            <li>
+                <a href="/archives/">Archives</a>
+            </li>
+            
+            <li>
+                <a href="/about/">About</a>
+            </li>
+            
+            <li>
+                <a href="/search/">Search</a>
+            </li>
+            
+            <li>
+                <a href="/index.xml">RSS</a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-links">
+        <h3>Links</h3>
+        <ul>
+            
+            <li>
+                <a href="https://github.com/" target="_blank"><span>GitHub</span></a>
+            </li>
+            
+            <li>
+                <a href="https://twitter.com/" target="_blank"><span>Twitter</span></a>
+            </li>
+            
+            <li>
+                <a href="https://space.bilibili.com/439482884/" target="_blank"><span>bilibili</span></a>
+            </li>
+            
+        </ul>
+    </div>
+    
+    <div class="sidebar-item sidebar-tags">
+        <h3>Tags</h3>
+        <div>
+            
+            <span>
+                <a href="/tags/algo/">algo</a>
+            </span>
+            
+            <span>
+                <a href="/tags/css/">css</a>
+            </span>
+            
+            <span>
+                <a href="/tags/linux/">linux</a>
+            </span>
+            
+            <span>
+                <a href="/tags/markdown/">markdown</a>
+            </span>
+            
+            <span>
+                <a href="/tags/nlp/">NLP</a>
+            </span>
+            
+            <span>
+                <a href="/tags/others/">others</a>
+            </span>
+            
+            <span>
+                <a href="/tags/pytorch/">pytorch</a>
+            </span>
+            
+            <span>
+                <a href="/tags/test/">test</a>
+            </span>
+            
+            <span>
+                <a href="/tags/text/">text</a>
+            </span>
+            
+            <span>
+                <a href="/tags/web/">web</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a>
+            </span>
+            
+            <span>
+                <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a>
+            </span>
+            
+        </div>
+    </div>
+    
+    
+    
+    <div class="sidebar-item sidebar-toc">
+        <h3>Table of Contents</h3>
+        <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-序aa">0. 序<a></a></a></li>
+    <li><a href="#1-通过正则化解决过拟合aa">1. 通过正则化解决过拟合<a></a></a>
+      <ul>
+        <li><a href="#11-正则化的基本原理以岭回归为例">1.1 正则化的基本原理（以岭回归为例）</a></li>
+        <li><a href="#12-岭回归最优解">1.2 岭回归最优解</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-深度学习模型训练总览-aa">2. 深度学习模型训练总览 <a></a></a>
+      <ul>
+        <li><a href="#21-model-bias">2.1 model bias</a></li>
+        <li><a href="#22-模型优化">2.2 模型优化</a></li>
+        <li><a href="#23-过拟合">2.3 过拟合</a></li>
+        <li><a href="#24-使用验证集">2.4 使用验证集</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-optimization-aa">3. optimization <a></a></a></li>
+    <li><a href="#4-训练技巧-aa">4. 训练技巧 <a></a></a>
+      <ul>
+        <li><a href="#41-batch">4.1 batch</a></li>
+        <li><a href="#42-momentum">4.2 momentum</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-学习率">5. 学习率</a>
+      <ul>
+        <li><a href="#51-apagrad">5.1 Apagrad</a></li>
+        <li><a href="#52-rmsprop">5.2 RMSProp</a></li>
+        <li><a href="#53-learning-rate-scheduling">5.3 Learning rate scheduling</a></li>
+        <li><a href="#54-总结">5.4 总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-classification">6. Classification</a>
+      <ul>
+        <li><a href="#61-softmax">6.1 Softmax</a></li>
+        <li><a href="#62-分类的误差">6.2 分类的误差</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+    
+    
+  </div>
+</aside>
+    </main>
+
+    <footer>
+    <div class="container-lg clearfix">
+        <div class="col-12 footer">
+            
+            <span>&copy; 2020-2022
+                <a href="https://wudaore.github.io/">DSRKafuU</a>
+                 | <a href="https://github.com/dsrkafuu/hugo-theme-fuji">Source code</a> 
+                | Powered by <a href="https://github.com/dsrkafuu/hugo-theme-fuji/"
+                   target="_blank">Fuji-v2</a> &amp; <a href="https://gohugo.io/"
+                                                    target="_blank">Hugo</a> 
+            </span>
+        </div>
+    </div>
+</footer>
+
+    
+<script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.6/dist/medium-zoom.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/components/prism-core.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/prismjs@1.27.0/plugins/autoloader/prism-autoloader.min.js"></script>
+
+
+
+<script defer src="/assets/js/fuji.min.js"></script>
+
+
+
+</body>
+
+</html>
