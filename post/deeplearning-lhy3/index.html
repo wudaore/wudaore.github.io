@@ -16,7 +16,7 @@
 
 
 
-<title>CSS的一些随笔 - wudao的博客</title>
+<title>李宏毅-深度学习课程学习笔记(3) - wudao的博客</title>
 
 
 <meta name="author" content="DSRKafuU" />
@@ -25,16 +25,16 @@
 <meta name="description" content="A minimal Hugo theme with nice theme color." />
 
 
-<meta name="keywords" content="web, css" />
+<meta name="keywords" content="深度学习, algo, pytorch" />
 
 
-<meta property="og:title" content="CSS的一些随笔" />
-<meta name="twitter:title" content="CSS的一些随笔" />
+<meta property="og:title" content="李宏毅-深度学习课程学习笔记(3)" />
+<meta name="twitter:title" content="李宏毅-深度学习课程学习笔记(3)" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://wudaore.github.io/post/css_detail/" /><meta property="og:description" content="1. 实现元素的居中的方法 1.1 水平居中 方法1： margin: xpx auto 方法2：见1.2的方法1 1.2 垂直居中 方法1： 使用绝对定位实现： 绝对定位中left 和 right的值默认是auto，所以如果不指定left和right，则等式不" />
-<meta name="twitter:description" content="1. 实现元素的居中的方法 1.1 水平居中 方法1： margin: xpx auto 方法2：见1.2的方法1 1.2 垂直居中 方法1： 使用绝对定位实现： 绝对定位中left 和 right的值默认是auto，所以如果不指定left和right，则等式不" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
+<meta property="og:url" content="https://wudaore.github.io/post/deeplearning-lhy3/" /><meta property="og:description" content="0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. receptive field 做图像识别时，让Neuron输入整个图片未免有些现实.给每个Neuron设置一个receptive fiel" />
+<meta name="twitter:description" content="0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. receptive field 做图像识别时，让Neuron输入整个图片未免有些现实.给每个Neuron设置一个receptive fiel" /><meta property="og:image" content="https://wudaore.github.io/img/og.png" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-07-10T00:00:00+08:00" /><meta property="article:modified_time" content="2022-07-10T00:00:00+08:00" />
+<meta name="twitter:image" content="https://wudaore.github.io/img/og.png" /><meta property="article:published_time" content="2022-09-22T00:00:00+08:00" /><meta property="article:modified_time" content="2022-09-22T00:00:00+08:00" />
 
 
 <style>
@@ -100,66 +100,75 @@
 <article>
     
     <h2 class="post-item post-title">
-        <a href="https://wudaore.github.io/post/css_detail/">CSS的一些随笔</a>
+        <a href="https://wudaore.github.io/post/deeplearning-lhy3/">李宏毅-深度学习课程学习笔记(3)</a>
     </h2>
     <div class="post-item post-meta">
-        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-07-10</span>
+        <span><i class="iconfont icon-today-sharp"></i>&nbsp;2022-09-22</span>
 
-<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;558 words</span>
+<span><i class="iconfont icon-file-tray-sharp"></i>&nbsp;1642 words</span>
 
-<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/web">web</a>&nbsp;<a href="/tags/css">css</a>&nbsp;</span>
+<span><i class="iconfont icon-pricetags-sharp"></i>&nbsp;<a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0">深度学习</a>&nbsp;<a href="/tags/algo">algo</a>&nbsp;<a href="/tags/pytorch">pytorch</a>&nbsp;</span>
 
     </div>
     
     <div class="post-content markdown-body">
-        <h2 id="1-实现元素的居中的方法a">1. 实现元素的居中的方法</a></h2>
-<h3 id="11-水平居中">1.1 水平居中</h3>
-<p>方法1：</p>
-<pre><code>margin: xpx auto
-</code></pre>
-<p>方法2：见1.2的方法1</p>
-<h3 id="12-垂直居中">1.2 垂直居中</h3>
-<p>方法1：</p>
-<p>使用绝对定位实现：</p>
-<p>绝对定位中left 和 right的值默认是auto，所以如果不指定left和right，则等式不满足时，会自动调整这两个值.</p>
-<p>所以要实现元素在块内的垂直居中（包括水平），就需要先将top和bottom(left和right)设为0,再将margin设为auto即可.</p>
-<p><strong>需要注意的是 这种方法只适合长宽都写死的元素进行居中.因为不写死的话长宽就变成了auto了，会导致变成全屏</strong></p>
-<pre><code>.box2{
-            width: 100px;
-            height: 100px;
-            background-color: orange;
-            position: absolute;
-            margin: auto;
-            left: 0px;
-            right: 0;
-            top: 0;
-            bottom: 0;
-        }
-
-</code></pre>
-<p>参考：D:\Html_Css-master\Html_Css-master\exercise\boke\垂直居中.html</p>
-<p>方法2：通过translate实现</p>
-<pre><code>.box3{
-            background-color: orange;
-            position: absolute;
-            /* 
-                这种居中方式，只适用于元素的大小确定
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            margin: auto; */
-
-            left: 50%;
-            top: 50%;
-            transform: translateX(-50%) translateY(-50%);
-          
-        }
-</code></pre>
-<p>原理就是先向下偏移页面的百分之五十，再向上偏移元素本身的百分之五十即可.</p>
-<h2 id="2-浮动随笔a">2. 浮动随笔</a></h2>
-<p>1.父元素的浮动并不会使子元素浮动，子元素会保留在父元素中的布局，但是位置会随之改变.另外 通过下面的示例可以发现：浮动不会在横方向上溢出 会在纵方向溢出</p>
-<p>参考：D:\Html_Css-master\Html_Css-master\exercise\boke\浮动对子元素影响.html</p>
+        <h2 id="0-序aa">0. 序<a></a></h2>
+<p>继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现.</p>
+<h2 id="1-receptive-fieldaa">1. receptive field<a></a></h2>
+<p>做图像识别时，让Neuron输入整个图片未免有些现实.给每个Neuron设置一个receptive field，将receptive field中的内容作为Neuron的输入，每个Neuron只需要关注其receptive field中的内容即可.</p>
+<p>不同Neuron的receptive field可以重叠，而同一个receptive field会有一组Neuron去守备.</p>
+<h3 id="11-kernel-size">1.1 Kernel size</h3>
+<p>receptive field的长乘宽就是Kernel size.一般较小（3*3）.</p>
+<h3 id="12-stride">1.2 stride</h3>
+<p>stride：receptive field移动的范围.超出影像范围的叫padding</p>
+<p>Receptive Field 和 paramters sharing都限制了模型的弹性，增加了 model bias.两者相加就是convolutional Neural（卷积神经），运用在newwork上就是CNN.CNN在影像上有比较好的表现.</p>
+<h2 id="2-cnn">2. CNN</h2>
+<h3 id="21-convolution-layer">2.1 convolution layer</h3>
+<p>convolution layer中有很多filter ，每个filter（举例）的大小是3*\3*Channel(视彩色或者黑白而定).每个filter的目的都是抓取一个Pattern</p>
+<p>具体做法是将每一个Filter和某个receptive field相乘，不断移动.做完后会得到一个Feature map.</p>
+<p>Filter的高度等于Channel数.当吧上一次的结果作为输入再次代入时，上一次有多少层，这一次的Filter高度就是多少.</p>
+<h3 id="22-池化-pooling">2.2 池化 Pooling</h3>
+<p>池化非是一个Layer，因为并没有做参数的相乘.它更像是如Relu一般的激活函数.</p>
+<p>以max-pooling为例，在一个n*n的空间内只取最大值.</p>
+<p>池化后可以经过Flatten使数据扁平化 再经过Fully 卷积神经 和softmax等.</p>
+<p><img class="img-zoomable" src="/LHY/15.png" alt="png" />
+</p>
+<h3 id="23-image-transformation">2.3 image transformation</h3>
+<p>要将图片缩放&ndash;平移&ndash;旋转。可以将图像数字化后乘以一个矩阵，再加上一个偏移量矩阵来实现.</p>
+<h2 id="3-self-attention">3. self-Attention</h2>
+<p>有时模型的输入会是不定长的一组向量（如声音信号，社交网络）.</p>
+<p>输出可能有以下三种情况：</p>
+<p>1.每个输入向量对应一个输出，输入和输出的长度一致（如词性标注）&ndash;即Sequence Labeling</p>
+<p>2.一整个sequence只需要输出一个（如情感分析）</p>
+<p>3.机器来决定输出多少个label（seq2seq，如语音辨识）</p>
+<p><strong>self-Attention</strong>会让输入input考虑一整个sequence后再得出结果，而非考虑一个非常小的window窗口.且可调用多次&ndash;即交替使用全连接层和self-Attention，如下图所示</p>
+<p><img class="img-zoomable" src="/LHY/16.png" alt="png" />
+</p>
+<h2 id="31-dot-product">3.1 dot-product</h2>
+<p>由于需要知道sequence中的向量和输入之间的关联值α，所以需要一个模组来进行计算.</p>
+<p>如dot-product做法是将输入的两个向量分别乘以不同的两个矩阵之后按比例相乘相加得到α</p>
+<p>具体做法如下：</p>
+<p><strong>简单来说</strong>，就是先将输入序列a乘以不同的矩阵，得到参数q,k,b.</p>
+<p><img class="img-zoomable" src="/LHY/18.png" alt="png" />
+</p>
+<p>接着每个q都会和k去计算inner-product，得到attention分数（也即矩阵q和k相乘）之后经过softmax.</p>
+<p><img class="img-zoomable" src="/LHY/19.png" alt="png" />
+</p>
+<p>最后将attantion矩阵乘以v矩阵，得到b</p>
+<h2 id="32-变形--multi-head-self-attention">3.2 变形&ndash;multi-head self-attention</h2>
+<p>如果有不同的相关性，就需要多个head.其实做法就是将原先的一个qkv变成head个qkv</p>
+<p><img class="img-zoomable" src="/LHY/20.png" alt="png" />
+</p>
+<h2 id="33-positional-encoding">3.3 positional encoding</h2>
+<p>self-Attention并没有考虑位置.但是，在做例如词性标注的任务时，位置的咨询是很重要的.这时需要通过positional encoding将它代入.</p>
+<p>具体做法如下：</p>
+<p>1.为每个位置设置一个vactor ei</p>
+<p>2.将ei加到ai上面</p>
+<h2 id="34-与cnn的差异与关联">3.4 与CNN的差异与关联</h2>
+<p>CNN可看做一个简化版的self-Attention.CNN只考虑receptive中的咨询而attention考虑一整个咨询.</p>
+<h2 id="35-与rnn的比较">3.5 与RNN的比较</h2>
+<p>attention和RNN都考虑了整个input sequence但是attention的每一个input都考虑了整个input sequence而RNN只考虑前面最近的那个（当然也可以做双向的）.</p>
+<p>另外，RNN无法平行处理所有输出.运算效率偏低.</p>
 
     </div>
 </article>
@@ -280,13 +289,26 @@
     <div class="sidebar-item sidebar-toc">
         <h3>Table of Contents</h3><nav id="TableOfContents">
   <ul>
-    <li><a href="#1-实现元素的居中的方法a">1. 实现元素的居中的方法</a></a>
+    <li><a href="#0-序aa">0. 序<a></a></a></li>
+    <li><a href="#1-receptive-fieldaa">1. receptive field<a></a></a>
       <ul>
-        <li><a href="#11-水平居中">1.1 水平居中</a></li>
-        <li><a href="#12-垂直居中">1.2 垂直居中</a></li>
+        <li><a href="#11-kernel-size">1.1 Kernel size</a></li>
+        <li><a href="#12-stride">1.2 stride</a></li>
       </ul>
     </li>
-    <li><a href="#2-浮动随笔a">2. 浮动随笔</a></a></li>
+    <li><a href="#2-cnn">2. CNN</a>
+      <ul>
+        <li><a href="#21-convolution-layer">2.1 convolution layer</a></li>
+        <li><a href="#22-池化-pooling">2.2 池化 Pooling</a></li>
+        <li><a href="#23-image-transformation">2.3 image transformation</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-self-attention">3. self-Attention</a></li>
+    <li><a href="#31-dot-product">3.1 dot-product</a></li>
+    <li><a href="#32-变形--multi-head-self-attention">3.2 变形&ndash;multi-head self-attention</a></li>
+    <li><a href="#33-positional-encoding">3.3 positional encoding</a></li>
+    <li><a href="#34-与cnn的差异与关联">3.4 与CNN的差异与关联</a></li>
+    <li><a href="#35-与rnn的比较">3.5 与RNN的比较</a></li>
   </ul>
 </nav></div>
 </aside>
@@ -413,13 +435,26 @@
         <h3>Table of Contents</h3>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#1-实现元素的居中的方法a">1. 实现元素的居中的方法</a></a>
+    <li><a href="#0-序aa">0. 序<a></a></a></li>
+    <li><a href="#1-receptive-fieldaa">1. receptive field<a></a></a>
       <ul>
-        <li><a href="#11-水平居中">1.1 水平居中</a></li>
-        <li><a href="#12-垂直居中">1.2 垂直居中</a></li>
+        <li><a href="#11-kernel-size">1.1 Kernel size</a></li>
+        <li><a href="#12-stride">1.2 stride</a></li>
       </ul>
     </li>
-    <li><a href="#2-浮动随笔a">2. 浮动随笔</a></a></li>
+    <li><a href="#2-cnn">2. CNN</a>
+      <ul>
+        <li><a href="#21-convolution-layer">2.1 convolution layer</a></li>
+        <li><a href="#22-池化-pooling">2.2 池化 Pooling</a></li>
+        <li><a href="#23-image-transformation">2.3 image transformation</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-self-attention">3. self-Attention</a></li>
+    <li><a href="#31-dot-product">3.1 dot-product</a></li>
+    <li><a href="#32-变形--multi-head-self-attention">3.2 变形&ndash;multi-head self-attention</a></li>
+    <li><a href="#33-positional-encoding">3.3 positional encoding</a></li>
+    <li><a href="#34-与cnn的差异与关联">3.4 与CNN的差异与关联</a></li>
+    <li><a href="#35-与rnn的比较">3.5 与RNN的比较</a></li>
   </ul>
 </nav>
     </div>

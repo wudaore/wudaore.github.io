@@ -6,7 +6,16 @@
     <description>Recent content in pytorch on wudao的博客</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 12 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/pytorch/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 22 Sep 2022 00:00:00 +0800</lastBuildDate><atom:link href="https://wudaore.github.io/tags/pytorch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>李宏毅-深度学习课程学习笔记(3)</title>
+      <link>https://wudaore.github.io/post/deeplearning-lhy3/</link>
+      <pubDate>Thu, 22 Sep 2022 00:00:00 +0800</pubDate>
+      
+      <guid>https://wudaore.github.io/post/deeplearning-lhy3/</guid>
+      <description>0. 序 继续李宏毅-深度学习课程的学习，并结合课程对暑假做过的项目进行深度的理解和尝试复现. 1. receptive field 做图像识别时，让Neuron输入整个图片未免有些现实.给每个Neuron设置一个receptive fiel</description>
+    </item>
+    
     <item>
       <title>李宏毅-深度学习课程学习笔记(2)</title>
       <link>https://wudaore.github.io/post/deeplearning-lhy2/</link>
